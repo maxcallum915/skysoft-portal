@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import Teams from "./pages/Teams";
 import Projects from "./pages/Projects";
 import Main from "./pages/Main";
+import Users from "./pages/Users";
+import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   return (
@@ -14,6 +16,10 @@ const App = () => {
           <Route index element={<Main />} />
           <Route path="teams" element={<Teams />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="users/">
+            <Route index element={<Users />} />
+            <Route path=":id" element={<UserProfile />} />
+          </Route>
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

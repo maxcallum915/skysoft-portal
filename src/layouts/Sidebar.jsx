@@ -1,5 +1,4 @@
 import logo from "../assets/logo.png";
-import logoFull from "../assets/logo-full.png";
 import {
   HiOutlineHome,
   HiOutlineUsers,
@@ -7,7 +6,7 @@ import {
   HiOutlineCube,
 } from "react-icons/hi2";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
+import { Link, useMatch, useParams } from "react-router-dom";
 
 // const Sidebar = (props) => {
 //   console.log(props);
@@ -46,7 +45,17 @@ const SidebarLayout = () => {
         <img src={logo} alt="logo" className="w-12" />
         <p className="text-xl font-semibold text-slate-700">Skysofttech</p>
       </div>
-      <Menu>
+      <Menu
+        menuItemStyles={{
+          button: ({ level, active, disabled }) => {
+            return {
+              color: active && `#fff`,
+              backgroundColor: active && `#3862e1`,
+              borderRadius: `0.5rem`,
+            };
+          },
+        }}
+      >
         <MenuItem
           active
           icon={<HiOutlineHome className="text-2xl" />}
@@ -58,6 +67,7 @@ const SidebarLayout = () => {
         <MenuItem
           icon={<HiOutlineUsers className="text-2xl" />}
           className="font-medium text-slate-700"
+          routerLink={<Link to="/users/1" />}
         >
           Users
         </MenuItem>

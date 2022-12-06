@@ -8,6 +8,8 @@ const styles = {
     info: `text-teal-500 bg-teal-100`,
     black: `text-white bg-black`,
     white: `text-black bg-white`,
+    primary: `text-primary bg-primary bg-opacity-10`,
+    secondary: `text-secondary bg-secondary bg-opacity-10`,
   },
   outlineVariants: {
     default: `border-slate-400 text-slate-500`,
@@ -17,6 +19,8 @@ const styles = {
     info: `border-teal-400 text-teal-500`,
     black: `border-white text-black`,
     white: `border-black text-white`,
+    primary: `border-primary text-primary`,
+    secondary: `border-secondary text-secondary`,
   },
 };
 

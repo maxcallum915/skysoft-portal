@@ -3,6 +3,7 @@ import { HiOutlineStar } from "react-icons/hi";
 import Box from "../components/Box";
 import Dropdown from "../components/Dropdown";
 import Avatar from "../components/Avatar";
+import { Link } from "react-router-dom";
 
 const Teams = () => {
   return (

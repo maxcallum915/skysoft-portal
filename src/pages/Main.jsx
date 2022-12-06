@@ -101,7 +101,7 @@ const Main = () => {
                   Congratulate John!
                 </span>
                 <Avatar
-                  icon="https://demos.themeselection.com/marketplace/materio-mui-react-nextjs-admin-template/demo-1/images/avatars/5.png"
+                  icon="https://xsgames.co/randomusers/avatar.php?g=male"
                   rounded
                   shadow
                   title="John Doe"
