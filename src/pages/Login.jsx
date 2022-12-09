@@ -40,7 +40,9 @@ const Login = () => {
           </Link>
         </div>
         <Link to="/">
-          <Button type="button" title="login" widthVariant="full" />
+          <Button type="button" widthVariant="full">
+            login
+          </Button>
         </Link>
       </div>
       <div className={styles.imgContainer}>

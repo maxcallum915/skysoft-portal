@@ -10,8 +10,10 @@ import {
   HiOutlineUser,
   HiOutlineUserCircle,
 } from "react-icons/hi2";
+import { useParams } from "react-router-dom";
 
 const UserProfile = () => {
+  const params = useParams();
   const series = [
     {
       data: [
@@ -359,8 +361,8 @@ const UserProfile = () => {
             className="mx-auto block h-28 w-28 overflow-hidden rounded-md"
           />
           <div className="mt-5 mb-8 flex flex-col items-center gap-2">
-            <h5 className="text-xl font-semibold text-slate-900">
-              Pamela anderson
+            <h5 className="text-xl font-semibold capitalize text-slate-900">
+              {params.id}
             </h5>
             <Chip label="project manager" variant="secondary" />
             <div className="mt-8 flex w-full justify-evenly gap-5">
@@ -373,7 +375,7 @@ const UserProfile = () => {
                     568
                   </h5>
                   <h6 className="text-sm capitalize text-slate-400">
-                    projects done
+                    orders done
                   </h6>
                 </div>
               </div>

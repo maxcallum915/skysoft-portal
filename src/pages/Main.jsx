@@ -15,6 +15,7 @@ import packageicon3 from "../assets/package-icon-3.png";
 import packageicon4 from "../assets/package-icon-4.png";
 import packageicon5 from "../assets/package-icon-5.png";
 import { HiCheck, HiXMark } from "react-icons/hi2";
+import Progressbar from "../components/Progressbar";
 
 const Main = () => {
   const series = [
@@ -123,7 +124,7 @@ const Main = () => {
           <Box>
             <div className="mb-5 flex items-center justify-between">
               <span className="text-xl font-semibold capitalize text-slate-700">
-                Projects overview
+                orders overview
               </span>
               <Dropdown />
             </div>
@@ -142,9 +143,7 @@ const Main = () => {
                     <HiCheck className="h-full w-full" />
                   </div>
                   <div>
-                    <h6 className="text-sm text-slate-400">
-                      Projects Delivered
-                    </h6>
+                    <h6 className="text-sm text-slate-400">orders Delivered</h6>
                     <h5 className="text-2xl font-semibold text-slate-700">
                       285
                     </h5>
@@ -155,7 +154,7 @@ const Main = () => {
                     <HiOutlineExclamationCircle className="h-full w-full" />
                   </div>
                   <div>
-                    <h6 className="text-sm text-slate-400">Projects Pending</h6>
+                    <h6 className="text-sm text-slate-400">orders Pending</h6>
                     <h5 className="text-2xl font-semibold text-slate-700">
                       35
                     </h5>
@@ -166,9 +165,7 @@ const Main = () => {
                     <HiXMark className="h-full w-full" />
                   </div>
                   <div>
-                    <h6 className="text-sm text-slate-400">
-                      Projects Refunded
-                    </h6>
+                    <h6 className="text-sm text-slate-400">orders Refunded</h6>
                     <h5 className="text-2xl font-semibold text-slate-700">
                       12
                     </h5>
@@ -180,7 +177,7 @@ const Main = () => {
                   </div>
                   <div>
                     <h6 className="text-sm text-slate-400">
-                      Projects Chargeback
+                      orders Chargeback
                     </h6>
                     <h5 className="text-2xl font-semibold text-slate-700">5</h5>
                   </div>
@@ -211,7 +208,7 @@ const Main = () => {
                 Your sales performance is 45% better compared to last month
               </p>
             </div>
-            <Button title="View details" widthVariant="full" />
+            <Button widthVariant="full">View details</Button>
           </Box>
         </div>
         <div>
@@ -290,22 +287,45 @@ const Main = () => {
             <p className="mb-10 text-sm text-slate-400">
               Compared to $84,325 last year
             </p>
-
-            <InfoChip
-              icon={brand1}
-              title="The website designs"
-              subtitle="minimal info about brand"
-            />
-            <InfoChip
-              icon={brand2}
-              title="web district"
-              subtitle="minimal info about brand"
-            />
-            <InfoChip
-              icon={brand3}
-              title="website design engines"
-              subtitle="minimal info about brand"
-            />
+            <div className="flex items-center gap-3">
+              <InfoChip
+                icon={brand1}
+                title="The website designs"
+                subtitle="minimal info about brand"
+              />
+              <div className="ml-auto flex flex-col gap-1">
+                <h5 className="mb-1 text-right font-semibold capitalize leading-none text-slate-700">
+                  $24,865.4
+                </h5>
+                <Progressbar completed="25" rounded />
+              </div>
+            </div>
+            <div className="mt-6 flex items-center gap-3">
+              <InfoChip
+                icon={brand2}
+                title="web district"
+                subtitle="minimal info about brand"
+              />
+              <div className="ml-auto flex flex-col gap-1">
+                <h5 className="mb-1 text-right font-semibold capitalize leading-none text-slate-700">
+                  $24,865.4
+                </h5>
+                <Progressbar completed="50" rounded />
+              </div>
+            </div>
+            <div className="mt-6 flex items-center gap-3">
+              <InfoChip
+                icon={brand3}
+                title="website design engines"
+                subtitle="minimal info about brand"
+              />
+              <div className="ml-auto flex flex-col gap-1">
+                <h5 className="mb-1 text-right font-semibold capitalize leading-none text-slate-700">
+                  $24,865.4
+                </h5>
+                <Progressbar completed="82" rounded />
+              </div>
+            </div>
           </Box>
         </div>
       </div>

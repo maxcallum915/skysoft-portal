@@ -26,12 +26,9 @@ const ForgotPassword = () => {
         <img src={logo} alt="logo" className={styles.logo} />
         <div className="flex items-start gap-4">
           <Link to="/login">
-            <Button
-              type="button"
-              title={<BiArrowBack />}
-              widthVariant="max"
-              rounded
-            />
+            <Button type="button" widthVariant="max" rounded>
+              <BiArrowBack />
+            </Button>
           </Link>
           <div>
             <h1 className={styles.title}>Forgot Password?</h1>
@@ -51,7 +48,9 @@ const ForgotPassword = () => {
           required
           widthVariant="full"
         />
-        <Button type="button" title="Change Password" widthVariant="full" />
+        <Button type="button" widthVariant="full">
+          Change Password
+        </Button>
       </div>
       <div className={styles.imgContainer}>
         <img

@@ -4,11 +4,14 @@ import Topbar from "../layouts/Topbar";
 const Dashboard = () => {
   return (
     <>
-      <div className="flex min-h-screen min-w-full items-start bg-slate-100">
+      <div className="flex min-h-screen min-w-full bg-slate-100">
         <Sidebar />
-        <main className="flex-1 p-5">
-          <Outlet />
-        </main>
+        <div className="flex-1">
+          <Topbar />
+          <main className="p-5">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </>
   );

@@ -1,8 +1,6 @@
-import Progressbar from "./Progressbar";
-
 const styles = {
-  chip: `flex items-center gap-3 mt-6`,
-  icon: `h-12 w-12 shrink-0 rounded-md bg-slate-100 p-2.5 text-center text-xl font-semibold capitalize text-slate-700`,
+  chip: `flex items-center gap-3`,
+  icon: `h-12 w-12 shrink-0 rounded-md bg-slate-100 p-2 text-center text-xl font-semibold uppercase text-secondary`,
   iconImg: `h-full w-full object-contain`,
   title: `font-semibold capitalize leading-none text-slate-700`,
   subtitle: `text-sm capitalize text-slate-400`,
@@ -19,12 +17,8 @@ const InfoChip = ({ icon, title, subtitle }) => {
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <h5 className={styles.title}>{title}</h5>
-        <p className={styles.subtitle}>{subtitle}</p>
-      </div>
-      <div className="ml-auto flex flex-col gap-1">
-        <h5 className={`text-right ${styles.title} mb-1`}>$24,865.4</h5>
-        <Progressbar completed="25" rounded />
+        {title && <h5 className={styles.title}>{title}</h5>}
+        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       </div>
     </div>
   );

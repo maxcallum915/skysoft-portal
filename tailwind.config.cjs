@@ -11,6 +11,9 @@ module.exports = {
         primary: "#019dff",
         secondary: "#3862e1",
       },
+      zIndex: {
+        1: "1",
+      },
     },
   },
   plugins: [],
