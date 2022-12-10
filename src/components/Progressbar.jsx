@@ -2,14 +2,14 @@
 // @param {string} [height] - Set progress height
 // @param {string} [background] - Set progress background
 // @param {string} [progressColor] - Set progress color
-// @param {number} [completed] - Set complete percentage
+// @param {number} [progress] - Set complete percentage
 // @param {boolean} [rounded] - Set progress radius
 const Progressbar = ({
   width = "w-24",
   height = "h-1",
   background = "bg-blue-100",
   progressColor = "bg-blue-700",
-  completed = 25,
+  progress = 25,
   rounded = false,
 }) => {
   return (
@@ -20,7 +20,7 @@ const Progressbar = ({
     >
       <div
         className={`h-full ${progressColor} ${rounded && "rounded-full"}`}
-        style={{ width: `${completed}%` }}
+        style={{ width: `${progress}%` }}
       ></div>
     </div>
   );

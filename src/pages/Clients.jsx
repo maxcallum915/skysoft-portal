@@ -4,6 +4,7 @@ import {
   HiOutlineUserPlus,
   HiOutlineXMark,
 } from "react-icons/hi2";
+import { HiOutlinePlusSm } from "react-icons/hi";
 import Button from "../components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { useState } from "react";
@@ -17,7 +18,6 @@ import Chip from "../components/Chip";
 import InfoChip from "../components/InfoChip";
 
 const VisitClient = ({ params }) => {
-  console.log(params);
   return (
     <Link
       to={`/users/${params.row.clientProfile}`}
@@ -33,7 +33,6 @@ const VisitClient = ({ params }) => {
     </Link>
   );
 };
-
 const rows = [
   {
     id: 1,
@@ -220,6 +219,14 @@ const columns = [
   },
 ];
 
+const styles = {
+  summaryChipWrapper: `mb-5 grid gap-5 lg:grid-cols-4`,
+  summaryChip: `flex items-center gap-3 rounded-lg bg-white p-4 shadow-md`,
+  summaryChipIcon: `h-12 w-12 shrink-0 rounded-lg bg-slate-100 p-2.5`,
+  summaryChipSubtitle: `text-sm capitalize text-slate-400`,
+  summaryChipTitle: `mt-1 text-2xl font-semibold leading-none`,
+};
+
 const Clients = () => {
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => setOpenModal((previousState) => !previousState);
@@ -298,59 +305,47 @@ const Clients = () => {
           </div>{" "}
         </Dialog>
       </Transition>
-      <div className="mb-5 grid gap-5 lg:grid-cols-4">
-        <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm">
-          <div className="h-12 w-12 shrink-0 rounded-lg bg-slate-100 p-2.5 text-secondary">
+      <div className={styles.summaryChipWrapper}>
+        <div className={styles.summaryChip}>
+          <div className={`${styles.summaryChipIcon} text-secondary`}>
             <HiOutlineUserPlus className="h-full w-full" />
           </div>
           <div>
-            <h6 className="text-sm capitalize text-slate-400">New clients</h6>
-            <h5 className="mt-1 text-2xl font-semibold leading-none text-secondary">
-              26
-            </h5>
+            <h6 className={styles.summaryChipSubtitle}>New clients</h6>
+            <h5 className={`${styles.summaryChipTitle} text-secondary`}>26</h5>
           </div>
         </div>
-        <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm">
-          <div className="h-12 w-12 shrink-0 rounded-lg bg-slate-100 p-2.5 text-green-500">
+        <div className={styles.summaryChip}>
+          <div className={`${styles.summaryChipIcon} text-green-500`}>
             <HiCheck className="h-full w-full" />
           </div>
           <div>
-            <h6 className="text-sm capitalize text-slate-400">
-              clients delivered
-            </h6>
-            <h5 className="mt-1 text-2xl font-semibold leading-none text-green-500">
-              408
-            </h5>
+            <h6 className={styles.summaryChipSubtitle}>clients delivered</h6>
+            <h5 className={`${styles.summaryChipTitle} text-green-500`}>408</h5>
           </div>
         </div>
-        <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm">
-          <div className="h-12 w-12 shrink-0 rounded-lg bg-slate-100 p-2.5 text-red-500">
+        <div className={styles.summaryChip}>
+          <div className={`${styles.summaryChipIcon} text-red-500`}>
             <HiOutlineXMark className="h-full w-full" />
           </div>
           <div>
-            <h6 className="text-sm capitalize text-slate-400">
-              chargedback clients
-            </h6>
-            <h5 className="mt-1 text-2xl font-semibold leading-none text-red-500">
-              12
-            </h5>
+            <h6 className={styles.summaryChipSubtitle}>chargedback clients</h6>
+            <h5 className={`${styles.summaryChipTitle} text-red-500`}>12</h5>
           </div>
         </div>
-        <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm">
-          <div className="h-12 w-12 shrink-0 rounded-lg bg-slate-100 p-2.5 text-amber-400">
+        <div className={styles.summaryChip}>
+          <div className={`${styles.summaryChipIcon} text-amber-500`}>
             <HiArrowTrendingUp className="h-full w-full" />
           </div>
           <div>
-            <h6 className="text-sm capitalize text-slate-400">
-              clients revenue
-            </h6>
-            <h5 className="mt-1 text-2xl font-semibold leading-none text-amber-400">
+            <h6 className={styles.summaryChipSubtitle}>clients revenue</h6>
+            <h5 className={`${styles.summaryChipTitle} text-amber-500`}>
               $1.2M
             </h5>
           </div>
         </div>
       </div>
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-5 flex items-center gap-2">
         <div>
           <h6 className="text-sm capitalize leading-none text-slate-400">
             Total
@@ -359,14 +354,20 @@ const Clients = () => {
             Clients: <span className="font-bold text-secondary">458</span>
           </h5>
         </div>
-        <Button handleClick={handleModal}>Add a new client</Button>
+        <button
+          onClick={handleModal}
+          after="Add client"
+          className="relative mb-0.5 h-6 w-6 self-end rounded-full border-2 border-secondary text-secondary after:invisible after:absolute after:top-1/2 after:left-full after:ml-1 after:mt-2 after:w-max after:-translate-y-1/2 after:rounded-md after:bg-slate-900 after:px-3 after:py-1 after:text-sm after:capitalize after:text-white after:opacity-0 after:transition-all after:duration-300 after:content-[attr(after)] hover:bg-secondary hover:text-white hover:after:visible hover:after:mt-0 hover:after:opacity-100"
+        >
+          <HiOutlinePlusSm className="h-full w-full" />
+        </button>
       </div>
-      <div className="h-[600px] w-full">
+      <div className="h-[1000px] w-full">
         <DataGrid
           rows={rows}
           columns={columns}
           sx={{
-            background: "#e2e8f0",
+            background: "#f1f5f9",
             border: "none",
             borderRadius: "0.75rem",
             padding: `0.5rem`,
@@ -375,10 +376,12 @@ const Clients = () => {
               minHeight: `65px !important`,
               background: "#fff",
               borderRadius: "0.75rem",
-              marginBottom: `1rem`,
+              marginTop: `1rem`,
+              transition: `all 300ms ease-in-out`,
             },
             "& .MuiDataGrid-row:hover": {
-              background: `#f1f5f9`,
+              background: `#e2e8f0`,
+              boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
             },
             "& .MuiDataGrid-cell": {
               maxHeight: `100% !important`,

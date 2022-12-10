@@ -9,8 +9,8 @@ import {
 
 const styles = {
   menu: `relative`,
-  menuButton: `flex items-center gap-2 rounded-md bg-slate-50 p-1.5 font-medium capitalize text-slate-700 outline-blue-700 hover:bg-secondary hover:text-white`,
-  menuItems: `absolute right-0 mt-2 w-36 min-w-max rounded-md bg-white p-1 shadow-xl outline-blue-700`,
+  menuButton: `flex items-center gap-2 rounded-md bg-slate-100 p-1.5 font-medium capitalize text-slate-900 outline-blue-700 hover:bg-secondary hover:text-white`,
+  menuItems: `absolute right-0 mt-2 w-36 min-w-max rounded-md bg-white p-1 shadow-xl outline-blue-700 z-1`,
   menuItem: `flex w-full gap-2 rounded-md py-1.5 px-2 text-sm font-medium capitalize`,
 };
 

@@ -2,18 +2,12 @@ import logo from "../assets/logo.png";
 import {
   HiOutlineHome,
   HiOutlineUsers,
-  HiOutlineInboxStack,
   HiOutlineBriefcase,
   HiOutlineCurrencyDollar,
-  HiOutlineUserGroup,
+  // HiOutlineUserGroup,
+  HiOutlineClipboardDocumentList,
 } from "react-icons/hi2";
-import {
-  Sidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-  sidebarClasses,
-} from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, sidebarClasses } from "react-pro-sidebar";
 import { Link, useMatch } from "react-router-dom";
 
 const styles = {
@@ -74,17 +68,17 @@ const SidebarLayout = () => {
         >
           Users
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           active={useMatch({ path: "/teams", end: true })}
           icon={<HiOutlineUserGroup className={styles.linkIcon} />}
           className={styles.link}
           routerLink={<Link to="/teams" />}
         >
           Teams
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           active={useMatch({ path: "/orders", end: true })}
-          icon={<HiOutlineInboxStack className={styles.linkIcon} />}
+          icon={<HiOutlineClipboardDocumentList className={styles.linkIcon} />}
           className={styles.link}
           routerLink={<Link to="/orders" />}
         >
