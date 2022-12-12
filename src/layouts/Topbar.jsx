@@ -1,11 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import {
-  HiOutlineArchiveBox,
-  HiOutlinePencilSquare,
-  HiOutlineTrash,
-  HiBars3CenterLeft,
-} from "react-icons/hi2";
+import { HiArrowRightOnRectangle, HiOutlineCog8Tooth } from "react-icons/hi2";
 import Avatar from "../components/Avatar";
 
 const styles = {
@@ -49,8 +44,8 @@ const Topbar = () => {
                     active && "bg-secondary text-white"
                   }`}
                 >
-                  <HiOutlinePencilSquare className="h-5 w-5" />
-                  edit
+                  <HiOutlineCog8Tooth className="h-5 w-5" />
+                  Settings
                 </button>
               )}
             </Menu.Item>
@@ -61,20 +56,8 @@ const Topbar = () => {
                     active && "bg-secondary text-white"
                   }`}
                 >
-                  <HiOutlineArchiveBox className="h-5 w-5" />
-                  archive
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={`${styles.menuItem} ${
-                    active && "bg-secondary text-white"
-                  }`}
-                >
-                  <HiOutlineTrash className="h-5 w-5" />
-                  delete
+                  <HiArrowRightOnRectangle className="h-5 w-5" />
+                  Logout
                 </button>
               )}
             </Menu.Item>

@@ -529,7 +529,7 @@ const Main = () => {
                 <>
                   <Disclosure.Button
                     as="div"
-                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all 2xl:flex-row ${
+                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all hover:bg-slate-100 2xl:flex-row ${
                       open && "bg-slate-100"
                     }`}
                   >
@@ -639,7 +639,7 @@ const Main = () => {
                 <>
                   <Disclosure.Button
                     as="div"
-                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all 2xl:flex-row ${
+                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all hover:bg-slate-100 2xl:flex-row ${
                       open && "bg-slate-100"
                     }`}
                   >
@@ -749,7 +749,7 @@ const Main = () => {
                 <>
                   <Disclosure.Button
                     as="div"
-                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all 2xl:flex-row ${
+                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all hover:bg-slate-100 2xl:flex-row ${
                       open && "bg-slate-100"
                     }`}
                   >
@@ -859,7 +859,7 @@ const Main = () => {
                 <>
                   <Disclosure.Button
                     as="div"
-                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all 2xl:flex-row ${
+                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all hover:bg-slate-100 2xl:flex-row ${
                       open && "bg-slate-100"
                     }`}
                   >
@@ -969,7 +969,7 @@ const Main = () => {
                 <>
                   <Disclosure.Button
                     as="div"
-                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all 2xl:flex-row ${
+                    className={`flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 transition-all hover:bg-slate-100 2xl:flex-row ${
                       open && "bg-slate-100"
                     }`}
                   >
