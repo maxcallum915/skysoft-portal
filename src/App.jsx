@@ -8,6 +8,7 @@ import Main from "./pages/Main";
 import Users from "./pages/Users";
 import UserProfile from "./pages/UserProfile";
 import Clients from "./pages/Clients";
+import BrandDetail from "./pages/BrandDetail";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
             <Route index element={<Users />} />
             <Route path=":id" element={<UserProfile />} />
           </Route>
+          <Route path="/brandDetails" element={<BrandDetail />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

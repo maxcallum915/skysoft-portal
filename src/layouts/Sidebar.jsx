@@ -84,13 +84,13 @@ const SidebarLayout = () => {
         >
           Orders
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           active={useMatch({ path: "/brands", end: true })}
           icon={<HiOutlineCurrencyDollar className={styles.linkIcon} />}
           className={styles.link}
         >
           Brands
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           active={useMatch({ path: "/clients", end: true })}
           icon={<HiOutlineBriefcase className={styles.linkIcon} />}

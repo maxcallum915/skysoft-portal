@@ -15,6 +15,7 @@ import {
 import Box from "../components/Box";
 import LineChart from "../components/LineChart";
 import { Disclosure } from "@headlessui/react";
+import { Link } from "react-router-dom";
 
 const Main = () => {
   const styles = {
@@ -689,243 +690,115 @@ const Main = () => {
               </ul>
             </div>
           </div>
-          <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-            <div className="flex items-center gap-2">
-              <img
-                src={brand1}
-                alt="brand icon"
-                className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
-              />
-              <h5 className="mb-1 font-medium capitalize">
-                The website designs
-              </h5>
-            </div>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-          </div>
-          <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-            <div className="flex items-center gap-2">
-              <img
-                src={brand2}
-                alt="brand icon"
-                className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
-              />
-              <h5 className="mb-1 font-medium capitalize">Web districts</h5>
-            </div>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-          </div>
-          <div className="grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-            <div className="flex items-center gap-2">
-              <img
-                src={brand3}
-                alt="brand icon"
-                className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
-              />
-              <h5 className="mb-1 font-medium capitalize">
-                website design engine
-              </h5>
-            </div>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-          </div>
-        </Box>
-      </div>
-      <div className="mt-5">
-        <Box>
-          <div className="mb-4 ml-2 grid grid-cols-5 items-end gap-8">
-            <div>
-              <h5 className="mb-1 text-lg font-semibold capitalize">Brand</h5>
-            </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-emerald-500">
-                Delivered
-              </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-emerald-50 py-1 px-2 text-center font-medium capitalize text-emerald-700">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+          <Link
+            to="/brandDetails"
+            state={{ brandIcon: brand1, brandName: "The Website Designs" }}
+          >
+            <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
+              <div className="flex items-center gap-2">
+                <img
+                  src={brand1}
+                  alt="brand icon"
+                  className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
+                />
+                <h5 className="mb-1 font-medium capitalize">
+                  The website designs
+                </h5>
+              </div>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
               </ul>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-amber-500">
-                In Process
-              </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-amber-50 py-1 px-2 text-center font-medium capitalize text-amber-700">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+          </Link>
+          <Link
+            to="/brandDetails"
+            state={{ brandIcon: brand2, brandName: "Web Districts" }}
+          >
+            <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
+              <div className="flex items-center gap-2">
+                <img
+                  src={brand2}
+                  alt="brand icon"
+                  className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
+                />
+                <h5 className="mb-1 font-medium capitalize">Web districts</h5>
+              </div>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
               </ul>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-red-500">
-                Refund
-              </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-red-50 py-1 px-2 text-center font-medium capitalize text-red-700">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+          </Link>
+          <Link
+            to="/brandDetails"
+            state={{ brandIcon: brand3, brandName: "Website Design Engine" }}
+          >
+            <div className="grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
+              <div className="flex items-center gap-2">
+                <img
+                  src={brand3}
+                  alt="brand icon"
+                  className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
+                />
+                <h5 className="mb-1 font-medium capitalize">
+                  website design engine
+                </h5>
+              </div>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              </ul>
+              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
+                <li className="flex-1 text-sm capitalize">110</li>
+                <li className="flex-1 text-sm capitalize">25%</li>
+                <li className="flex-1 text-sm capitalize">$45.5k</li>
               </ul>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-red-700">
-                Chargeback
-              </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-red-50 py-1 px-2 text-center font-medium capitalize text-red-800">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
-              </ul>
-            </div>
-          </div>
-          <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-            <div className="flex items-center gap-2">
-              <img
-                src={brand1}
-                alt="brand icon"
-                className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
-              />
-              <h5 className="mb-1 font-medium capitalize">
-                The website designs
-              </h5>
-            </div>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-          </div>
-          <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-            <div className="flex items-center gap-2">
-              <img
-                src={brand2}
-                alt="brand icon"
-                className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
-              />
-              <h5 className="mb-1 font-medium capitalize">Web districts</h5>
-            </div>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-          </div>
-          <div className="grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-            <div className="flex items-center gap-2">
-              <img
-                src={brand3}
-                alt="brand icon"
-                className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
-              />
-              <h5 className="mb-1 font-medium capitalize">
-                website design engine
-              </h5>
-            </div>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-            <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-              <li className="flex-1 text-sm capitalize">110</li>
-              <li className="flex-1 text-sm capitalize">25%</li>
-              <li className="flex-1 text-sm capitalize">$45.5k</li>
-            </ul>
-          </div>
+          </Link>
         </Box>
       </div>
     </>
