@@ -1,3 +1,5 @@
+import { useState, useId } from "react";
+
 const styles = {
   inputWrapper: `relative mb-5 w-max`,
   input: `peer absolute top-0 left-0 z-1 h-full min-w-full cursor-pointer opacity-0`,
@@ -8,10 +10,21 @@ const styles = {
 // @param {string} [text] - Set label text
 // @param {boolean} [required] - Set required attribute
 const InputRadio = ({ type, text, required = false }) => {
+  const [isChecked, setIsChecked] = useState(false);
+  const id = useId();
   return (
     <div className={styles.inputWrapper}>
-      <input type={type} className={styles.input} required={required && true} />
-      <label htmlFor="radio" className={styles.label}>
+      <input
+        type={type}
+        checked={isChecked}
+        className={styles.input}
+        required={required}
+        onChange={() => {
+          setIsChecked((previousState) => !previousState);
+        }}
+        id={id}
+      />
+      <label htmlFor={id} className={styles.label}>
         {text && text}
       </label>
     </div>

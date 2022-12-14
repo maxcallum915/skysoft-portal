@@ -1,5 +1,5 @@
 const styles = {
-  box: `rounded-lg bg-white p-5 pb-6 shadow-md shadow-gray-300 w-full`,
+  box: `w-full rounded-lg bg-white p-5 pb-6 shadow-md`,
 };
 
 const Box = ({ children }) => {

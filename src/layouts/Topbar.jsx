@@ -7,6 +7,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useProSidebar } from "react-pro-sidebar";
 import Avatar from "../components/Avatar";
+import { Link } from "react-router-dom";
 
 const styles = {
   topbar: `sticky top-0 z-50 flex items-center gap-3 border-b border-b-slate-100 bg-white p-3`,
@@ -50,26 +51,30 @@ const Topbar = () => {
           <Menu.Items className={styles.menuItems}>
             <Menu.Item>
               {({ active }) => (
-                <button
-                  className={`${styles.menuItem} ${
-                    active && "bg-secondary text-white"
-                  }`}
-                >
-                  <HiOutlineCog8Tooth className="h-5 w-5" />
-                  Settings
-                </button>
+                <Link to="settings">
+                  <button
+                    className={`${styles.menuItem} ${
+                      active && "bg-secondary text-white"
+                    }`}
+                  >
+                    <HiOutlineCog8Tooth className="h-5 w-5" />
+                    Settings
+                  </button>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <button
-                  className={`${styles.menuItem} ${
-                    active && "bg-secondary text-white"
-                  }`}
-                >
-                  <HiArrowRightOnRectangle className="h-5 w-5" />
-                  Logout
-                </button>
+                <Link to="login">
+                  <button
+                    className={`${styles.menuItem} ${
+                      active && "bg-secondary text-white"
+                    }`}
+                  >
+                    <HiArrowRightOnRectangle className="h-5 w-5" />
+                    Logout
+                  </button>
+                </Link>
               )}
             </Menu.Item>
           </Menu.Items>

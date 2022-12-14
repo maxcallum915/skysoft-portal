@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const styles = {
   inputWrapper: `mb-5`,
   label: `mb-2 block select-none font-medium capitalize leading-5 text-slate-700`,
@@ -15,6 +17,7 @@ const Input = ({
   required = false,
   widthVariant = "auto",
 }) => {
+  const [input, setInput] = useState("");
   return (
     <div className={`${styles.inputWrapper} w-${widthVariant}`}>
       {label && (
@@ -25,8 +28,10 @@ const Input = ({
       )}
       <input
         type={type}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         className={styles.input}
-        required={required && true}
+        required={required}
         id={label}
       />
     </div>

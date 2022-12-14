@@ -252,14 +252,14 @@ const columns = [
 const styles = {
   summaryChipWrapper: `mb-5 grid gap-5 lg:grid-cols-4`,
   summaryChip: `flex items-center gap-3 rounded-lg bg-white p-4 shadow-md`,
-  summaryChipIcon: `h-12 w-12 shrink-0 rounded-lg bg-slate-100 p-2.5`,
-  summaryChipSubtitle: `text-sm capitalize text-slate-400`,
+  summaryChipIcon: `h-12 w-12 shrink-0 rounded-lg p-2.5`,
+  summaryChipSubtitle: `text-sm capitalize text-slate-400 font-medium`,
   summaryChipTitle: `mt-1 text-2xl font-semibold leading-none`,
 };
 
 const Orders = () => {
-  const [openModal, setopenModal] = useState(false);
-  const handleModal = () => setopenModal((previousState) => !previousState);
+  const [openModal, setOpenModal] = useState(false);
+  const handleModal = () => setOpenModal((previousState) => !previousState);
   return (
     <>
       <Transition show={openModal} as={Fragment}>
@@ -378,7 +378,9 @@ const Orders = () => {
       </Transition>
       <div className={styles.summaryChipWrapper}>
         <div className={styles.summaryChip}>
-          <div className={`${styles.summaryChipIcon} text-secondary`}>
+          <div
+            className={`${styles.summaryChipIcon} bg-secondary bg-opacity-10 text-secondary`}
+          >
             <HiOutlineUserPlus className="h-full w-full" />
           </div>
           <div>
@@ -387,7 +389,20 @@ const Orders = () => {
           </div>
         </div>
         <div className={styles.summaryChip}>
-          <div className={`${styles.summaryChipIcon} text-green-500`}>
+          <div
+            className={`${styles.summaryChipIcon} bg-amber-50 text-amber-500`}
+          >
+            <HiArrowTrendingUp className="h-full w-full" />
+          </div>
+          <div>
+            <h6 className={styles.summaryChipSubtitle}>orders in-process</h6>
+            <h5 className={`${styles.summaryChipTitle} text-amber-500`}>587</h5>
+          </div>
+        </div>
+        <div className={styles.summaryChip}>
+          <div
+            className={`${styles.summaryChipIcon} bg-green-50 text-green-500`}
+          >
             <HiCheck className="h-full w-full" />
           </div>
           <div>
@@ -396,23 +411,12 @@ const Orders = () => {
           </div>
         </div>
         <div className={styles.summaryChip}>
-          <div className={`${styles.summaryChipIcon} text-red-500`}>
+          <div className={`${styles.summaryChipIcon} bg-red-50 text-red-500`}>
             <HiOutlineXMark className="h-full w-full" />
           </div>
           <div>
             <h6 className={styles.summaryChipSubtitle}>chargedback orders</h6>
             <h5 className={`${styles.summaryChipTitle} text-red-500`}>12</h5>
-          </div>
-        </div>
-        <div className={styles.summaryChip}>
-          <div className={`${styles.summaryChipIcon} text-amber-500`}>
-            <HiArrowTrendingUp className="h-full w-full" />
-          </div>
-          <div>
-            <h6 className={styles.summaryChipSubtitle}>orders revenue</h6>
-            <h5 className={`${styles.summaryChipTitle} text-amber-500`}>
-              $1.2M
-            </h5>
           </div>
         </div>
       </div>

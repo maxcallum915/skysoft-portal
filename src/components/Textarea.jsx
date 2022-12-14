@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const styles = {
   textareaWrapper: `mb-5`,
   label: `mb-2 block select-none font-medium capitalize leading-5 text-slate-700`,
@@ -15,6 +17,7 @@ const Textarea = ({
   widthVariant = "auto",
   rows = 5,
 }) => {
+  const [text, setText] = useState("");
   return (
     <div className={`${styles.textareaWrapper} w-${widthVariant}`}>
       {label && (
@@ -24,11 +27,13 @@ const Textarea = ({
         </label>
       )}
       <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         className={styles.textarea}
-        required={required && true}
+        required={required}
         id={label}
         rows={rows}
-      ></textarea>
+      />
     </div>
   );
 };
