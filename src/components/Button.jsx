@@ -3,13 +3,13 @@ const styles = {
 };
 
 // @param {string} type - Set button type
-// @param {string} title - Set button text
 // @param {string} [variant=auto] - Set button width variants
+// @param {function} [handleClick] - Handle click event
 const Button = ({
-  children,
   type = "button",
   widthVariant = "auto",
   handleClick,
+  children,
 }) => {
   return (
     <button

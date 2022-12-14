@@ -7,7 +7,7 @@ const styles = {
 // @param {string} type - Set input type
 // @param {string} [text] - Set label text
 // @param {boolean} [required] - Set required attribute
-const InputRadio = ({ type, text, required }) => {
+const InputRadio = ({ type, text, required = false }) => {
   return (
     <div className={styles.inputWrapper}>
       <input type={type} className={styles.input} required={required && true} />

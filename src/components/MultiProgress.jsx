@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useState } from "react";
 
+// @param {string} height - Set progress height
 const MultiProgress = ({ height }) => {
   const [data, setData] = useState([
     { numberOfProjects: 45, projectsWorth: 4589.54, status: "delivered" },

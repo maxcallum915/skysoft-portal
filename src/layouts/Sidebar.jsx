@@ -4,22 +4,29 @@ import {
   HiOutlineUsers,
   HiOutlineBriefcase,
   HiOutlineCurrencyDollar,
-  // HiOutlineUserGroup,
+  HiOutlineUserGroup,
   HiOutlineClipboardDocumentList,
 } from "react-icons/hi2";
-import { Sidebar, Menu, MenuItem, sidebarClasses } from "react-pro-sidebar";
+import {
+  Sidebar,
+  Menu,
+  MenuItem,
+  sidebarClasses,
+  useProSidebar,
+} from "react-pro-sidebar";
 import { Link, useMatch } from "react-router-dom";
 
 const styles = {
-  sidebarWrapper: `h-full min-h-screen bg-white p-3`,
-  logo: `mb-5 flex items-center gap-2.5`,
-  logoImg: `w-12`,
+  sidebarWrapper: `h-full min-h-screen bg-white p-3 !border-r !border-r-slate-100`,
+  logo: `mb-8 flex items-center gap-2.5`,
+  logoImg: `w-14`,
   logoText: `text-xl font-semibold text-slate-900`,
   link: `font-medium text-slate-400`,
   linkIcon: `text-2xl`,
 };
 
 const SidebarLayout = () => {
+  const { collapsed } = useProSidebar();
   return (
     <Sidebar
       className={styles.sidebarWrapper}
@@ -48,6 +55,8 @@ const SidebarLayout = () => {
               color: active && `#fff`,
               background: active && `linear-gradient(45deg,#3862e1,#019dff)`,
               borderRadius: `0.75rem`,
+              paddingLeft: collapsed && `0.65rem`,
+              transition: `padding-left 300ms ease-in-out`,
             };
           },
         }}
@@ -60,14 +69,14 @@ const SidebarLayout = () => {
         >
           Dashboard
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           active={useMatch({ path: "/users", end: true })}
           icon={<HiOutlineUsers className={styles.linkIcon} />}
           className={styles.link}
           routerLink={<Link to="/users/1" />}
         >
           Users
-        </MenuItem>
+        </MenuItem> */}
         {/* <MenuItem
           active={useMatch({ path: "/teams", end: true })}
           icon={<HiOutlineUserGroup className={styles.linkIcon} />}

@@ -53,11 +53,27 @@ const Main = () => {
         brandAmount: `text-secondary`,
       },
     },
+    statusTable: {
+      row: `grid grid-cols-5 gap-8`,
+      column: `flex items-center capitalize`,
+      columnCells: `flex w-full items-center justify-between gap-2.5 py-1 px-2 text-center font-medium`,
+      columnSpan: `flex-1 text-sm`,
+      icon: `h-8 w-8 rounded-md bg-white object-contain p-0.5`,
+      header: {
+        row: `mb-4 items-end`,
+        column: `flex-col gap-1`,
+        columnTitle: `text-lg font-semibold`,
+      },
+      body: {
+        row: `mt-2.5 items-center rounded-md bg-slate-50 p-2 hover:bg-slate-100`,
+      },
+    },
   };
   const {
     orderSummary,
     categoryCard,
     categoryCard: { wrapper, accordionButton, accordionPanel },
+    statusTable,
   } = styles;
 
   return (
@@ -645,48 +661,68 @@ const Main = () => {
       </div>
       <div className="mt-2">
         <Box>
-          <div className="mb-4 ml-2 grid grid-cols-5 items-end gap-8">
-            <div>
-              <h5 className="mb-1 text-lg font-semibold capitalize">Brand</h5>
+          <div className={`${statusTable.row} ${statusTable.header.row}`}>
+            <div className={statusTable.column}>
+              <h5 className={statusTable.header.columnTitle}>Brand</h5>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-emerald-500">
+            <div
+              className={`${statusTable.column} ${statusTable.header.column}`}
+            >
+              <h5
+                className={`${statusTable.header.columnTitle} text-emerald-500`}
+              >
                 Delivered
               </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-emerald-50 py-1 px-2 text-center font-medium capitalize text-emerald-700">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+              <ul
+                className={`${statusTable.columnCells} rounded-md bg-emerald-50 text-emerald-700`}
+              >
+                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>Percentage</li>
+                <li className={statusTable.columnSpan}>Worth</li>
               </ul>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-amber-500">
+            <div
+              className={`${statusTable.column} ${statusTable.header.column}`}
+            >
+              <h5
+                className={`${statusTable.header.columnTitle} text-amber-500`}
+              >
                 In Process
               </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-amber-50 py-1 px-2 text-center font-medium capitalize text-amber-700">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+              <ul
+                className={`${statusTable.columnCells} rounded-md bg-amber-50 text-amber-700`}
+              >
+                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>Percentage</li>
+                <li className={statusTable.columnSpan}>Worth</li>
               </ul>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-red-500">
+            <div
+              className={`${statusTable.column} ${statusTable.header.column}`}
+            >
+              <h5 className={`${statusTable.header.columnTitle} text-red-500`}>
                 Refund
               </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-red-50 py-1 px-2 text-center font-medium capitalize text-red-700">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+              <ul
+                className={`${statusTable.columnCells} rounded-md bg-red-50 text-red-700`}
+              >
+                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>Percentage</li>
+                <li className={statusTable.columnSpan}>Worth</li>
               </ul>
             </div>
-            <div className="flex flex-col items-center">
-              <h5 className="mb-1 text-lg font-semibold capitalize text-red-700">
+            <div
+              className={`${statusTable.column} ${statusTable.header.column}`}
+            >
+              <h5 className={`${statusTable.header.columnTitle} text-red-800`}>
                 Chargeback
               </h5>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md bg-red-50 py-1 px-2 text-center font-medium capitalize text-red-800">
-                <li className="flex-1 text-sm capitalize">projects</li>
-                <li className="flex-1 text-sm capitalize">Percentage</li>
-                <li className="flex-1 text-sm capitalize">Worth</li>
+              <ul
+                className={`${statusTable.columnCells} rounded-md bg-red-50 text-red-700`}
+              >
+                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>Percentage</li>
+                <li className={statusTable.columnSpan}>Worth</li>
               </ul>
             </div>
           </div>
@@ -694,71 +730,69 @@ const Main = () => {
             to="/brandDetails"
             state={{ brandIcon: brand1, brandName: "The Website Designs" }}
           >
-            <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-              <div className="flex items-center gap-2">
+            <div className={`${statusTable.row} ${statusTable.body.row}`}>
+              <div className={`${statusTable.column} gap-2`}>
                 <img
                   src={brand1}
                   alt="brand icon"
-                  className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
+                  className={statusTable.icon}
                 />
-                <h5 className="mb-1 font-medium capitalize">
-                  The website designs
-                </h5>
+                <h5 className="font-medium">The website designs</h5>
               </div>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
             </div>
           </Link>
           <Link
             to="/brandDetails"
-            state={{ brandIcon: brand2, brandName: "Web Districts" }}
+            state={{ brandIcon: brand2, brandName: "web Districts" }}
           >
-            <div className="mb-2 grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-              <div className="flex items-center gap-2">
+            <div className={`${statusTable.row} ${statusTable.body.row}`}>
+              <div className={`${statusTable.column} gap-2`}>
                 <img
                   src={brand2}
                   alt="brand icon"
-                  className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
+                  className={statusTable.icon}
                 />
-                <h5 className="mb-1 font-medium capitalize">Web districts</h5>
+                <h5 className="font-medium">web Districts</h5>
               </div>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
             </div>
           </Link>
@@ -766,36 +800,34 @@ const Main = () => {
             to="/brandDetails"
             state={{ brandIcon: brand3, brandName: "Website Design Engine" }}
           >
-            <div className="grid grid-cols-5 items-center gap-8 rounded-md bg-slate-50 p-2">
-              <div className="flex items-center gap-2">
+            <div className={`${statusTable.row} ${statusTable.body.row}`}>
+              <div className={`${statusTable.column} gap-2`}>
                 <img
                   src={brand3}
                   alt="brand icon"
-                  className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
+                  className={statusTable.icon}
                 />
-                <h5 className="mb-1 font-medium capitalize">
-                  website design engine
-                </h5>
+                <h5 className="font-medium">Website Design Engine</h5>
               </div>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
-              <ul className="flex w-full items-center justify-between gap-2.5 rounded-md py-1 px-2 text-center font-medium">
-                <li className="flex-1 text-sm capitalize">110</li>
-                <li className="flex-1 text-sm capitalize">25%</li>
-                <li className="flex-1 text-sm capitalize">$45.5k</li>
+              <ul className={statusTable.columnCells}>
+                <li className={statusTable.columnSpan}>110</li>
+                <li className={statusTable.columnSpan}>25%</li>
+                <li className={statusTable.columnSpan}>$45.5k</li>
               </ul>
             </div>
           </Link>

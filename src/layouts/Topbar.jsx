@@ -1,9 +1,18 @@
-import { Menu, Transition } from "@headlessui/react";
+import {
+  HiArrowRightOnRectangle,
+  HiOutlineBars3BottomLeft,
+  HiOutlineCog8Tooth,
+} from "react-icons/hi2";
 import { Fragment } from "react";
-import { HiArrowRightOnRectangle, HiOutlineCog8Tooth } from "react-icons/hi2";
+import { Menu, Transition } from "@headlessui/react";
+import { useProSidebar } from "react-pro-sidebar";
 import Avatar from "../components/Avatar";
 
 const styles = {
+  topbar: `sticky top-0 z-50 flex items-center gap-3 border-b border-b-slate-100 bg-white p-3`,
+  hamburger: `h-10 w-10 rounded-md bg-slate-100 p-1`,
+  hamburgerActive: `bg-gradient-to-l from-primary to-secondary text-white`,
+  title: `mr-auto text-xl font-semibold capitalize text-slate-900`,
   menu: `relative`,
   menuButton: `flex items-center gap-2 rounded-full font-medium capitalize text-slate-700 outline-blue-700 hover:bg-secondary hover:text-white ml-auto`,
   menuItems: `absolute right-0 mt-1 w-36 min-w-max rounded-md bg-white p-1 shadow-xl outline-blue-700`,
@@ -11,14 +20,16 @@ const styles = {
 };
 
 const Topbar = () => {
+  const { collapseSidebar, collapsed } = useProSidebar();
   return (
-    <div className="sticky top-0 z-50 flex items-center gap-3 bg-white p-3">
-      {/* <button>
-        <HiBars3CenterLeft className="h-10 w-10 rounded-md bg-slate-100 p-1 text-slate-900" />
-      </button> */}
-      <h5 className="mr-auto text-xl font-medium capitalize text-slate-900">
-        Hi John Doe! 👋
-      </h5>
+    <div className={styles.topbar}>
+      <button
+        onClick={() => collapseSidebar()}
+        className={`${styles.hamburger} ${collapsed && styles.hamburgerActive}`}
+      >
+        <HiOutlineBars3BottomLeft className="h-full w-full" />
+      </button>
+      <h5 className={styles.title}>Hi John Doe! 👋</h5>
       <Menu as="div" className={styles.menu}>
         <Menu.Button className={styles.menuButton}>
           <Avatar

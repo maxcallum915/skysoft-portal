@@ -23,7 +23,7 @@ const App = () => {
             <Route index element={<Users />} />
             <Route path=":id" element={<UserProfile />} />
           </Route>
-          <Route path="/brandDetails" element={<BrandDetail />} />
+          <Route path="brandDetails" element={<BrandDetail />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
