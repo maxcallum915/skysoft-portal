@@ -1,8 +1,18 @@
+import companyLogo from "./assets/logo.png";
+import brand1 from "./assets/brand-logo-1.png";
+import brand2 from "./assets/brand-logo-2.png";
+import brand3 from "./assets/brand-logo-3.png";
+import packageIcon1 from "./assets/package-icon-1.png";
+import packageIcon2 from "./assets/package-icon-2.png";
+import packageIcon3 from "./assets/package-icon-3.png";
+import packageIcon4 from "./assets/package-icon-4.png";
+import packageIcon5 from "./assets/package-icon-5.png";
+
 const companiesData = [
   {
     id: 1,
     title: `Skysosfttech`,
-    icon: `./src/assets/logo.png`,
+    icon: companyLogo,
     date: `01-01-2023`,
   },
 ];
@@ -11,19 +21,19 @@ const brandsData = [
   {
     id: 1,
     title: `The Website Designs`,
-    icon: `./src/assets/brand-logo-1.png`,
+    icon: brand1,
     company: `Skysosfttech`,
   },
   {
     id: 2,
     title: `Web Districts`,
-    icon: `./src/assets/brand-logo-2.png`,
+    icon: brand2,
     company: `Skysosfttech`,
   },
   {
     id: 3,
     title: `Website Design Engine`,
-    icon: `./src/assets/brand-logo-3.png`,
+    icon: brand3,
     company: `Skysosfttech`,
   },
 ];
@@ -32,27 +42,27 @@ const categoriesData = [
   {
     id: "1",
     title: "Bronze",
-    icon: "./src/assets/package-icon-1.png",
+    icon: packageIcon1,
   },
   {
     id: "2",
     title: "Silver",
-    icon: "./src/assets/package-icon-2.png",
+    icon: packageIcon2,
   },
   {
     id: "3",
     title: "Gold",
-    icon: "./src/assets/package-icon-3.png",
+    icon: packageIcon3,
   },
   {
     id: "4",
     title: "Platinum",
-    icon: "./src/assets/package-icon-4.png",
+    icon: packageIcon4,
   },
   {
     id: "5",
     title: "Diamond",
-    icon: "./src/assets/package-icon-5.png",
+    icon: packageIcon5,
   },
 ];
 
