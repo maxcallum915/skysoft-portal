@@ -12,6 +12,8 @@ import {
   categoriesData,
   statusesData,
   stagesData,
+  healthData,
+  projectTypeData,
 } from "../data.js";
 
 const styles = {
@@ -39,6 +41,8 @@ const Settings = () => {
   const [categories, setCategories] = useState(categoriesData);
   const [brands, setBrands] = useState(brandsData);
   const [companies, setCompanies] = useState(companiesData);
+  const [health, setHealth] = useState(healthData);
+  const [projectType, setProjectType] = useState(projectTypeData);
 
   const handleDelete = (id, array, setter) => {
     const updatedArray = array.filter((v) => v.id !== id);
@@ -83,6 +87,20 @@ const Settings = () => {
             }
           >
             Stages
+          </Tab>
+          <Tab
+            className={({ selected }) =>
+              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
+            }
+          >
+            Project Health
+          </Tab>
+          <Tab
+            className={({ selected }) =>
+              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
+            }
+          >
+            Project Types
           </Tab>
         </Tab.List>
         <Tab.Panels>
@@ -255,6 +273,74 @@ const Settings = () => {
                         <button
                           onClick={() => {
                             handleDelete(stage.id, stages, setStages);
+                          }}
+                          className={chips.action}
+                        >
+                          <HiOutlineTrash className="h-full w-full" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Box>
+          </Tab.Panel>
+          <Tab.Panel>
+            <Box>
+              <Button classes="ml-auto mb-5">Add a new status</Button>
+              <div className={chips.wrapper}>
+                {health.map((healthStatus) => {
+                  return (
+                    <div className={chips.chip} key={healthStatus.id}>
+                      <div>
+                        <h5 className={chips.title}>{healthStatus.title}</h5>
+                        <Chip
+                          label={healthStatus.title}
+                          variant={healthStatus.className}
+                          outlined={healthStatus.outlineVariant}
+                        />
+                      </div>
+                      <div className={chips.actionWrapper}>
+                        <button className={chips.action}>
+                          <HiOutlinePencil className="h-full w-full" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleDelete(healthStatus.id, health, setHealth);
+                          }}
+                          className={chips.action}
+                        >
+                          <HiOutlineTrash className="h-full w-full" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Box>
+          </Tab.Panel>
+          <Tab.Panel>
+            <Box>
+              <Button classes="ml-auto mb-5">Add a new type</Button>
+              <div className={chips.wrapper}>
+                {projectType.map((type) => {
+                  return (
+                    <div className={chips.chip} key={type.id}>
+                      <img
+                        src={type.icon}
+                        alt={type.title}
+                        className={chips.logo}
+                      />
+                      <div>
+                        <h5 className={chips.title}>{type.title}</h5>
+                      </div>
+                      <div className={chips.actionWrapper}>
+                        <button className={chips.action}>
+                          <HiOutlinePencil className="h-full w-full" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleDelete(type.id, projectType, setProjectType);
                           }}
                           className={chips.action}
                         >
