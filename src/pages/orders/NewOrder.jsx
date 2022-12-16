@@ -1,13 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
 import Textarea from "../../components/Textarea";
 import InputRadio from "../../components/InputRadio";
 import TagInput from "../../components/TagInput";
 import Button from "../../components/Button";
-import { useNavigate } from "react-router-dom";
 
 const styles = {
   title: `mb-6 border-b border-b-slate-200 pb-2 text-2xl font-semibold capitalize text-slate-900`,
+  subtitle: `mb-3 select-none text-lg font-medium capitalize text-slate-700`,
   buttonGroup: `mt-2 flex justify-end gap-3 border-t border-t-slate-200 pt-5`,
 };
 
@@ -35,9 +36,7 @@ const NewOrder = () => {
         <Textarea label="Description" required widthVariant="full" rows={3} />
         <TagInput label="Services Tags" />
       </div>
-      <h5 className="mb-3 select-none text-lg font-medium capitalize text-slate-700">
-        Services
-      </h5>
+      <h5 className={styles.subtitle}>Services</h5>
       <div className="grid grid-cols-3 gap-x-5">
         <InputRadio type="checkbox" text="logo design" />
         <InputRadio type="checkbox" text="3d logo design" />

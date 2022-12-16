@@ -1,6 +1,6 @@
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
-import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
 import Orders from "./pages/orders/Orders";
@@ -13,6 +13,7 @@ import Users from "./pages/Users";
 import UserProfile from "./pages/UserProfile";
 import OrderDetails from "./pages/orders/OrderDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
+import NewClient from "./pages/clients/NewClient";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
           </Route>
           <Route path="clients">
             <Route index element={<Clients />} />
+            <Route path="new" element={<NewClient />} />
             <Route path=":id" element={<ClientDetails />} />
           </Route>
           <Route path="users">
@@ -37,8 +39,8 @@ const App = () => {
           <Route path="brandDetails" element={<BrandDetail />} />
           <Route path="settings" element={<Settings />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
       </Routes>
     </>
   );

@@ -31,7 +31,8 @@ const Main = () => {
       chart: `2xl:w-2/3`,
     },
     categoryCard: {
-      wrapper: `mb-4 rounded-lg bg-white p-1.5 shadow-md`,
+      // wrapper: `mb-4 rounded-lg bg-white p-1.5 shadow-md`,
+      wrapper: `mb-4 rounded-lg bg-white p-1.5 ring-1 ring-slate-200`,
       accordionButton: {
         wrapper: `flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 hover:bg-slate-100 2xl:flex-row`,
         titleWrapper: `flex w-full items-center gap-2 2xl:w-40`,

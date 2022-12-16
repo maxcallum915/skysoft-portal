@@ -1,18 +1,12 @@
+import { Link } from "react-router-dom";
+import { DataGrid } from "@mui/x-data-grid";
 import {
   HiArrowTrendingUp,
   HiCheck,
   HiOutlineUserPlus,
   HiOutlineXMark,
+  HiPlus,
 } from "react-icons/hi2";
-import { HiOutlinePlusSm } from "react-icons/hi";
-import Button from "../../components/Button";
-import { Dialog, Transition } from "@headlessui/react";
-import { useState } from "react";
-import Input from "../../components/Input";
-import { Fragment } from "react";
-import Select from "../../components/Select";
-import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import Chip from "../../components/Chip";
 import InfoChip from "../../components/InfoChip";
@@ -20,7 +14,7 @@ import InfoChip from "../../components/InfoChip";
 const VisitClient = ({ params }) => {
   return (
     <Link
-      to={`/users/${params.row.clientProfile}`}
+      to={`/clients/${params.row.clientProfile}`}
       className="flex items-center gap-3"
     >
       <Avatar icon="https://xsgames.co/randomusers/avatar.php?g=male" rounded />
@@ -220,151 +214,75 @@ const columns = [
 ];
 
 const styles = {
-  summaryChipWrapper: `mb-5 grid gap-5 lg:grid-cols-4`,
-  summaryChip: `flex items-center gap-3 rounded-lg bg-white p-4 shadow-md`,
-  summaryChipIcon: `h-12 w-12 shrink-0 rounded-lg p-2.5`,
-  summaryChipSubtitle: `text-sm capitalize text-slate-400 font-medium`,
-  summaryChipTitle: `mt-1 text-2xl font-semibold leading-none`,
+  summaryChips: `mb-5 grid gap-5 lg:grid-cols-4`,
+  summaryChip: {
+    wrapper: `flex items-center gap-3 rounded-lg bg-white p-4 ring-1 ring-slate-200`,
+    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5`,
+    subtitle: `text-sm capitalize text-slate-400 font-medium`,
+    title: `mt-1 text-2xl font-semibold leading-none`,
+  },
+  addClient: {
+    wrapper: `mb-5 flex items-end gap-2`,
+    subtitle: `text-sm capitalize leading-none text-slate-400`,
+    title: `text-xl font-semibold capitalize text-slate-900`,
+    icon: `relative mb-1 h-6 w-6 rounded-full border-2 border-secondary text-secondary after:invisible after:absolute after:top-1/2 after:left-full after:ml-1 after:mt-2 after:w-max after:-translate-y-1/2 after:rounded-md after:bg-slate-900 after:px-3 after:py-1 after:text-sm after:capitalize after:text-white after:opacity-0 after:transition-all after:duration-300 after:content-['add_order'] hover:bg-secondary hover:text-white hover:after:visible hover:after:mt-0 hover:after:opacity-100`,
+  },
 };
+const { summaryChip, addClient } = styles;
 
 const Clients = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const handleModal = () => setOpenModal((previousState) => !previousState);
   return (
     <>
-      <Transition show={openModal} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-50"
-          open={openModal}
-          onClose={handleModal}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-300"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
-          </Transition.Child>
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="mx-auto flex min-h-full max-w-5xl items-center p-4">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-300"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full">
-                  <div className="transform overflow-hidden rounded-md bg-white p-5 shadow-xl transition-all">
-                    <h1 className="mb-6 border-b border-b-slate-200 pb-2 text-2xl font-semibold capitalize text-slate-900">
-                      Add a new client
-                    </h1>
-                    <div className="grid grid-cols-2 gap-x-5">
-                      <Select widthVariant="full" label="Select brand" />
-                      <Input required label="Client Name" widthVariant="full" />
-                      <Input
-                        required
-                        type="email"
-                        label="Client email"
-                        widthVariant="full"
-                      />
-                      <Input
-                        required
-                        type="tel"
-                        label="Client phone"
-                        widthVariant="full"
-                      />
-                      <Input
-                        required
-                        type="password"
-                        label="Password"
-                        widthVariant="full"
-                      />
-                      <Input
-                        required
-                        type="password"
-                        label="Re-enter password"
-                        widthVariant="full"
-                      />
-                    </div>
-                    <div className="mt-2 flex justify-end gap-3 border-t border-t-slate-200 pt-5">
-                      <Button handleClick={handleModal}>Cancel</Button>
-                      <Button>Add client</Button>
-                    </div>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>{" "}
-        </Dialog>
-      </Transition>
-      <div className={styles.summaryChipWrapper}>
-        <div className={styles.summaryChip}>
+      <div className={styles.summaryChips}>
+        <div className={summaryChip.wrapper}>
           <div
-            className={`${styles.summaryChipIcon} bg-secondary bg-opacity-10 text-secondary`}
+            className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
           >
             <HiOutlineUserPlus className="h-full w-full" />
           </div>
           <div>
-            <h6 className={styles.summaryChipSubtitle}>New clients</h6>
-            <h5 className={`${styles.summaryChipTitle} text-secondary`}>26</h5>
+            <h6 className={summaryChip.subtitle}>New clients</h6>
+            <h5 className={`${summaryChip.title} text-secondary`}>26</h5>
           </div>
         </div>
-        <div className={styles.summaryChip}>
-          <div
-            className={`${styles.summaryChipIcon} bg-amber-50 text-amber-500`}
-          >
+        <div className={summaryChip.wrapper}>
+          <div className={`${summaryChip.icon} bg-amber-50 text-amber-500`}>
             <HiArrowTrendingUp className="h-full w-full" />
           </div>
           <div>
-            <h6 className={styles.summaryChipSubtitle}>clients in-process</h6>
-            <h5 className={`${styles.summaryChipTitle} text-amber-500`}>587</h5>
+            <h6 className={summaryChip.subtitle}>clients in-process</h6>
+            <h5 className={`${summaryChip.title} text-amber-500`}>587</h5>
           </div>
         </div>
-        <div className={styles.summaryChip}>
-          <div
-            className={`${styles.summaryChipIcon} bg-green-50 text-green-500`}
-          >
+        <div className={summaryChip.wrapper}>
+          <div className={`${summaryChip.icon} bg-green-50 text-green-500`}>
             <HiCheck className="h-full w-full" />
           </div>
           <div>
-            <h6 className={styles.summaryChipSubtitle}>clients delivered</h6>
-            <h5 className={`${styles.summaryChipTitle} text-green-500`}>408</h5>
+            <h6 className={summaryChip.subtitle}>clients delivered</h6>
+            <h5 className={`${summaryChip.title} text-green-500`}>408</h5>
           </div>
         </div>
-        <div className={styles.summaryChip}>
-          <div className={`${styles.summaryChipIcon} bg-red-50 text-red-500`}>
+        <div className={summaryChip.wrapper}>
+          <div className={`${summaryChip.icon} bg-red-50 text-red-500`}>
             <HiOutlineXMark className="h-full w-full" />
           </div>
           <div>
-            <h6 className={styles.summaryChipSubtitle}>chargedback clients</h6>
-            <h5 className={`${styles.summaryChipTitle} text-red-500`}>12</h5>
+            <h6 className={summaryChip.subtitle}>chargedback clients</h6>
+            <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
           </div>
         </div>
       </div>
-      <div className="mb-5 flex items-center gap-2">
+      <div className={addClient.wrapper}>
         <div>
-          <h6 className="text-sm capitalize leading-none text-slate-400">
-            Total
-          </h6>
-          <h5 className="text-xl font-semibold capitalize text-slate-900">
-            Clients: <span className="font-bold text-secondary">458</span>
+          <h6 className={addClient.subtitle}>Total</h6>
+          <h5 className={addClient.title}>
+            clients: <span className="font-bold text-secondary">458</span>
           </h5>
         </div>
-        <button
-          onClick={handleModal}
-          after="Add client"
-          className="relative mb-0.5 h-6 w-6 self-end rounded-full border-2 border-secondary text-secondary after:invisible after:absolute after:top-1/2 after:left-full after:ml-1 after:mt-2 after:w-max after:-translate-y-1/2 after:rounded-md after:bg-slate-900 after:px-3 after:py-1 after:text-sm after:capitalize after:text-white after:opacity-0 after:transition-all after:duration-300 after:content-[attr(after)] hover:bg-secondary hover:text-white hover:after:visible hover:after:mt-0 hover:after:opacity-100"
-        >
-          <HiOutlinePlusSm className="h-full w-full" />
-        </button>
+        <Link to="new" className={addClient.icon}>
+          <HiPlus className="h-full w-full" />
+        </Link>
       </div>
       <div className="h-[1000px] w-full">
         <DataGrid

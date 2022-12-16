@@ -6,17 +6,20 @@ const styles = {
   subtitle: `text-sm capitalize text-slate-400`,
 };
 
+// @param {string} icon - Set icon
+// @param {string} title - Set title
+// @param {string} subtitle - Set subtitle
+// @param {string} vDirectionInvert - Invert text vertically
+// @param {string} hDirectionInvert - Invert chip horizontally
 const InfoChip = ({
   icon,
   title,
   subtitle,
-  vDirectionReverse = false,
-  hDirectionReverse = false,
+  vDirectionInvert = false,
+  hDirectionInvert = false,
 }) => {
   return (
-    <div
-      className={`${styles.chip} ${hDirectionReverse && "flex-row-reverse"}`}
-    >
+    <div className={`${styles.chip} ${hDirectionInvert && "flex-row-reverse"}`}>
       <div className={styles.icon}>
         {icon ? (
           <img src={icon} alt="brand logo" className={styles.iconImg} />
@@ -26,7 +29,7 @@ const InfoChip = ({
       </div>
       <div
         className={`flex flex-col gap-1 ${
-          vDirectionReverse && "flex-col-reverse"
+          vDirectionInvert && "flex-col-reverse"
         }`}
       >
         {title && <h5 className={styles.title}>{title}</h5>}

@@ -1,9 +1,7 @@
-import AvatarGroup from "../components/AvatarGroup";
-import { HiOutlineStar } from "react-icons/hi";
-import Box from "../components/Box";
-import Dropdown from "../components/Dropdown";
-import Avatar from "../components/Avatar";
 import { Link } from "react-router-dom";
+import AvatarGroup from "../components/AvatarGroup";
+import Box from "../components/Box";
+import Avatar from "../components/Avatar";
 
 const Teams = () => {
   return (
@@ -13,8 +11,6 @@ const Teams = () => {
           <span className="mr-auto text-xl font-semibold capitalize text-slate-700">
             Developers
           </span>
-          <Dropdown dropdownIcon={<HiOutlineStar className="h-5 w-5" />} />
-          <Dropdown />
         </div>
         <p className="text-slate-400">
           We don’t make assumptions about the rest of your technology stack, so
@@ -50,8 +46,6 @@ const Teams = () => {
           <span className="mr-auto text-xl font-semibold capitalize text-slate-700">
             designers
           </span>
-          <Dropdown dropdownIcon={<HiOutlineStar className="h-5 w-5" />} />
-          <Dropdown />
         </div>
         <p className="text-slate-400">
           We don’t make assumptions about the rest of your technology stack, so
@@ -87,8 +81,6 @@ const Teams = () => {
           <span className="mr-auto text-xl font-semibold capitalize text-slate-700">
             Social Media Marketing
           </span>
-          <Dropdown dropdownIcon={<HiOutlineStar className="h-5 w-5" />} />
-          <Dropdown />
         </div>
         <p className="text-slate-400">
           We don’t make assumptions about the rest of your technology stack, so
@@ -124,8 +116,6 @@ const Teams = () => {
           <span className="mr-auto text-xl font-semibold capitalize text-slate-700">
             Sales
           </span>
-          <Dropdown dropdownIcon={<HiOutlineStar className="h-5 w-5" />} />
-          <Dropdown />
         </div>
         <p className="text-slate-400">
           We don’t make assumptions about the rest of your technology stack, so
@@ -161,8 +151,6 @@ const Teams = () => {
           <span className="mr-auto text-xl font-semibold capitalize text-slate-700">
             Support
           </span>
-          <Dropdown dropdownIcon={<HiOutlineStar className="h-5 w-5" />} />
-          <Dropdown />
         </div>
         <p className="text-slate-400">
           We don’t make assumptions about the rest of your technology stack, so
