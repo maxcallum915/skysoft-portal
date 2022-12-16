@@ -38,7 +38,7 @@ const rows = [
     brand: "The website design",
     package: "Gold",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -51,7 +51,7 @@ const rows = [
     brand: "Web districts",
     package: "Bronze",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -64,7 +64,7 @@ const rows = [
     brand: "Seo maisters",
     package: "Silver",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -77,7 +77,7 @@ const rows = [
     brand: "Web districts",
     package: "Bronze",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -90,7 +90,7 @@ const rows = [
     brand: "The Website Design",
     package: "Bronze",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -103,7 +103,7 @@ const rows = [
     brand: "Web districts",
     package: "Silver",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -116,7 +116,7 @@ const rows = [
     brand: "Web districts",
     package: "Gold",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -129,7 +129,7 @@ const rows = [
     brand: "SEO Maisters",
     package: "Bronze",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
   {
@@ -142,7 +142,7 @@ const rows = [
     brand: "Web districts",
     package: "Bronze",
     clientWorth: 5040.25,
-    projectNumbers: 2,
+    orderNumbers: 2,
     createdAt: "10-10-2022",
   },
 ];
@@ -195,11 +195,11 @@ const columns = [
     },
   },
   {
-    field: "projectNumbers",
+    field: "orderNumbers",
     width: 135,
     headerAlign: "center",
     align: "center",
-    headerName: `No. of Projects`,
+    headerName: `No. of Orders`,
   },
   {
     field: "createdAt",

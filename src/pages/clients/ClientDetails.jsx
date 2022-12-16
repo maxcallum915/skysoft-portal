@@ -30,7 +30,7 @@ const styles = {
     tabDefault: `text-slate-700 hover:bg-slate-100 hover:text-slate-900`,
     tabSelected: `bg-gradient-to-l from-primary to-secondary text-white shadow-md`,
   },
-  projectCard: {
+  orderCard: {
     top: `mb-5 flex items-start justify-between gap-3 border-b border-slate-200 pb-5`,
     title: `mb-1 text-lg font-semibold capitalize leading-none text-secondary`,
     subtitle: `text-sm capitalize text-slate-400`,
@@ -38,7 +38,7 @@ const styles = {
     flexBetween: `flex items-center justify-between`,
   },
 };
-const { infoRow, tabs, projectCard } = styles;
+const { infoRow, tabs, orderCard } = styles;
 
 const ClientDetails = () => {
   return (
@@ -136,31 +136,29 @@ const ClientDetails = () => {
             <div className="grid gap-5 lg:grid-cols-2 2xl:grid-cols-3">
               <Box>
                 <Link to="/orders/132">
-                  <div className={projectCard.top}>
+                  <div className={orderCard.top}>
                     <div>
-                      <h5 className={projectCard.title}>Create Website</h5>
-                      <h6 className={projectCard.subtitle}>
-                        order id: 12345678
-                      </h6>
+                      <h5 className={orderCard.title}>Create Website</h5>
+                      <h6 className={orderCard.subtitle}>order id: 12345678</h6>
                     </div>
-                    <div className={projectCard.worth}>
+                    <div className={orderCard.worth}>
                       worth: <span className="text-secondary">$1.84k</span>
                     </div>
                   </div>
-                  <div className={`${projectCard.flexBetween} mb-2`}>
-                    <span className={projectCard.subtitle}>Order Status</span>
+                  <div className={`${orderCard.flexBetween} mb-2`}>
+                    <span className={orderCard.subtitle}>Order Status</span>
                     <Chip label="in-process" variant="warning" />
                   </div>
-                  <div className={projectCard.flexBetween}>
-                    <span className={projectCard.subtitle}>Order Stage</span>
+                  <div className={orderCard.flexBetween}>
+                    <span className={orderCard.subtitle}>Order Stage</span>
                     <Chip
                       label="Revision - Inner Pages - Test Link"
                       variant="warning"
                     />
                   </div>
-                  <div className={`${projectCard.flexBetween} mb-1 mt-5`}>
-                    <h6 className={projectCard.subtitle}>Order Completion:</h6>
-                    <h6 className={projectCard.subtitle}>24% completed</h6>
+                  <div className={`${orderCard.flexBetween} mb-1 mt-5`}>
+                    <h6 className={orderCard.subtitle}>Order Completion:</h6>
+                    <h6 className={orderCard.subtitle}>24% completed</h6>
                   </div>
                   <Progressbar
                     width="w-full"
@@ -184,8 +182,8 @@ const ClientDetails = () => {
                   date={"January 13th, 2022"}
                 />
                 <ActivityChip
-                  title={"New project has been created"}
-                  subtitle={"You have created a new project"}
+                  title={"New order has been created"}
+                  subtitle={"You have created a new order"}
                   date={"January 13th, 2022"}
                 />
                 <ActivityChip

@@ -351,7 +351,7 @@ const healthData = [
   },
 ];
 
-const projectTypeData = [
+const orderTypeData = [
   {
     id: 1,
     title: `custom`,
@@ -381,5 +381,5 @@ export {
   statusesData,
   stagesData,
   healthData,
-  projectTypeData,
+  orderTypeData,
 };

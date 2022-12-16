@@ -8,7 +8,7 @@ const styles = {
 
 // @param {string} type - Set input type
 // @param {string} [text] - Set label text
-// @param {boolean} [required] - Set required attribute
+// @param {boolean} [required=false] - Set required attribute
 const InputRadio = ({ type, text, required = false }) => {
   const [isChecked, setIsChecked] = useState(false);
   const id = useId();

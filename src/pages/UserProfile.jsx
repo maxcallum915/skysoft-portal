@@ -1,5 +1,4 @@
-import Box from "../components/Box";
-import Chip from "../components/Chip";
+import { useParams } from "react-router-dom";
 import {
   HiCheck,
   HiOutlineEnvelope,
@@ -8,7 +7,8 @@ import {
   HiOutlineUser,
   HiOutlineUserCircle,
 } from "react-icons/hi2";
-import { useParams } from "react-router-dom";
+import Box from "../components/Box";
+import Chip from "../components/Chip";
 import ActivityChip from "../components/ActivityChip";
 import ActivityChipGroup from "../components/ActivityChipGroup";
 

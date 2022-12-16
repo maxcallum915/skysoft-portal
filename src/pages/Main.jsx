@@ -1,3 +1,11 @@
+import { Link } from "react-router-dom";
+import { Disclosure } from "@headlessui/react";
+import {
+  HiCheck,
+  HiChevronDown,
+  HiXMark,
+  HiOutlineArrowPath,
+} from "react-icons/hi2";
 import brand1 from "../assets/brand-logo-1.png";
 import brand2 from "../assets/brand-logo-2.png";
 import brand3 from "../assets/brand-logo-3.png";
@@ -6,77 +14,68 @@ import silverIcon from "../assets/package-icon-2.png";
 import goldIcon from "../assets/package-icon-3.png";
 import platinumIcon from "../assets/package-icon-4.png";
 import diamondIcon from "../assets/package-icon-5.png";
-import {
-  HiCheck,
-  HiChevronDown,
-  HiXMark,
-  HiOutlineArrowPath,
-} from "react-icons/hi2";
-import Box from "../components/Box";
 import LineChart from "../components/LineChart";
-import { Disclosure } from "@headlessui/react";
-import { Link } from "react-router-dom";
+import Box from "../components/Box";
+
+const styles = {
+  orderSummary: {
+    wrapper: `mb-5 flex items-center gap-3`,
+    icon: `h-12 w-12 shrink-0 rounded-lg p-2`,
+    title: `text-xl font-semibold capitalize text-slate-900`,
+    body: `flex flex-col justify-between gap-4 2xl:flex-row 2xl:items-end 2xl:gap-5`,
+    textInfo: `mb-1 flex items-end gap-1.5`,
+    orders: `text-3xl font-bold leading-none text-slate-900`,
+    percentage: `font-medium text-slate-400`,
+    amount: `text-lg font-semibold leading-none`,
+    chart: `2xl:w-2/3`,
+  },
+  categoryCard: {
+    wrapper: `mb-4 rounded-lg bg-white p-1.5 ring-1 ring-slate-200`,
+    accordionButton: {
+      wrapper: `flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 hover:bg-slate-100 2xl:flex-row`,
+      titleWrapper: `flex w-full items-center gap-2 2xl:w-40`,
+      icon: `h-14 w-14 shrink-0 object-contain`,
+      title: `text-lg font-bold leading-tight capitalize text-slate-900`,
+      subtitle: `font-semibold text-slate-400`,
+      infoWrapper: `flex w-full flex-1 items-center justify-around gap-4 rounded-md text-center 2xl:justify-end`,
+      infoTitle: `mb-1 text-xl font-bold leading-none text-secondary`,
+      infoSubtitle: `text-xs font-medium capitalize text-slate-900`,
+      chevron: `ml-auto transition-transform duration-300 2xl:ml-0`,
+    },
+    accordionPanel: {
+      wrapper: `mt-5`,
+      brandRow: `flex items-center gap-2`,
+      brandIcon: `h-10 w-10 rounded-md bg-slate-100 p-0.5`,
+      brandTitle: `font-semibold capitalize text-slate-900`,
+      brandInfo: `ml-auto flex items-center gap-2 rounded-md bg-slate-100 px-2 py-1 text-sm font-bold`,
+      brandOrders: `text-slate-900 after:ml-2 after:content-['/']`,
+      brandAmount: `text-secondary`,
+    },
+  },
+  statusTable: {
+    row: `grid grid-cols-5 gap-8`,
+    column: `flex items-center capitalize`,
+    columnCells: `flex w-full items-center justify-between gap-2.5 py-1 px-2 text-center font-medium`,
+    columnSpan: `flex-1 text-sm`,
+    icon: `h-8 w-8 rounded-md bg-white object-contain p-0.5`,
+    header: {
+      row: `mb-4 items-end`,
+      column: `flex-col gap-1`,
+      columnTitle: `text-lg font-semibold`,
+    },
+    body: {
+      row: `mt-2.5 items-center rounded-md bg-slate-50 p-2 hover:bg-slate-100`,
+    },
+  },
+};
+const {
+  orderSummary,
+  categoryCard,
+  categoryCard: { wrapper, accordionButton, accordionPanel },
+  statusTable,
+} = styles;
 
 const Main = () => {
-  const styles = {
-    orderSummary: {
-      wrapper: `mb-5 flex items-center gap-3`,
-      icon: `h-12 w-12 shrink-0 rounded-lg p-2`,
-      title: `text-xl font-semibold capitalize text-slate-900`,
-      body: `flex flex-col justify-between gap-4 2xl:flex-row 2xl:items-end 2xl:gap-5`,
-      textInfo: `mb-1 flex items-end gap-1.5`,
-      projects: `text-3xl font-bold leading-none text-slate-900`,
-      percentage: `font-medium text-slate-400`,
-      amount: `text-lg font-semibold leading-none`,
-      chart: `2xl:w-2/3`,
-    },
-    categoryCard: {
-      // wrapper: `mb-4 rounded-lg bg-white p-1.5 shadow-md`,
-      wrapper: `mb-4 rounded-lg bg-white p-1.5 ring-1 ring-slate-200`,
-      accordionButton: {
-        wrapper: `flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 hover:bg-slate-100 2xl:flex-row`,
-        titleWrapper: `flex w-full items-center gap-2 2xl:w-40`,
-        icon: `h-14 w-14 shrink-0 object-contain`,
-        title: `text-lg font-bold leading-tight capitalize text-slate-900`,
-        subtitle: `font-semibold text-slate-400`,
-        infoWrapper: `flex w-full flex-1 items-center justify-around gap-4 rounded-md text-center 2xl:justify-end`,
-        infoTitle: `mb-1 text-xl font-bold leading-none text-secondary`,
-        infoSubtitle: `text-xs font-medium capitalize text-slate-900`,
-        chevron: `ml-auto transition-transform duration-300 2xl:ml-0`,
-      },
-      accordionPanel: {
-        wrapper: `mt-5`,
-        brandRow: `flex items-center gap-2`,
-        brandIcon: `h-10 w-10 rounded-md bg-slate-100 p-0.5`,
-        brandTitle: `font-semibold capitalize text-slate-900`,
-        brandInfo: `ml-auto flex items-center gap-2 rounded-md bg-slate-100 px-2 py-1 text-sm font-bold`,
-        brandProjects: `text-slate-900 after:ml-2 after:content-['/']`,
-        brandAmount: `text-secondary`,
-      },
-    },
-    statusTable: {
-      row: `grid grid-cols-5 gap-8`,
-      column: `flex items-center capitalize`,
-      columnCells: `flex w-full items-center justify-between gap-2.5 py-1 px-2 text-center font-medium`,
-      columnSpan: `flex-1 text-sm`,
-      icon: `h-8 w-8 rounded-md bg-white object-contain p-0.5`,
-      header: {
-        row: `mb-4 items-end`,
-        column: `flex-col gap-1`,
-        columnTitle: `text-lg font-semibold`,
-      },
-      body: {
-        row: `mt-2.5 items-center rounded-md bg-slate-50 p-2 hover:bg-slate-100`,
-      },
-    },
-  };
-  const {
-    orderSummary,
-    categoryCard,
-    categoryCard: { wrapper, accordionButton, accordionPanel },
-    statusTable,
-  } = styles;
-
   return (
     <>
       <div className="flex flex-col items-start gap-5 xl:flex-row">
@@ -97,7 +96,7 @@ const Main = () => {
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.projects}>58</h5>
+                    <h5 className={orderSummary.orders}>58</h5>
                     <h6 className={orderSummary.percentage}>25%</h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-emerald-400`}>
@@ -121,7 +120,7 @@ const Main = () => {
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.projects}>20</h5>
+                    <h5 className={orderSummary.orders}>20</h5>
                     <h6 className={orderSummary.percentage}>18%</h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-amber-400`}>
@@ -143,7 +142,7 @@ const Main = () => {
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.projects}>5</h5>
+                    <h5 className={orderSummary.orders}>5</h5>
                     <h6 className={orderSummary.percentage}>18%</h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-red-500`}>
@@ -165,7 +164,7 @@ const Main = () => {
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.projects}>2</h5>
+                    <h5 className={orderSummary.orders}>2</h5>
                     <h6 className={orderSummary.percentage}>4%</h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-red-600`}>
@@ -237,7 +236,7 @@ const Main = () => {
                         The Website Designs
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>21</li>
+                        <li className={accordionPanel.brandOrders}>21</li>
                         <li className={accordionPanel.brandAmount}>$28.4k</li>
                       </ul>
                     </div>
@@ -253,7 +252,7 @@ const Main = () => {
                         web Districts
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>5</li>
+                        <li className={accordionPanel.brandOrders}>5</li>
                         <li className={accordionPanel.brandAmount}>$4.2k</li>
                       </ul>
                     </div>
@@ -269,7 +268,7 @@ const Main = () => {
                         Website Design Engine
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>68</li>
+                        <li className={accordionPanel.brandOrders}>68</li>
                         <li className={accordionPanel.brandAmount}>$56.1k</li>
                       </ul>
                     </div>
@@ -332,7 +331,7 @@ const Main = () => {
                         The Website Designs
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>21</li>
+                        <li className={accordionPanel.brandOrders}>21</li>
                         <li className={accordionPanel.brandAmount}>$28.4k</li>
                       </ul>
                     </div>
@@ -348,7 +347,7 @@ const Main = () => {
                         web Districts
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>5</li>
+                        <li className={accordionPanel.brandOrders}>5</li>
                         <li className={accordionPanel.brandAmount}>$4.2k</li>
                       </ul>
                     </div>
@@ -364,7 +363,7 @@ const Main = () => {
                         Website Design Engine
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>68</li>
+                        <li className={accordionPanel.brandOrders}>68</li>
                         <li className={accordionPanel.brandAmount}>$56.1k</li>
                       </ul>
                     </div>
@@ -427,7 +426,7 @@ const Main = () => {
                         The Website Designs
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>21</li>
+                        <li className={accordionPanel.brandOrders}>21</li>
                         <li className={accordionPanel.brandAmount}>$28.4k</li>
                       </ul>
                     </div>
@@ -443,7 +442,7 @@ const Main = () => {
                         web Districts
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>5</li>
+                        <li className={accordionPanel.brandOrders}>5</li>
                         <li className={accordionPanel.brandAmount}>$4.2k</li>
                       </ul>
                     </div>
@@ -459,7 +458,7 @@ const Main = () => {
                         Website Design Engine
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>68</li>
+                        <li className={accordionPanel.brandOrders}>68</li>
                         <li className={accordionPanel.brandAmount}>$56.1k</li>
                       </ul>
                     </div>
@@ -522,7 +521,7 @@ const Main = () => {
                         The Website Designs
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>21</li>
+                        <li className={accordionPanel.brandOrders}>21</li>
                         <li className={accordionPanel.brandAmount}>$28.4k</li>
                       </ul>
                     </div>
@@ -538,7 +537,7 @@ const Main = () => {
                         web Districts
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>5</li>
+                        <li className={accordionPanel.brandOrders}>5</li>
                         <li className={accordionPanel.brandAmount}>$4.2k</li>
                       </ul>
                     </div>
@@ -554,7 +553,7 @@ const Main = () => {
                         Website Design Engine
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>68</li>
+                        <li className={accordionPanel.brandOrders}>68</li>
                         <li className={accordionPanel.brandAmount}>$56.1k</li>
                       </ul>
                     </div>
@@ -617,7 +616,7 @@ const Main = () => {
                         The Website Designs
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>21</li>
+                        <li className={accordionPanel.brandOrders}>21</li>
                         <li className={accordionPanel.brandAmount}>$28.4k</li>
                       </ul>
                     </div>
@@ -633,7 +632,7 @@ const Main = () => {
                         web Districts
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>5</li>
+                        <li className={accordionPanel.brandOrders}>5</li>
                         <li className={accordionPanel.brandAmount}>$4.2k</li>
                       </ul>
                     </div>
@@ -649,7 +648,7 @@ const Main = () => {
                         Website Design Engine
                       </h5>
                       <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandProjects}>68</li>
+                        <li className={accordionPanel.brandOrders}>68</li>
                         <li className={accordionPanel.brandAmount}>$56.1k</li>
                       </ul>
                     </div>
@@ -677,7 +676,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-emerald-50 text-emerald-700`}
               >
-                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>orders</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
@@ -693,7 +692,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-amber-50 text-amber-700`}
               >
-                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>orders</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
@@ -707,7 +706,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-red-50 text-red-700`}
               >
-                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>orders</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
@@ -721,7 +720,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-red-50 text-red-700`}
               >
-                <li className={statusTable.columnSpan}>projects</li>
+                <li className={statusTable.columnSpan}>orders</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>

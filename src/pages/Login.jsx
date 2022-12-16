@@ -1,10 +1,10 @@
+import { Link } from "react-router-dom";
 import loginImg from "../assets/login-img-3.png";
 import loginBg from "../assets/login-bg-1.png";
 import logo from "../assets/logo-full.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import InputRadio from "../components/InputRadio";
-import { Link } from "react-router-dom";
 
 const styles = {
   authWrapper: `flex min-h-screen bg-white`,

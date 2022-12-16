@@ -8,7 +8,7 @@ const styles = {
 };
 
 // @param {string} [label] - Show label tag
-// @param {boolean} [required] - Set required attribute
+// @param {boolean} [required=false] - Set required attribute
 // @param {string} [widthVariant=auto] - Set textarea width variants
 // @param {number} [rows=5] - Set textarea rows
 const Textarea = ({

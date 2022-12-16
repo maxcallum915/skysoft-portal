@@ -179,8 +179,8 @@ const OrderDetails = () => {
                   date={"January 13th, 2022"}
                 />
                 <ActivityChip
-                  title={"New project has been created"}
-                  subtitle={"You have created a new project"}
+                  title={"New order has been created"}
+                  subtitle={"You have created a new order"}
                   date={"January 13th, 2022"}
                 />
                 <ActivityChip

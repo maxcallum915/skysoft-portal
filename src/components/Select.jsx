@@ -24,7 +24,7 @@ const styles = {
 };
 
 // @param {string} - [label] - Show label tag
-// @param {boolean} - [required] - Set required attribute
+// @param {boolean} - [required=false] - Set required attribute
 // @param {string} - [widthVariant] - Set width variant
 const Select = ({ label, required = false, widthVariant }) => {
   const [selected, setSelected] = useState(people[0]);

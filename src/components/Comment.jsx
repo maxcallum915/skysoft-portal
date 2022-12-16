@@ -11,7 +11,7 @@ const styles = {
 // @param {string} comment - Set comment
 // @param {string} date - Set date
 // @param {string} [file] - Set file
-// @param {boolean} [flip] - Toggle comment flip
+// @param {boolean} [flip=false] - Toggle comment flip
 const Comment = ({ comment, date, file, flip = false }) => {
   return (
     <>

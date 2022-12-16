@@ -9,8 +9,8 @@ const styles = {
 // @param {string} icon - Set icon
 // @param {string} title - Set title
 // @param {string} subtitle - Set subtitle
-// @param {string} vDirectionInvert - Invert text vertically
-// @param {string} hDirectionInvert - Invert chip horizontally
+// @param {string} [vDirectionInvert=false] - Invert text vertically
+// @param {string} [hDirectionInvert=false] - Invert chip horizontally
 const InfoChip = ({
   icon,
   title,

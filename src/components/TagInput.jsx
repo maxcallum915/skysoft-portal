@@ -9,7 +9,7 @@ const styles = {
 
 // @param {string} [label] - Show label tag
 // @param {string} [widthVariant=auto] - Set textarea width variants
-// @param {boolean} [required] - Set required attribute
+// @param {boolean} [required=false] - Set required attribute
 const TagInput = ({ label, widthVariant = "auto", required = false }) => {
   const [selected, setSelected] = useState([]);
   return (

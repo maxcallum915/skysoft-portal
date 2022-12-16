@@ -25,7 +25,7 @@ const styles = {
 };
 
 // @param {string} label - Set chip label
-// @param {boolean} [outlined] - Set outline variant
+// @param {boolean} [outlined=false] - Set outline variant
 // @param {string} [variant] - Set color variant
 const Chip = ({ label, outlined = false, variant }) => {
   return (

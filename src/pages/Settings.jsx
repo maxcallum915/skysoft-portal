@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { Tab } from "@headlessui/react";
 import { HiOutlinePencil } from "react-icons/hi2";
 import Box from "../components/Box";
 import Button from "../components/Button";
 import Chip from "../components/Chip";
-import { useState } from "react";
 
 // Temporary Data
 import {
@@ -13,7 +13,7 @@ import {
   statusesData,
   stagesData,
   healthData,
-  projectTypeData,
+  orderTypeData,
 } from "../data.js";
 
 const styles = {
@@ -42,7 +42,7 @@ const Settings = () => {
   const [brands, setBrands] = useState(brandsData);
   const [companies, setCompanies] = useState(companiesData);
   const [health, setHealth] = useState(healthData);
-  const [projectType, setProjectType] = useState(projectTypeData);
+  const [orderType, setOrderType] = useState(orderTypeData);
 
   const handleDelete = (id, array, setter) => {
     const updatedArray = array.filter((v) => v.id !== id);
@@ -93,14 +93,14 @@ const Settings = () => {
               `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
             }
           >
-            Project Health
+            Order Health
           </Tab>
           <Tab
             className={({ selected }) =>
               `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
             }
           >
-            Project Types
+            Order Types
           </Tab>
         </Tab.List>
         <Tab.Panels>
@@ -274,7 +274,7 @@ const Settings = () => {
             <Box>
               <Button classes="ml-auto mb-5">Add a new type</Button>
               <div className={chips.wrapper}>
-                {projectType.map((type) => {
+                {orderType.map((type) => {
                   return (
                     <div className={chips.chip} key={type.id}>
                       <img

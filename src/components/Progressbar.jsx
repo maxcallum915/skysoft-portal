@@ -9,13 +9,13 @@ const styles = {
   secondary: `text-secondary bg-secondary bg-opacity-10`,
 };
 
-// @param {string} [width] - Set progress width
-// @param {string} [height] - Set progress height
-// @param {string} [background] - Set progress background
-// @param {string} [progressColor] - Set progress color
-// @param {number} [progress] - Set progress percentage
-// @param {boolean} [rounded] - Toggle progress radius
-// @param {boolean} [floatingTitle] - Toggle floatingTitle
+// @param {string} [width="w-24"] - Set progress width
+// @param {string} [height="h-1"] - Set progress height
+// @param {string} [background="bg-secondary bg-opacity-20"] - Set progress background
+// @param {string} [progressColor="bg-secondary"] - Set progress color
+// @param {number} [progress=25] - Set progress percentage
+// @param {boolean} [rounded=false] - Toggle progress radius
+// @param {boolean} [floatingTitle=false] - Toggle floatingTitle
 const Progressbar = ({
   width = "w-24",
   height = "h-1",

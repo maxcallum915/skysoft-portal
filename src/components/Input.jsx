@@ -7,9 +7,9 @@ const styles = {
   required: `text-blue-600`,
 };
 
-// @param {string} type - Set input type
+// @param {string} type=text - Set input type
 // @param {string} [label] - Show label tag
-// @param {boolean} [required] - Set required attribute
+// @param {boolean} [required=false] - Set required attribute
 // @param {string} [widthVariant=auto] - Set input width variants
 const Input = ({
   type = "text",

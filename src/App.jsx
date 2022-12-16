@@ -8,12 +8,12 @@ import NewOrder from "./pages/orders/NewOrder";
 import Clients from "./pages/clients/Clients";
 import BrandDetail from "./pages/BrandDetail";
 import Settings from "./pages/Settings";
-import Teams from "./pages/Teams";
 import Users from "./pages/Users";
 import UserProfile from "./pages/UserProfile";
 import OrderDetails from "./pages/orders/OrderDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
 import NewClient from "./pages/clients/NewClient";
+import Teams from "./pages/Teams";
 
 const App = () => {
   return (
