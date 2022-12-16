@@ -8,7 +8,14 @@ const styles = {
 // @param {string} [title] - Set popover title
 // @param {boolean} [rounded] - Set avatar radius
 // @param {boolean} [shadow] - Set avatar shadow
-const Avatar = ({ icon, title, rounded = false, shadow = false }) => {
+// @param {boolean} [tooltip] - Set title tooltip
+const Avatar = ({
+  icon,
+  title,
+  rounded = false,
+  shadow = false,
+  tooltip = false,
+}) => {
   return (
     <div
       className={`${styles.avatar} ${rounded && "rounded-full"} ${
@@ -22,10 +29,14 @@ const Avatar = ({ icon, title, rounded = false, shadow = false }) => {
           className={`${styles.avatarImg} ${rounded && "rounded-full"}`}
         />
       ) : (
-        title.split(" ").map((v, i) => i < 2 && v.slice(0, 1))
+        title
+          .split(" ")
+          .map((v, i, a) => (i === 0 || i === a.length - 1) && v.slice(0, 1))
       )}
 
-      {title && <span className={styles.popover}>{title}</span>}
+      {tooltip && title ? (
+        <span className={styles.popover}>{title}</span>
+      ) : null}
     </div>
   );
 };

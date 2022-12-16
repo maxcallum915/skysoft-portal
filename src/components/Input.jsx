@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useId } from "react";
 
 const styles = {
   inputWrapper: `mb-5`,
@@ -18,10 +18,11 @@ const Input = ({
   widthVariant = "auto",
 }) => {
   const [input, setInput] = useState("");
+  const id = useId();
   return (
     <div className={`${styles.inputWrapper} w-${widthVariant}`}>
       {label && (
-        <label className={styles.label} htmlFor={label}>
+        <label className={styles.label} htmlFor={id}>
           {label}
           {required && <span className={styles.required}>*</span>}
         </label>
@@ -32,7 +33,7 @@ const Input = ({
         onChange={(e) => setInput(e.target.value)}
         className={styles.input}
         required={required}
-        id={label}
+        id={id}
       />
     </div>
   );

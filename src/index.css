@@ -7,3 +7,25 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* React tag input */
+.rti--container {
+  --rti-main: #3862e1;
+  --rti-border: #e2e8f0;
+  --rti-radius: 0.375rem;
+  --rti-tag: #3862e1;
+  --rti-tag-remove: #ef4444;
+  --rti-tag-padding: 0.15rem 0.125rem 0.15rem 0.5rem;
+}
+.rti--container {
+  border-radius: 0.5rem;
+}
+.rti--container:focus-within {
+  background: #eff6ff;
+}
+.rti--tag {
+  color: #fff;
+}
+.rti--container:focus-within .rti--input {
+  background: #eff6ff;
+}

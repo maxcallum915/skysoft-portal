@@ -2,14 +2,17 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import Teams from "./pages/Teams";
-import Orders from "./pages/Orders";
 import Main from "./pages/Main";
-import Users from "./pages/Users";
-import UserProfile from "./pages/UserProfile";
-import Clients from "./pages/Clients";
+import Orders from "./pages/orders/Orders";
+import NewOrder from "./pages/orders/NewOrder";
+import Clients from "./pages/clients/Clients";
 import BrandDetail from "./pages/BrandDetail";
 import Settings from "./pages/Settings";
+import Teams from "./pages/Teams";
+import Users from "./pages/Users";
+import UserProfile from "./pages/UserProfile";
+import OrderDetails from "./pages/orders/OrderDetails";
+import ClientDetails from "./pages/clients/ClientDetails";
 
 const App = () => {
   return (
@@ -18,9 +21,16 @@ const App = () => {
         <Route path="/" element={<Dashboard />}>
           <Route index element={<Main />} />
           {/* <Route path="teams" element={<Teams />} /> */}
-          <Route path="orders" element={<Orders />} />
-          <Route path="clients" element={<Clients />} />
-          <Route path="users/">
+          <Route path="orders">
+            <Route index element={<Orders />} />
+            <Route path="new" element={<NewOrder />} />
+            <Route path=":id" element={<OrderDetails />} />
+          </Route>
+          <Route path="clients">
+            <Route index element={<Clients />} />
+            <Route path=":id" element={<ClientDetails />} />
+          </Route>
+          <Route path="users">
             <Route index element={<Users />} />
             <Route path=":id" element={<UserProfile />} />
           </Route>

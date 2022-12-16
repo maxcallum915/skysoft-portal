@@ -5,17 +5,17 @@ import {
   HiOutlineXMark,
 } from "react-icons/hi2";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import Button from "../components/Button";
+import Button from "../../components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { useState } from "react";
-import Input from "../components/Input";
+import Input from "../../components/Input";
 import { Fragment } from "react";
-import Select from "../components/Select";
+import Select from "../../components/Select";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
-import Avatar from "../components/Avatar";
-import Chip from "../components/Chip";
-import InfoChip from "../components/InfoChip";
+import Avatar from "../../components/Avatar";
+import Chip from "../../components/Chip";
+import InfoChip from "../../components/InfoChip";
 
 const VisitClient = ({ params }) => {
   return (

@@ -1,5 +1,5 @@
 import { Tab } from "@headlessui/react";
-import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi2";
+import { HiOutlinePencil } from "react-icons/hi2";
 import Box from "../components/Box";
 import Button from "../components/Button";
 import Chip from "../components/Chip";
@@ -25,12 +25,12 @@ const styles = {
   },
   chips: {
     wrapper: `flex flex-wrap gap-4`,
-    chip: `flex items-center gap-2.5 rounded-lg border border-slate-200 p-3`,
-    logo: `h-14 w-14 shrink-0 rounded-lg bg-slate-50 object-contain p-1 ring-1 ring-slate-100`,
+    chip: `flex items-center justify-between gap-2.5 rounded-lg border border-slate-200 bg-slate-50 p-3`,
+    logo: `h-14 w-14 shrink-0 rounded-lg bg-white object-contain p-1 ring-1 ring-slate-200`,
     title: `text-lg font-semibold capitalize text-slate-900`,
     subtitle: `text-xs font-medium capitalize text-slate-400`,
     actionWrapper: `relative ml-6 flex items-center gap-2`,
-    action: `h-6 w-6 rounded-md text-slate-900 hover:text-secondary focus:text-secondary focus:outline-none`,
+    action: `h-6 w-6 rounded-md text-secondary hover:text-secondary focus:text-secondary focus:outline-none`,
   },
 };
 const { tabs, chips } = styles;
@@ -126,14 +126,6 @@ const Settings = () => {
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
                         </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(company.id, companies, setCompanies);
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
-                        </button>
                       </div>
                     </div>
                   );
@@ -160,14 +152,6 @@ const Settings = () => {
                       <div className={chips.actionWrapper}>
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(brand.id, brands, setBrands);
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
                         </button>
                       </div>
                     </div>
@@ -198,18 +182,6 @@ const Settings = () => {
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
                         </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(
-                              category.id,
-                              categories,
-                              setCategories
-                            );
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
-                        </button>
                       </div>
                     </div>
                   );
@@ -236,14 +208,6 @@ const Settings = () => {
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
                         </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(status.id, statuses, setStatuses);
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
-                        </button>
                       </div>
                     </div>
                   );
@@ -257,7 +221,10 @@ const Settings = () => {
               <div className={chips.wrapper}>
                 {stages.map((stage) => {
                   return (
-                    <div className={chips.chip} key={stage.id}>
+                    <div
+                      className={`${chips.chip} w-[calc(50%-0.5rem)]`}
+                      key={stage.id}
+                    >
                       <div>
                         <h5 className={chips.title}>{stage.title}</h5>
                         <Chip
@@ -269,14 +236,6 @@ const Settings = () => {
                       <div className={chips.actionWrapper}>
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(stage.id, stages, setStages);
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
                         </button>
                       </div>
                     </div>
@@ -304,14 +263,6 @@ const Settings = () => {
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
                         </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(healthStatus.id, health, setHealth);
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
-                        </button>
                       </div>
                     </div>
                   );
@@ -337,14 +288,6 @@ const Settings = () => {
                       <div className={chips.actionWrapper}>
                         <button className={chips.action}>
                           <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleDelete(type.id, projectType, setProjectType);
-                          }}
-                          className={chips.action}
-                        >
-                          <HiOutlineTrash className="h-full w-full" />
                         </button>
                       </div>
                     </div>

@@ -37,7 +37,6 @@ const Topbar = () => {
             icon="https://xsgames.co/randomusers/avatar.php?g=male"
             rounded
           />
-          {/* {dropdownLabel && dropdownLabel} */}
         </Menu.Button>
         <Transition
           as={Fragment}
