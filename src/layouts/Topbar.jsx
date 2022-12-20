@@ -10,7 +10,7 @@ import Avatar from "../components/Avatar";
 import { Link } from "react-router-dom";
 
 const styles = {
-  topbar: `sticky top-0 z-50 flex items-center gap-3 border-b border-b-slate-100 bg-white p-3`,
+  topbar: `sticky top-0 z-10 flex items-center gap-3 border-b border-b-slate-100 bg-white p-3`,
   hamburger: `h-10 w-10 rounded-md bg-slate-100 p-1`,
   hamburgerActive: `bg-gradient-to-l from-primary to-secondary text-white`,
   title: `mr-auto text-xl font-semibold capitalize text-slate-900`,

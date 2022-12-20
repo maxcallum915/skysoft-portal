@@ -12,6 +12,7 @@
     "@headlessui/react": "^1.7.4",
     "@mui/x-data-grid": "^5.17.14",
     "apexcharts": "^3.36.3",
+    "axios": "^1.2.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^18.2.0",

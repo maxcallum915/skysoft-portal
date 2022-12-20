@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Tab } from "@headlessui/react";
 import { HiOutlinePencil } from "react-icons/hi2";
 import Box from "../components/Box";
 import Button from "../components/Button";
 import Chip from "../components/Chip";
+import Modal from "../components/Modal";
 
 // Temporary Data
 import {
@@ -49,8 +50,11 @@ const Settings = () => {
     setter(updatedArray);
   };
 
+  const healthModal = useRef(null);
+
   return (
     <>
+      <Modal ref={healthModal}>My Modal</Modal>
       <Tab.Group>
         <Tab.List className={`${tabs.tabList}`}>
           <Tab
@@ -246,7 +250,14 @@ const Settings = () => {
           </Tab.Panel>
           <Tab.Panel>
             <Box>
-              <Button classes="ml-auto mb-5">Add a new status</Button>
+              <Button
+                handleClick={() => {
+                  healthModal.current.toggleModal();
+                }}
+                classes="ml-auto mb-5"
+              >
+                Add a new status
+              </Button>
               <div className={chips.wrapper}>
                 {health.map((healthStatus) => {
                   return (
