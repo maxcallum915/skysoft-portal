@@ -37,7 +37,7 @@ const App = () => {
             <Route path=":id" element={<UserProfile />} />
           </Route>
           <Route path="brandDetails" element={<BrandDetail />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="admin-settings/*" element={<Settings />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="forgot-password" element={<ForgotPassword />} />

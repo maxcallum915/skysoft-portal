@@ -1,21 +1,11 @@
-import { useState, useRef } from "react";
-import { Tab } from "@headlessui/react";
-import { HiOutlinePencil } from "react-icons/hi2";
-import Box from "../components/Box";
-import Button from "../components/Button";
-import Chip from "../components/Chip";
-import Modal from "../components/Modal";
-
-// Temporary Data
-import {
-  companiesData,
-  brandsData,
-  categoriesData,
-  statusesData,
-  stagesData,
-  healthData,
-  orderTypeData,
-} from "../data.js";
+import { Routes, Link, Route, useLocation } from "react-router-dom";
+import Companies from "./admin-settings/Companies";
+import Brands from "./admin-settings/Brands";
+import Categories from "./admin-settings/Categories";
+import Statuses from "./admin-settings/Statuses";
+import Stages from "./admin-settings/Stages";
+import OrderHealth from "./admin-settings/OrderHealth";
+import OrderTypes from "./admin-settings/OrderTypes";
 
 const styles = {
   tabs: {
@@ -24,291 +14,84 @@ const styles = {
     tabDefault: `text-slate-700 hover:bg-slate-100 hover:text-slate-900`,
     tabSelected: `bg-gradient-to-l from-primary to-secondary text-white shadow-md`,
   },
-  chips: {
-    wrapper: `flex flex-wrap gap-4`,
-    chip: `flex items-center justify-between gap-2.5 rounded-lg border border-slate-200 bg-slate-50 p-3`,
-    logo: `h-14 w-14 shrink-0 rounded-lg bg-white object-contain p-1 ring-1 ring-slate-200`,
-    title: `text-lg font-semibold capitalize text-slate-900`,
-    subtitle: `text-xs font-medium capitalize text-slate-400`,
-    actionWrapper: `relative ml-6 flex items-center gap-2`,
-    action: `h-6 w-6 rounded-md text-secondary hover:text-secondary focus:text-secondary focus:outline-none`,
-  },
 };
-const { tabs, chips } = styles;
+const { tabs } = styles;
 
 const Settings = () => {
-  const [stages, setStages] = useState(stagesData);
-  const [statuses, setStatuses] = useState(statusesData);
-  const [categories, setCategories] = useState(categoriesData);
-  const [brands, setBrands] = useState(brandsData);
-  const [companies, setCompanies] = useState(companiesData);
-  const [health, setHealth] = useState(healthData);
-  const [orderType, setOrderType] = useState(orderTypeData);
-
-  const handleDelete = (id, array, setter) => {
-    const updatedArray = array.filter((v) => v.id !== id);
-    setter(updatedArray);
-  };
-
-  const healthModal = useRef(null);
-
+  const { pathname } = useLocation();
   return (
     <>
-      <Modal ref={healthModal}>My Modal</Modal>
-      <Tab.Group>
-        <Tab.List className={`${tabs.tabList}`}>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Companies
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Brands
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Categories
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Statuses
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Stages
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Order Health
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              `${tabs.tab} ${selected ? tabs.tabSelected : tabs.tabDefault}`
-            }
-          >
-            Order Types
-          </Tab>
-        </Tab.List>
-        <Tab.Panels>
-          <Tab.Panel>
-            <Box>
-              <Button classes="ml-auto mb-5">Add a new company</Button>
-              <div className={chips.wrapper}>
-                {companies.map((company) => {
-                  return (
-                    <div className={chips.chip} key={company.id}>
-                      <img
-                        src={company.icon}
-                        alt={company.title}
-                        className={chips.logo}
-                      />
-                      <div>
-                        <h5 className={chips.title}>{company.title}</h5>
-                        <h6 className={chips.subtitle}>
-                          created on {company.date}
-                        </h6>
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-          <Tab.Panel>
-            <Box>
-              <Button classes="ml-auto mb-5">Add a new brand</Button>
-              <div className={chips.wrapper}>
-                {brands.map((brand) => {
-                  return (
-                    <div className={chips.chip} key={brand.id}>
-                      <img
-                        src={brand.icon}
-                        alt={brand.title}
-                        className={chips.logo}
-                      />
-                      <div>
-                        <h5 className={chips.title}>{brand.title}</h5>
-                        <h6 className={chips.subtitle}>{brand.company}</h6>
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-          <Tab.Panel>
-            <Box>
-              <Button classes="ml-auto mb-5">Add a new category</Button>
-              <div className={chips.wrapper}>
-                {categories.map((category) => {
-                  return (
-                    <div className={chips.chip} key={category.id}>
-                      <img
-                        src={category.icon}
-                        alt={category.title}
-                        className={chips.logo}
-                      />
-                      <div>
-                        <h5 className={chips.title}>{category.title}</h5>
-                        <h6 className={chips.subtitle}>
-                          created on 01-01-2023
-                        </h6>
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-          <Tab.Panel>
-            <Box>
-              <Button classes="ml-auto mb-5">Add a new status</Button>
-              <div className={chips.wrapper}>
-                {statuses.map((status) => {
-                  return (
-                    <div className={chips.chip} key={status.id}>
-                      <div>
-                        <h5 className={chips.title}>{status.title}</h5>
-                        <Chip
-                          label={status.title}
-                          variant={status.className}
-                          outlined={status.outlineVariant}
-                        />
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-          <Tab.Panel>
-            <Box>
-              <Button classes="ml-auto mb-5">Add a new stage</Button>
-              <div className={chips.wrapper}>
-                {stages.map((stage) => {
-                  return (
-                    <div
-                      className={`${chips.chip} w-[calc(50%-0.5rem)]`}
-                      key={stage.id}
-                    >
-                      <div>
-                        <h5 className={chips.title}>{stage.title}</h5>
-                        <Chip
-                          label={stage.title}
-                          variant={stage.className}
-                          outlined={stage.outlineVariant}
-                        />
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-          <Tab.Panel>
-            <Box>
-              <Button
-                handleClick={() => {
-                  healthModal.current.toggleModal();
-                }}
-                classes="ml-auto mb-5"
-              >
-                Add a new status
-              </Button>
-              <div className={chips.wrapper}>
-                {health.map((healthStatus) => {
-                  return (
-                    <div className={chips.chip} key={healthStatus.id}>
-                      <div>
-                        <h5 className={chips.title}>{healthStatus.title}</h5>
-                        <Chip
-                          label={healthStatus.title}
-                          variant={healthStatus.className}
-                          outlined={healthStatus.outlineVariant}
-                        />
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-          <Tab.Panel>
-            <Box>
-              <Button classes="ml-auto mb-5">Add a new type</Button>
-              <div className={chips.wrapper}>
-                {orderType.map((type) => {
-                  return (
-                    <div className={chips.chip} key={type.id}>
-                      <img
-                        src={type.icon}
-                        alt={type.title}
-                        className={chips.logo}
-                      />
-                      <div>
-                        <h5 className={chips.title}>{type.title}</h5>
-                      </div>
-                      <div className={chips.actionWrapper}>
-                        <button className={chips.action}>
-                          <HiOutlinePencil className="h-full w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </Tab.Panel>
-        </Tab.Panels>
-      </Tab.Group>
+      <div className={tabs.tabList}>
+        <Link
+          to={"companies"}
+          className={`${tabs.tab} ${
+            pathname.includes("companies") ? tabs.tabSelected : tabs.tabDefault
+          }`}
+        >
+          Companies
+        </Link>
+        <Link
+          to={"brands"}
+          className={`${tabs.tab} ${
+            pathname.includes("brands") ? tabs.tabSelected : tabs.tabDefault
+          }`}
+        >
+          Brands
+        </Link>
+        <Link
+          to={"categories"}
+          className={`${tabs.tab} ${
+            pathname.includes("categories") ? tabs.tabSelected : tabs.tabDefault
+          }`}
+        >
+          Categories
+        </Link>
+        <Link
+          to={"statuses"}
+          className={`${tabs.tab} ${
+            pathname.includes("statuses") ? tabs.tabSelected : tabs.tabDefault
+          }`}
+        >
+          Statuses
+        </Link>
+        <Link
+          to={"stages"}
+          className={`${tabs.tab} ${
+            pathname.includes("stages") ? tabs.tabSelected : tabs.tabDefault
+          }`}
+        >
+          Stages
+        </Link>
+        <Link
+          to={"order-health"}
+          className={`${tabs.tab} ${
+            pathname.includes("order-health")
+              ? tabs.tabSelected
+              : tabs.tabDefault
+          }`}
+        >
+          Order Health
+        </Link>
+        <Link
+          to={"order-types"}
+          className={`${tabs.tab} ${
+            pathname.includes("order-types")
+              ? tabs.tabSelected
+              : tabs.tabDefault
+          }`}
+        >
+          Order Types
+        </Link>
+      </div>
+      <Routes>
+        <Route path="order-health" element={<OrderHealth />} />
+        <Route path="order-types" element={<OrderTypes />} />
+        <Route path="stages" element={<Stages />} />
+        <Route path="statuses" element={<Statuses />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="brands" element={<Brands />} />
+        <Route path="companies" element={<Companies />} />
+      </Routes>
     </>
   );
 };

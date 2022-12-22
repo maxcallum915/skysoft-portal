@@ -2,6 +2,7 @@ import {
   HiArrowRightOnRectangle,
   HiOutlineBars3BottomLeft,
   HiOutlineCog8Tooth,
+  HiOutlineCog,
 } from "react-icons/hi2";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -48,7 +49,7 @@ const Topbar = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className={styles.menuItems}>
-            <Menu.Item>
+            {/* <Menu.Item>
               {({ active }) => (
                 <Link to="settings">
                   <button
@@ -57,6 +58,20 @@ const Topbar = () => {
                     }`}
                   >
                     <HiOutlineCog8Tooth className="h-5 w-5" />
+                    Settings
+                  </button>
+                </Link>
+              )}
+            </Menu.Item> */}
+            <Menu.Item>
+              {({ active }) => (
+                <Link to="admin-settings">
+                  <button
+                    className={`${styles.menuItem} ${
+                      active && "bg-secondary text-white"
+                    }`}
+                  >
+                    <HiOutlineCog className="h-5 w-5" />
                     Settings
                   </button>
                 </Link>

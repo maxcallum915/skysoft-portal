@@ -1,14 +1,14 @@
-import { Fragment, useState } from "react";
-import { Combobox, Transition } from "@headlessui/react";
+import { useState } from "react";
+import { Combobox } from "@headlessui/react";
 import { HiCheck, HiChevronDown } from "react-icons/hi2";
 
 const people = [
-  { id: 1, name: "Wade Cooper" },
-  { id: 2, name: "Arlene Mccoy" },
-  { id: 3, name: "Devon Webb" },
-  { id: 4, name: "Tom Cook" },
-  { id: 5, name: "Tanya Fox" },
-  { id: 6, name: "Hellen Schmidt" },
+  "Option 1",
+  "Option 2",
+  "Option 3",
+  "Option 4",
+  "Option 5",
+  "Option 6",
 ];
 
 const styles = {
@@ -19,31 +19,33 @@ const styles = {
   iconButton: `absolute inset-y-0 right-0 pr-2 text-slate-500`,
   icon: `h-5 w-5`,
   options: `absolute mt-1.5 w-full max-h-32 overflow-y-auto cursor-default rounded-lg border border-slate-200 bg-white p-1 shadow-md z-1`,
-  option: `relative cursor-pointer select-none px-3 py-2 rounded-md`,
+  option: `relative lowercase cursor-pointer select-none px-3 py-2 rounded-md`,
   selectedOptionIcon: `absolute inset-y-0 left-0 flex items-center pl-3`,
 };
 
 // @param {string} - [label] - Show label tag
+// @param {string} - [widthVariant=max] - Set width variant
 // @param {boolean} - [required=false] - Set required attribute
-// @param {string} - [widthVariant] - Set width variant
-const Select = ({ label, required = false, widthVariant }) => {
-  const [selected, setSelected] = useState(people[0]);
+// @param {object} - [options] - Set required attribute
+// @param {string} - [selected] - Selected option
+// @param {function} - [handleSelect] - Select an option
+const Select = ({
+  label,
+  widthVariant = "max",
+  required = false,
+  options = people,
+  selected,
+  handleSelect,
+}) => {
   const [input, setInput] = useState("");
-
   const filtered =
     input === ""
-      ? people
-      : people.filter((person) =>
-          person.name.toLowerCase().includes(input.toLowerCase())
-        );
+      ? options
+      : options.filter((i) => i.toLowerCase().includes(input.toLowerCase()));
 
   return (
-    <Combobox value={selected} onChange={setSelected}>
-      <div
-        className={`${styles.selectWrapper} w-${
-          widthVariant ? widthVariant : "max"
-        }`}
-      >
+    <Combobox value={selected} onChange={handleSelect}>
+      <div className={`${styles.selectWrapper} w-${widthVariant}`}>
         {label && (
           <Combobox.Label className={styles.label} htmlFor={label}>
             {label}
@@ -53,48 +55,41 @@ const Select = ({ label, required = false, widthVariant }) => {
         <div className="relative">
           <Combobox.Input
             value={input}
-            displayValue={(person) => person.name}
+            displayValue={(option) => option}
             onChange={(e) => setInput(e.target.value)}
             className={styles.select}
             id={label}
+            required={required}
           />
           <Combobox.Button className={styles.iconButton}>
             <HiChevronDown className={styles.icon} aria-hidden="true" />
           </Combobox.Button>
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-            afterLeave={() => setInput("")}
-          >
-            <Combobox.Options className={styles.options}>
-              {filtered.length === 0 && input !== "" ? (
-                <div className="p-2 px-3">No results found.</div>
-              ) : (
-                filtered.map((person) => (
-                  <Combobox.Option
-                    key={person.id}
-                    value={person}
-                    className={({ active, selected }) =>
-                      `${styles.option} ${selected && "flex justify-between"} ${
-                        active ? "bg-secondary text-white" : "text-slate-900"
-                      }`
-                    }
-                  >
-                    {({ selected }) => (
-                      <>
-                        {person.name}
-                        {selected && (
-                          <HiCheck className={styles.icon} aria-hidden="true" />
-                        )}
-                      </>
-                    )}
-                  </Combobox.Option>
-                ))
-              )}
-            </Combobox.Options>
-          </Transition>
+          <Combobox.Options className={styles.options}>
+            {filtered.length === 0 && input !== "" ? (
+              <div className="p-2 px-3">No results found.</div>
+            ) : (
+              filtered.map((option, id) => (
+                <Combobox.Option
+                  key={id}
+                  value={option}
+                  className={({ active, selected }) =>
+                    `${styles.option} ${selected && "flex justify-between"} ${
+                      active ? "bg-secondary text-white" : "text-slate-900"
+                    }`
+                  }
+                >
+                  {({ selected }) => (
+                    <>
+                      <span>{option}</span>
+                      {selected && (
+                        <HiCheck className={styles.icon} aria-hidden="true" />
+                      )}
+                    </>
+                  )}
+                </Combobox.Option>
+              ))
+            )}
+          </Combobox.Options>
         </div>
       </div>
     </Combobox>
