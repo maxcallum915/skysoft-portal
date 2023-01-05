@@ -19,6 +19,7 @@ import { Toaster } from "react-hot-toast";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import useAuth from "./hooks/useAuth";
+import Summary from "./pages/Summary";
 
 const toastOptions = {
   position: "bottom-center",
@@ -55,7 +56,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Dashboard />}>
           <Route index element={<Main />} />
-          {/* <Route path="teams" element={<Teams />} /> */}
           <Route path="orders">
             <Route index element={<Orders />} />
             <Route path="new" element={<NewOrder />} />
@@ -70,8 +70,8 @@ const App = () => {
             <Route index element={<Users />} />
             <Route path=":id" element={<UserProfile />} />
           </Route>
-          <Route path="brands" element={<BrandDetails />}>
-            <Route path=":id" element={<BrandDetails />} />
+          <Route path="summary" element={<Summary />}>
+            <Route path=":id" element={<Summary />} />
           </Route>
           <Route path="admin-settings/*" element={<Settings />} />
         </Route>

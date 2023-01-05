@@ -31,7 +31,7 @@ const NewClient = () => {
   // useEffect(() => {
   //   const fetchBrands = async () => {
   //     try {
-  //       const { data } = await axios.get("/brands", {
+  //       const { data } = await axios.get("/admin-settings/brands", {
   //         headers: {
   //           Authorization: `Bearer ${auth.token}`,
   //         },

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
@@ -32,6 +32,7 @@ const VisitClient = ({ params }) => {
     </Link>
   );
 };
+
 const columns = [
   { field: "_id", headerName: "Order ID" },
   {
@@ -127,9 +128,12 @@ const UserProfile = () => {
     const fetchClients = async () => {
       try {
         const [{ data: clients }, { data: user }] = await Promise.all([
-          axios.get("/clients", {
+          axios.get("/clients/byUser", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
+            },
+            params: {
+              userId: params.id,
             },
           }),
           axios.get(`/users/${params.id}`, {
@@ -150,8 +154,13 @@ const UserProfile = () => {
     //   method: "GET",
     //   url: "clients",
     // });
-    console.log(user);
   }, []);
+
+  const getTotalWorth = formattedCurrency(
+    clients.reduce((pv, c) => pv + c.worth, 0)
+  );
+
+  const clientsWorth = useMemo(() => getTotalWorth, [clients]);
 
   return (
     user && (
@@ -173,10 +182,10 @@ const UserProfile = () => {
                   </div>
                   <div>
                     <h5 className="text-xl font-semibold leading-none text-slate-900">
-                      568
+                      {clients.length}
                     </h5>
                     <h6 className="text-sm capitalize text-slate-400">
-                      orders done
+                      total clients
                     </h6>
                   </div>
                 </div>
@@ -186,10 +195,10 @@ const UserProfile = () => {
                   </div>
                   <div>
                     <h5 className="text-xl font-semibold leading-none text-slate-900">
-                      1.5k
+                      {clientsWorth}
                     </h5>
                     <h6 className="text-sm capitalize text-slate-400">
-                      Tasks done
+                      Clients worth
                     </h6>
                   </div>
                 </div>
@@ -230,7 +239,7 @@ const UserProfile = () => {
                 </h5>
               </li>
             </ul>
-            <h5 className="mt-6 mb-4 flex items-center gap-2 text-sm font-medium uppercase text-slate-500 after:inline-block after:h-0.5 after:w-full after:bg-slate-200">
+            {/* <h5 className="mt-6 mb-4 flex items-center gap-2 text-sm font-medium uppercase text-slate-500 after:inline-block after:h-0.5 after:w-full after:bg-slate-200">
               Contact
             </h5>
             <ul className="ml-2">
@@ -252,7 +261,7 @@ const UserProfile = () => {
                   (000)-000-0000
                 </h5>
               </li>
-            </ul>
+            </ul> */}
           </Box>
         </div>
         <div className="flex w-2/3 flex-col gap-5">

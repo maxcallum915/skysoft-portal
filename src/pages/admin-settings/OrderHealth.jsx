@@ -48,11 +48,14 @@ const OrderHealth = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: fetchedHealth } = await axios.get("/order-health", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: fetchedHealth } = await axios.get(
+          "/admin-settings/order-health",
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setHealth(fetchedHealth);
       } catch (error) {
         console.log(error);
@@ -70,7 +73,7 @@ const OrderHealth = () => {
     try {
       if (editId) {
         const { data: updatedHealth } = await axios.put(
-          `/order-health/${editId}`,
+          `/admin-settings/order-health/${editId}`,
           data,
           {
             headers: {
@@ -84,11 +87,15 @@ const OrderHealth = () => {
         setEditId(null);
         toast.success("Order health updated successfully");
       } else {
-        const { data: newHealth } = await axios.post("/order-health", data, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: newHealth } = await axios.post(
+          "/admin-settings/order-health",
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setHealth((prevState) => [...prevState, newHealth]);
         toast.success("Order health created successfully");
       }

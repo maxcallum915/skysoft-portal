@@ -364,7 +364,7 @@ const ClientDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/order-statuses",
+                          requestPath: "/admin-settings/order-statuses",
                           modalTitle: "Update Client Status",
                           fieldName: "status",
                         })

@@ -332,7 +332,7 @@ const OrderDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/order-types",
+                          requestPath: "/admin-settings/order-types",
                           modalTitle: "Update Order Type",
                           fieldName: "orderType",
                         })
@@ -359,7 +359,7 @@ const OrderDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/order-health",
+                          requestPath: "/admin-settings/order-health",
                           modalTitle: "Update Order Health",
                           fieldName: "orderHealth",
                         })
@@ -390,7 +390,7 @@ const OrderDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/order-stages",
+                          requestPath: "/admin-settings/order-stages",
                           modalTitle: "Update Order Stage",
                           fieldName: "orderStage",
                         })

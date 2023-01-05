@@ -29,6 +29,7 @@ const SidebarLayout = () => {
   const { collapsed } = useProSidebar();
   return (
     <Sidebar
+      defaultCollapsed
       className={styles.sidebarWrapper}
       backgroundColor="white"
       rootStyles={{

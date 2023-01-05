@@ -48,7 +48,7 @@ const Statuses = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/order-statuses", {
+        const { data } = await axios.get("/admin-settings/order-statuses", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
@@ -69,22 +69,30 @@ const Statuses = () => {
     };
     try {
       if (editId) {
-        const response = await axios.put(`/order-statuses/${editId}`, data, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const response = await axios.put(
+          `/admin-settings/order-statuses/${editId}`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setStatuses((prevState) => [
           ...prevState.map((i) => (i.id === editId ? { ...response.data } : i)),
         ]);
         setEditId(null);
         toast.success("Status updated successfully");
       } else {
-        const response = await axios.post("/order-statuses", data, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const response = await axios.post(
+          "/admin-settings/order-statuses",
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setStatuses((prevState) => [...prevState, response.data]);
         toast.success("Status created successfully");
       }

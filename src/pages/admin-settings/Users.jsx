@@ -65,12 +65,12 @@ const Users = () => {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/brands", {
+          axios.get("/admin-settings/brands", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/companies", {
+          axios.get("/admin-settings/companies", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },

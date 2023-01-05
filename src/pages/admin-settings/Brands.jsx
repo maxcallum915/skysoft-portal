@@ -48,12 +48,12 @@ const Brands = () => {
       try {
         const [{ data: fetchedBrands }, { data: fetchedCompanies }] =
           await Promise.all([
-            axios.get("/brands", {
+            axios.get("/admin-settings/brands", {
               headers: {
                 Authorization: `Bearer ${auth.token}`,
               },
             }),
-            axios.get("/companies", {
+            axios.get("/admin-settings/companies", {
               headers: {
                 Authorization: `Bearer ${auth.token}`,
               },
@@ -77,7 +77,7 @@ const Brands = () => {
     try {
       if (editId) {
         const { data: updatedBrand } = await axios.put(
-          `/brands/${editId}`,
+          `/admin-settings/brands/${editId}`,
           formData,
           {
             headers: {
@@ -91,11 +91,15 @@ const Brands = () => {
         setEditId(null);
         toast.success("Brand updated successfully");
       } else {
-        const { data: newBrand } = await axios.post("/brands", formData, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: newBrand } = await axios.post(
+          "/admin-settings/brands",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setBrands((prevState) => [...prevState, newBrand]);
         toast.success("Brand created successfully");
       }

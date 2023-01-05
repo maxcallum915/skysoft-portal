@@ -51,7 +51,10 @@ const Users = () => {
     const fetchData = async () => {
       try {
         const [{ data: fetchedUsers }, { data: fetchedBrands }] =
-          await Promise.all([axios.get("/users"), axios.get("/brands")]);
+          await Promise.all([
+            axios.get("/users"),
+            axios.get("/admin-settings/brands"),
+          ]);
         setUsers(fetchedUsers);
         setData(fetchedBrands);
         setCompanies(fetchedBrands.map((b) => b.company));

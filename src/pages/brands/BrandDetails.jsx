@@ -33,14 +33,17 @@ const { statusTable } = styles;
 const BrandDetails = () => {
   const [clients, setClients] = useState([]);
   const [categories, setCategories] = useState([]);
-  const {
-    state: { brand, status },
-  } = useLocation();
+  // const {
+  //   state: { brand, status },
+  // } = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
       const [{ data: fetchedClients }, { data: fetchedCategories }] =
-        await Promise.all([axios.get("/clients"), axios.get("/categories")]);
+        await Promise.all([
+          axios.get("/clients"),
+          axios.get("/admin-settings/categories"),
+        ]);
       setClients(fetchedClients);
       setCategories(fetchedCategories);
     };
@@ -92,7 +95,8 @@ const BrandDetails = () => {
   return (
     <>
       <Box>
-        <div className={styles.brand.wrapper}>
+        <h1>Heelo</h1>
+        {/* <div className={styles.brand.wrapper}>
           <img
             src={`http://localhost:8000/${brand.imgUrl}`}
             alt={brand.title}
@@ -280,7 +284,7 @@ const BrandDetails = () => {
               </ul>
             </div>
           );
-        })}
+        })} */}
         {/* <div className={`${statusTable.row} ${statusTable.body.row}`}>
             <div className={`${statusTable.column} gap-2`}>
               <h5 className="font-medium">Total</h5>

@@ -43,11 +43,14 @@ const OrderTypes = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: fetchedTypes } = await axios.get("/order-types", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: fetchedTypes } = await axios.get(
+          "/admin-settings/order-types",
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setOrderTypes(fetchedTypes);
       } catch (error) {
         console.log(error);
@@ -64,7 +67,7 @@ const OrderTypes = () => {
     try {
       if (editId) {
         const { data: updatedType } = await axios.put(
-          `/order-types/${editId}`,
+          `/admin-settings/order-types/${editId}`,
           formData,
           {
             headers: {
@@ -78,11 +81,15 @@ const OrderTypes = () => {
         setEditId(null);
         toast.success("Order type updated successfully");
       } else {
-        const { data: newType } = await axios.post("/order-types", formData, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: newType } = await axios.post(
+          "/admin-settings/order-types",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         toast.success("Order type created successfully");
         setOrderTypes((prevState) => [...prevState, newType]);
       }

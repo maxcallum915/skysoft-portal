@@ -46,7 +46,7 @@ const NewOrder = () => {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/order-types", {
+          axios.get("/admin-settings/order-types", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },

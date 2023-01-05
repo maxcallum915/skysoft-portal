@@ -50,11 +50,14 @@ const Categories = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: fetchedCategories } = await axios.get("/categories", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: fetchedCategories } = await axios.get(
+          "/admin-settings/categories",
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setCategories(fetchedCategories);
       } catch (error) {
         console.log(error);
@@ -73,7 +76,7 @@ const Categories = () => {
     try {
       if (editId) {
         const { data: updatedCategory } = await axios.put(
-          `/categories/${editId}`,
+          `/admin-settings/categories/${editId}`,
           formData,
           {
             headers: {
@@ -90,7 +93,7 @@ const Categories = () => {
         toast.success("Category updated successfully");
       } else {
         const { data: newCategory } = await axios.post(
-          "/categories",
+          "/admin-settings/categories",
           formData,
           {
             headers: {
