@@ -2,15 +2,6 @@ import { useState } from "react";
 import { Combobox } from "@headlessui/react";
 import { HiCheck, HiChevronDown } from "react-icons/hi2";
 
-const people = [
-  "Option 1",
-  "Option 2",
-  "Option 3",
-  "Option 4",
-  "Option 5",
-  "Option 6",
-];
-
 const styles = {
   selectWrapper: `relative mb-5`,
   label: `mb-2 block select-none font-medium capitalize leading-5 text-slate-700`,
@@ -26,23 +17,24 @@ const styles = {
 // @param {string} - [label] - Show label tag
 // @param {string} - [widthVariant=max] - Set width variant
 // @param {boolean} - [required=false] - Set required attribute
-// @param {object} - [options] - Set required attribute
+// @param {array} - [options] - Set options
 // @param {string} - [selected] - Selected option
 // @param {function} - [handleSelect] - Select an option
 const Select = ({
   label,
   widthVariant = "max",
   required = false,
-  options = people,
+  options = [],
   selected,
   handleSelect,
 }) => {
   const [input, setInput] = useState("");
   const filtered =
-    input === ""
-      ? options
-      : options.filter((i) => i.toLowerCase().includes(input.toLowerCase()));
-
+    options.length > 0 && input !== ""
+      ? options.filter((i) =>
+          i?.title.toLowerCase().includes(input.toLowerCase())
+        )
+      : options;
   return (
     <Combobox value={selected} onChange={handleSelect}>
       <div className={`${styles.selectWrapper} w-${widthVariant}`}>
@@ -55,7 +47,7 @@ const Select = ({
         <div className="relative">
           <Combobox.Input
             value={input}
-            displayValue={(option) => option}
+            displayValue={(option) => option?.title}
             onChange={(e) => setInput(e.target.value)}
             className={styles.select}
             id={label}
@@ -65,12 +57,10 @@ const Select = ({
             <HiChevronDown className={styles.icon} aria-hidden="true" />
           </Combobox.Button>
           <Combobox.Options className={styles.options}>
-            {filtered.length === 0 && input !== "" ? (
-              <div className="p-2 px-3">No results found.</div>
-            ) : (
-              filtered.map((option, id) => (
+            {filtered.length > 0 ? (
+              filtered.map((option, i) => (
                 <Combobox.Option
-                  key={id}
+                  key={option._id ? option._id : i}
                   value={option}
                   className={({ active, selected }) =>
                     `${styles.option} ${selected && "flex justify-between"} ${
@@ -80,7 +70,7 @@ const Select = ({
                 >
                   {({ selected }) => (
                     <>
-                      <span>{option}</span>
+                      <span>{option?.title}</span>
                       {selected && (
                         <HiCheck className={styles.icon} aria-hidden="true" />
                       )}
@@ -88,6 +78,8 @@ const Select = ({
                   )}
                 </Combobox.Option>
               ))
+            ) : (
+              <div className="p-2 px-3">No results found.</div>
             )}
           </Combobox.Options>
         </div>

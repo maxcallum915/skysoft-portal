@@ -1,14 +1,14 @@
 import {
   HiArrowRightOnRectangle,
   HiOutlineBars3BottomLeft,
-  HiOutlineCog8Tooth,
   HiOutlineCog,
 } from "react-icons/hi2";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useProSidebar } from "react-pro-sidebar";
 import Avatar from "../components/Avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const styles = {
   topbar: `sticky top-0 z-10 flex items-center gap-3 border-b border-b-slate-100 bg-white p-3`,
@@ -23,6 +23,14 @@ const styles = {
 
 const Topbar = () => {
   const { collapseSidebar, collapsed } = useProSidebar();
+  const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setAuth({});
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <div className={styles.topbar}>
       <button
@@ -31,7 +39,7 @@ const Topbar = () => {
       >
         <HiOutlineBars3BottomLeft className="h-full w-full" />
       </button>
-      <h5 className={styles.title}>Hi John Doe! 👋</h5>
+      <h5 className={styles.title}>Hi {auth.name}! 👋</h5>
       <Menu as="div" className={styles.menu}>
         <Menu.Button className={styles.menuButton}>
           <Avatar
@@ -49,46 +57,50 @@ const Topbar = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className={styles.menuItems}>
-            {/* <Menu.Item>
-              {({ active }) => (
-                <Link to="settings">
-                  <button
-                    className={`${styles.menuItem} ${
-                      active && "bg-secondary text-white"
-                    }`}
-                  >
-                    <HiOutlineCog8Tooth className="h-5 w-5" />
-                    Settings
-                  </button>
-                </Link>
-              )}
-            </Menu.Item> */}
+            {auth.role === "admin" && (
+              <Menu.Item>
+                {({ active }) => (
+                  <Link to="admin-settings">
+                    <button
+                      className={`${styles.menuItem} ${
+                        active && "bg-secondary text-white"
+                      }`}
+                    >
+                      <HiOutlineCog className="h-5 w-5" />
+                      Settings
+                    </button>
+                  </Link>
+                )}
+              </Menu.Item>
+            )}
+            {auth.role === "user" && (
+              <Menu.Item>
+                {({ active }) => (
+                  <Link to={`users/${auth._id}`}>
+                    <button
+                      className={`${styles.menuItem} ${
+                        active && "bg-secondary text-white"
+                      }`}
+                    >
+                      <HiOutlineCog className="h-5 w-5" />
+                      Profile
+                    </button>
+                  </Link>
+                )}
+              </Menu.Item>
+            )}
+
             <Menu.Item>
               {({ active }) => (
-                <Link to="admin-settings">
-                  <button
-                    className={`${styles.menuItem} ${
-                      active && "bg-secondary text-white"
-                    }`}
-                  >
-                    <HiOutlineCog className="h-5 w-5" />
-                    Settings
-                  </button>
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link to="login">
-                  <button
-                    className={`${styles.menuItem} ${
-                      active && "bg-secondary text-white"
-                    }`}
-                  >
-                    <HiArrowRightOnRectangle className="h-5 w-5" />
-                    Logout
-                  </button>
-                </Link>
+                <button
+                  onClick={handleLogout}
+                  className={`${styles.menuItem} ${
+                    active && "bg-secondary text-white"
+                  }`}
+                >
+                  <HiArrowRightOnRectangle className="h-5 w-5" />
+                  Logout
+                </button>
               )}
             </Menu.Item>
           </Menu.Items>

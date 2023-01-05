@@ -38,8 +38,8 @@ const Avatar = ({
         />
       ) : (
         title
-          .split(" ")
-          .map((v, i, a) => (i === 0 || i === a.length - 1) && v.slice(0, 1))
+          ?.split(" ")
+          ?.map((v, i, a) => (i === 0 || i === a.length - 1) && v.slice(0, 1))
       )}
 
       {tooltip && title ? (

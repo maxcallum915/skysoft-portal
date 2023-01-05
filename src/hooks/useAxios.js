@@ -8,11 +8,9 @@ const useAxios = () => {
   const [controller, setController] = useState();
 
   const axiosFetch = async ({ method, url, data, config = {} }) => {
-    // console.log(method, url, config);
     try {
       const ctrl = new AbortController();
       setController(ctrl);
-      // setLoading((prevState) => !prevState);
       const res = await axios[method.toLowerCase()](url, data, {
         ...config,
         signal: ctrl.signal,
@@ -22,7 +20,7 @@ const useAxios = () => {
       console.log(error);
       setError(error.response.data.message);
     } finally {
-      setLoading((prev) => !prev);
+      setLoading(false);
     }
   };
 
@@ -30,7 +28,7 @@ const useAxios = () => {
     return () => controller && controller.abort();
   }, [controller]);
 
-  return [response, error, loading, axiosFetch];
+  return { response, error, loading, axiosFetch };
 };
 
 export default useAxios;

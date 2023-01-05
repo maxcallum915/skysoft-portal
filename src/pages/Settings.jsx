@@ -6,6 +6,7 @@ import Statuses from "./admin-settings/Statuses";
 import Stages from "./admin-settings/Stages";
 import OrderHealth from "./admin-settings/OrderHealth";
 import OrderTypes from "./admin-settings/OrderTypes";
+import Users from "./admin-settings/Users";
 
 const styles = {
   tabs: {
@@ -82,6 +83,14 @@ const Settings = () => {
         >
           Order Types
         </Link>
+        <Link
+          to={"users"}
+          className={`${tabs.tab} ${
+            pathname.includes("users") ? tabs.tabSelected : tabs.tabDefault
+          }`}
+        >
+          Users
+        </Link>
       </div>
       <Routes>
         <Route path="order-health" element={<OrderHealth />} />
@@ -91,6 +100,7 @@ const Settings = () => {
         <Route path="categories" element={<Categories />} />
         <Route path="brands" element={<Brands />} />
         <Route path="companies" element={<Companies />} />
+        <Route path="users" element={<Users />} />
       </Routes>
     </>
   );

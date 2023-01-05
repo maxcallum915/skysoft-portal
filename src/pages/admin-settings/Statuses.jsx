@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { toast } from "react-hot-toast";
 import { HiDocumentDuplicate, HiOutlinePencil } from "react-icons/hi2";
 import Box from "../../components/Box";
 import Chip from "../../components/Chip";
@@ -6,7 +7,9 @@ import Input from "../../components/Input";
 import Select from "../../components/Select";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
+import EmptyPlaceholder from "../../components/EmptyPlaceholder";
 import axios from "../../config/axios";
+import useAuth from "../../hooks/useAuth";
 
 const styles = {
   chips: {
@@ -18,23 +21,19 @@ const styles = {
     actionWrapper: `relative ml-6 flex items-center gap-2`,
     action: `h-6 w-6 rounded-md text-secondary hover:text-secondary focus:text-secondary focus:outline-none`,
   },
-  emptyPlaceholder: {
-    wrapper: `block w-full rounded-lg bg-slate-100 p-4 text-center text-lg text-slate-300`,
-    icon: `mx-auto mb-2 block h-12 w-12`,
-  },
 };
-const { chips, emptyPlaceholder } = styles;
+const { chips } = styles;
 
 const options = [
-  "black",
-  "danger",
-  "default",
-  "info",
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "white",
+  { id: 1, title: "black" },
+  { id: 2, title: "danger" },
+  { id: 3, title: "default" },
+  { id: 4, title: "info" },
+  { id: 5, title: "primary" },
+  { id: 6, title: "secondary" },
+  { id: 7, title: "success" },
+  { id: 8, title: "warning" },
+  { id: 9, title: "white" },
 ];
 
 const Statuses = () => {
@@ -43,14 +42,16 @@ const Statuses = () => {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [editId, setEditId] = useState(null);
+  const { auth } = useAuth();
   const modal = useRef(null);
 
   useEffect(() => {
-    const controller = new AbortController();
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/admin-settings/order-statuses", {
-          signal: controller.signal,
+        const { data } = await axios.get("/order-statuses", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         });
         setStatuses(data);
       } catch (error) {
@@ -58,40 +59,43 @@ const Statuses = () => {
       }
     };
     fetchData();
-    return () => controller.abort();
   }, [editId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
       title: input,
-      className: selected,
+      className: selected.title,
     };
     try {
       if (editId) {
-        const response = await axios.put(
-          `/admin-settings/order-statuses/${editId}`,
-          data
-        );
+        const response = await axios.put(`/order-statuses/${editId}`, data, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
         setStatuses((prevState) => [
-          ...prevState.map((i) => (i.id === editId ? (i = response.data) : i)),
+          ...prevState.map((i) => (i.id === editId ? { ...response.data } : i)),
         ]);
+        setEditId(null);
+        toast.success("Status updated successfully");
       } else {
-        const response = await axios.post(
-          "/admin-settings/order-statuses",
-          data
-        );
+        const response = await axios.post("/order-statuses", data, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
         setStatuses((prevState) => [...prevState, response.data]);
+        toast.success("Status created successfully");
       }
       modal.current.toggleModal();
       setInput("");
       setSelected([]);
-      setEditId(null);
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message);
+      if (error?.response) {
+        setError(error?.response?.data.message);
       } else {
-        console.log("err", error);
+        console.log(error);
       }
     }
   };
@@ -138,9 +142,9 @@ const Statuses = () => {
         >
           Add a new status
         </Button>
-        <div className={chips.wrapper}>
-          {statuses.length > 0 ? (
-            statuses.map((status) => {
+        {statuses.length > 0 ? (
+          <div className={chips.wrapper}>
+            {statuses.map((status) => {
               return (
                 <div className={chips.chip} key={status._id}>
                   <div>
@@ -157,16 +161,14 @@ const Statuses = () => {
                   </div>
                 </div>
               );
-            })
-          ) : (
-            <div className={emptyPlaceholder.wrapper}>
-              <span className={emptyPlaceholder.icon}>
-                <HiDocumentDuplicate className="h-full w-full" />
-              </span>
-              <p>Create a status to display here</p>
-            </div>
-          )}
-        </div>
+            })}
+          </div>
+        ) : (
+          <EmptyPlaceholder
+            icon={<HiDocumentDuplicate className="h-full w-full" />}
+            title={"Create statuses to display here"}
+          />
+        )}
       </Box>
     </>
   );

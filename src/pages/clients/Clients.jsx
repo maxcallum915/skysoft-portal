@@ -1,205 +1,138 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   HiArrowTrendingUp,
   HiCheck,
   HiOutlineUserPlus,
   HiOutlineXMark,
   HiPlus,
+  HiUsers,
 } from "react-icons/hi2";
 import Avatar from "../../components/Avatar";
 import Chip from "../../components/Chip";
 import InfoChip from "../../components/InfoChip";
+import Loader from "../../components/Loader";
+import EmptyPlaceholder from "../../components/EmptyPlaceholder";
+import Button from "../../components/Button";
+import formattedDate from "../../utils/formattedDate";
+import formattedCurrency from "../../utils/formattedCurrency";
+import useAxios from "../../hooks/useAxios";
+import { DateRange } from "react-date-range";
+import { formatISO } from "date-fns";
+import useAuth from "../../hooks/useAuth";
+import axios from "../../config/axios";
 
 const VisitClient = ({ params }) => {
   return (
-    <Link
-      to={`/clients/${params.row.clientProfile}`}
-      className="flex items-center gap-3"
-    >
-      <Avatar icon="https://xsgames.co/randomusers/avatar.php?g=male" rounded />
+    <Link to={`/clients/${params.row._id}`} className="flex items-center gap-3">
+      <Avatar title={params.row.title} rounded />
       <div>
         <h5 className="font-semibold capitalize leading-none text-slate-900">
-          {params.row.clientName}
+          {params.row.title}
         </h5>
-        <h6 className="text-sm text-slate-400">{params.row.clientEmail}</h6>
+        <h6 className="text-sm text-slate-400">{params.row.email}</h6>
       </div>
     </Link>
   );
 };
-const rows = [
-  {
-    id: 1,
-    clientId: 461850657,
-    clientName: "John doe",
-    clientEmail: "johndoe@gmail.com",
-    clientProfile: "johndoe",
-    clientStatus: "active",
-    brand: "The website design",
-    package: "Gold",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 2,
-    clientId: 506574618,
-    clientName: "Silver Green",
-    clientEmail: "silvergreen@gmail.com",
-    clientProfile: "silvergreen",
-    clientStatus: "inactive",
-    brand: "Web districts",
-    package: "Bronze",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 3,
-    clientId: 574661508,
-    clientName: "Brad ford",
-    clientEmail: "bradford@gmail.com",
-    clientProfile: "bradford",
-    clientStatus: "delivered",
-    brand: "Seo maisters",
-    package: "Silver",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 4,
-    clientId: 746501865,
-    clientName: "Joey Tribbiani",
-    clientEmail: "joeytribbiani@gmail.com",
-    clientProfile: "joeytribbiani",
-    clientStatus: "active",
-    brand: "Web districts",
-    package: "Bronze",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 5,
-    clientId: 616574850,
-    clientName: "Matthew Perry",
-    clientEmail: "matthewperry@gmail.com",
-    clientProfile: "matthewperry",
-    clientStatus: "inactive",
-    brand: "The Website Design",
-    package: "Bronze",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 6,
-    clientId: 661505748,
-    clientName: "David Schwimmer",
-    clientEmail: "davidschwimmer@gmail.com",
-    clientProfile: "davidschwimmer",
-    clientStatus: "active",
-    brand: "Web districts",
-    package: "Silver",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 7,
-    clientId: 506574618,
-    clientName: "Matt Le Blanc",
-    clientEmail: "mattleblanc@gmail.com",
-    clientProfile: "mattleblanc",
-    clientStatus: "active",
-    brand: "Web districts",
-    package: "Gold",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 8,
-    clientId: 506574618,
-    clientName: "Ross Geller",
-    clientEmail: "rossgeller@gmail.com",
-    clientProfile: "rossgeller",
-    clientStatus: "delivered",
-    brand: "SEO Maisters",
-    package: "Bronze",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 9,
-    clientId: 506574618,
-    clientName: "Silver Green",
-    clientEmail: "silvergreen@gmail.com",
-    clientProfile: "silvergreen",
-    clientStatus: "active",
-    brand: "Web districts",
-    package: "Bronze",
-    clientWorth: 5040.25,
-    orderNumbers: 2,
-    createdAt: "10-10-2022",
-  },
-];
+
+const VisitUser = ({ params }) => {
+  const { auth } = useAuth();
+  return (
+    <Link to={`/users/${params.value._id}`} className="flex items-center gap-3">
+      <Avatar
+        title={auth.name === params.value.name ? "You" : params.value.name}
+        rounded
+      />
+      <div>
+        <h5 className="font-semibold capitalize leading-none text-slate-900">
+          {auth.name === params.value.name ? "You" : params.value.name}
+        </h5>
+        <h6 className="text-sm text-slate-400">{params.value.email}</h6>
+      </div>
+    </Link>
+  );
+};
+
 const columns = [
-  { field: "clientId", headerName: "Client ID" },
+  { field: "_id", headerName: "Order ID" },
   {
-    field: "clientName",
-    headerName: "Client Info",
-    width: 220,
+    field: "title",
+    headerName: "Client",
+    width: 200,
     renderCell: (params) => <VisitClient params={params} />,
+    flex: 1,
   },
   {
-    field: "clientStatus",
+    field: "brand",
+    headerName: "Brand",
+    width: 200,
+    renderCell: (params) => (
+      <InfoChip
+        icon={`http://localhost:8000/${params.value.imgUrl}`}
+        title={params.value.title}
+      />
+    ),
+    flex: 1,
+  },
+  {
+    field: "user",
+    headerName: "Manager",
+    width: 200,
+    renderCell: (params) => <VisitUser params={params} />,
+    flex: 1,
+  },
+  {
+    field: "status",
     headerName: "Client Status",
     width: 140,
     headerAlign: "center",
     align: "center",
     renderCell: (params) => (
-      <Chip
-        variant={
-          params.value === "active" || params.value === "delivered"
-            ? "success"
-            : "warning"
-        }
-        label={params.value}
-      />
+      <Chip label={params.value.title} variant={params.value.className} />
     ),
   },
   {
-    field: "brand",
-    headerName: "Associated Brand",
-    width: 250,
-    renderCell: (params) => <InfoChip title={params.value} />,
-  },
-  {
-    field: "package",
+    field: "category",
     width: 140,
     headerAlign: "center",
     align: "center",
-    headerName: `Package Name`,
+    headerName: `Category`,
+    renderCell: (params) =>
+      !!params.value ? (
+        <div className="flex items-center gap-2">
+          <img
+            src={`http://localhost:8000/${params.value.imgUrl}`}
+            alt={params.value.title}
+            className="block h-5 w-5 object-contain"
+          />
+          <span className="capitalize">{params.value.title}</span>
+        </div>
+      ) : (
+        "No orders yet"
+      ),
+    flex: 1,
   },
   {
-    field: "clientWorth",
+    field: "worth",
     width: 135,
     headerAlign: "center",
     align: "center",
-    headerName: `Client's Worth`,
-    valueFormatter: (params) => {
-      return `$ ${params.value}`;
+    headerName: `Client Worth`,
+    valueFormatter: ({ value }) => {
+      return formattedCurrency(value);
     },
   },
   {
-    field: "orderNumbers",
+    field: "orders",
+    headerName: "No. of orders",
     width: 135,
     headerAlign: "center",
     align: "center",
-    headerName: `No. of Orders`,
+    valueFormatter: ({ value }) => {
+      return value.length;
+    },
   },
   {
     field: "createdAt",
@@ -208,8 +141,9 @@ const columns = [
     align: "center",
     headerName: `Created On`,
     valueFormatter: ({ value }) => {
-      return new Date(value).toISOString().split("T")[0];
+      return formattedDate(value);
     },
+    flex: 1,
   },
 ];
 
@@ -231,87 +165,193 @@ const styles = {
 const { summaryChip, addClient } = styles;
 
 const Clients = () => {
+  // const { response: clients, loading, error, axiosFetch } = useAxios();
+  const [clients, setClients] = useState([]);
+  const [filteredClients, setFilteredClients] = useState();
+  const { auth } = useAuth();
+
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+  const [toggleDateRange, setToggleDateRange] = useState(false);
+
+  const handleToggleRange = () => setToggleDateRange((prev) => !prev);
+
+  const handleRangeSelection = () => {
+    setToggleDateRange((prevState) => !prevState);
+    const { startDate, endDate } = dateRange[0];
+    const filtered = clients.filter(
+      (order) =>
+        order.createdAt >= formatISO(startDate) &&
+        order.createdAt <= formatISO(endDate)
+    );
+    setFilteredClients(filtered);
+  };
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const { data: clients } = await axios.get("clients", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
+        setClients(clients);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchClients();
+    // axiosFetch({
+    //   method: "GET",
+    //   url: "clients",
+    // });
+  }, []);
+
   return (
     <>
-      <div className={styles.summaryChips}>
-        <div className={summaryChip.wrapper}>
-          <div
-            className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
-          >
-            <HiOutlineUserPlus className="h-full w-full" />
-          </div>
-          <div>
-            <h6 className={summaryChip.subtitle}>New clients</h6>
-            <h5 className={`${summaryChip.title} text-secondary`}>26</h5>
-          </div>
-        </div>
-        <div className={summaryChip.wrapper}>
-          <div className={`${summaryChip.icon} bg-amber-50 text-amber-500`}>
-            <HiArrowTrendingUp className="h-full w-full" />
-          </div>
-          <div>
-            <h6 className={summaryChip.subtitle}>clients in-process</h6>
-            <h5 className={`${summaryChip.title} text-amber-500`}>587</h5>
-          </div>
-        </div>
-        <div className={summaryChip.wrapper}>
-          <div className={`${summaryChip.icon} bg-green-50 text-green-500`}>
-            <HiCheck className="h-full w-full" />
-          </div>
-          <div>
-            <h6 className={summaryChip.subtitle}>clients delivered</h6>
-            <h5 className={`${summaryChip.title} text-green-500`}>408</h5>
-          </div>
-        </div>
-        <div className={summaryChip.wrapper}>
-          <div className={`${summaryChip.icon} bg-red-50 text-red-500`}>
-            <HiOutlineXMark className="h-full w-full" />
-          </div>
-          <div>
-            <h6 className={summaryChip.subtitle}>chargedback clients</h6>
-            <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
-          </div>
-        </div>
-      </div>
-      <div className={addClient.wrapper}>
-        <div>
-          <h6 className={addClient.subtitle}>Total</h6>
-          <h5 className={addClient.title}>
-            clients: <span className="font-bold text-secondary">458</span>
-          </h5>
-        </div>
-        <Link to="new" className={addClient.icon}>
-          <HiPlus className="h-full w-full" />
+      {/* {loading && <Loader />}
+      {!loading && error && <div>{error}</div>}
+      {!loading && !error && !clients?.length && (
+        <Link to="new">
+          <EmptyPlaceholder
+            icon={<HiUsers className="h-full w-full" />}
+            title="No clients to display Click to Add"
+          />
         </Link>
-      </div>
-      <div className="h-[1000px] w-full">
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          sx={{
-            background: "#f1f5f9",
-            border: "none",
-            borderRadius: "0.75rem",
-            padding: `0.5rem`,
-            "& .MuiDataGrid-row": {
-              maxHeight: `65px !important`,
-              minHeight: `65px !important`,
-              background: "#fff",
-              borderRadius: "0.75rem",
-              marginTop: `1rem`,
-              transition: `all 300ms ease-in-out`,
-            },
-            "& .MuiDataGrid-row:hover": {
-              background: `#e2e8f0`,
-              boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
-            },
-            "& .MuiDataGrid-cell": {
-              maxHeight: `100% !important`,
-              minHeight: `100% !important`,
-            },
-          }}
+      )} */}
+      {/* {!loading && !error && clients?.length > 0 && ( */}
+      {clients?.length > 0 ? (
+        <>
+          {/* <div className={styles.summaryChips}>
+            <div className={summaryChip.wrapper}>
+              <div
+                className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
+              >
+                <HiOutlineUserPlus className="h-full w-full" />
+              </div>
+              <div>
+                <h6 className={summaryChip.subtitle}>New clients</h6>
+                <h5 className={`${summaryChip.title} text-secondary`}>26</h5>
+              </div>
+            </div>
+            <div className={summaryChip.wrapper}>
+              <div className={`${summaryChip.icon} bg-amber-50 text-amber-500`}>
+                <HiArrowTrendingUp className="h-full w-full" />
+              </div>
+              <div>
+                <h6 className={summaryChip.subtitle}>clients in-process</h6>
+                <h5 className={`${summaryChip.title} text-amber-500`}>587</h5>
+              </div>
+            </div>
+            <div className={summaryChip.wrapper}>
+              <div className={`${summaryChip.icon} bg-green-50 text-green-500`}>
+                <HiCheck className="h-full w-full" />
+              </div>
+              <div>
+                <h6 className={summaryChip.subtitle}>clients delivered</h6>
+                <h5 className={`${summaryChip.title} text-green-500`}>408</h5>
+              </div>
+            </div>
+            <div className={summaryChip.wrapper}>
+              <div className={`${summaryChip.icon} bg-red-50 text-red-500`}>
+                <HiOutlineXMark className="h-full w-full" />
+              </div>
+              <div>
+                <h6 className={summaryChip.subtitle}>chargedback clients</h6>
+                <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
+              </div>
+            </div>
+          </div> */}
+          <div className="flex justify-between">
+            <div className={addClient.wrapper}>
+              <div>
+                <h6 className={addClient.subtitle}>Total</h6>
+                <h5 className={addClient.title}>
+                  clients:{" "}
+                  <span className="font-bold text-secondary">
+                    {clients.length}
+                  </span>
+                </h5>
+              </div>
+              {auth.role === "user" && (
+                <Link to="new" className={addClient.icon}>
+                  <HiPlus className="h-full w-full" />
+                </Link>
+              )}
+            </div>
+            <div>
+              <Button handleClick={handleToggleRange}>Search By Date</Button>
+              {toggleDateRange && (
+                <div className="relative">
+                  <div className="absolute top-0 right-0 z-50 shadow-lg">
+                    <DateRange
+                      onChange={(item) => setDateRange([item.selection])}
+                      moveRangeOnFirstSelection={false}
+                      ranges={dateRange}
+                      rangeColors={["#019dff"]}
+                      showDateDisplay={true}
+                    />
+                    <Button
+                      widthVariant="full"
+                      handleClick={handleRangeSelection}
+                    >
+                      Search
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="h-[800px] w-full">
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={!filteredClients ? clients : filteredClients}
+              columns={columns}
+              // loading={loading}
+              components={{ Toolbar: GridToolbar }}
+              sx={{
+                background: "#f1f5f9",
+                border: "none",
+                borderRadius: "0.75rem",
+                padding: `0.5rem`,
+                "& .MuiDataGrid-row": {
+                  maxHeight: `65px !important`,
+                  minHeight: `65px !important`,
+                  background: "#fff",
+                  borderRadius: "0.75rem",
+                  marginTop: `1rem`,
+                  transition: `all 300ms ease-in-out`,
+                },
+                "& .MuiDataGrid-row:hover": {
+                  background: `#e2e8f0`,
+                  boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
+                },
+                "& .MuiDataGrid-cell": {
+                  maxHeight: `100% !important`,
+                  minHeight: `100% !important`,
+                },
+              }}
+            />
+          </div>
+        </>
+      ) : auth.role === "user" ? (
+        <Link to="new">
+          <EmptyPlaceholder
+            icon={<HiUsers className="h-full w-full" />}
+            title="No clients to display Click to Add"
+          />
+        </Link>
+      ) : (
+        <EmptyPlaceholder
+          icon={<HiUsers className="h-full w-full" />}
+          title="No clients to display Click to Add"
         />
-      </div>
+      )}
     </>
   );
 };

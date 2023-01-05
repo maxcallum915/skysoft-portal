@@ -1,3 +1,4 @@
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import {
@@ -6,9 +7,6 @@ import {
   HiXMark,
   HiOutlineArrowPath,
 } from "react-icons/hi2";
-import brand1 from "../assets/brand-logo-1.png";
-import brand2 from "../assets/brand-logo-2.png";
-import brand3 from "../assets/brand-logo-3.png";
 import bronzeIcon from "../assets/package-icon-1.png";
 import silverIcon from "../assets/package-icon-2.png";
 import goldIcon from "../assets/package-icon-3.png";
@@ -16,6 +14,10 @@ import platinumIcon from "../assets/package-icon-4.png";
 import diamondIcon from "../assets/package-icon-5.png";
 import LineChart from "../components/LineChart";
 import Box from "../components/Box";
+import formattedCurrency from "../utils/formattedCurrency";
+import axios from "../config/axios";
+import useAxios from "../hooks/useAxios";
+import useAuth from "../hooks/useAuth";
 
 const styles = {
   orderSummary: {
@@ -30,30 +32,17 @@ const styles = {
     chart: `2xl:w-2/3`,
   },
   categoryCard: {
-    wrapper: `mb-4 rounded-lg bg-white p-1.5 ring-1 ring-slate-200`,
-    accordionButton: {
-      wrapper: `flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg p-2 hover:bg-slate-100 2xl:flex-row`,
-      titleWrapper: `flex w-full items-center gap-2 2xl:w-40`,
-      icon: `h-14 w-14 shrink-0 object-contain`,
-      title: `text-lg font-bold leading-tight capitalize text-slate-900`,
-      subtitle: `font-semibold text-slate-400`,
-      infoWrapper: `flex w-full flex-1 items-center justify-around gap-4 rounded-md text-center 2xl:justify-end`,
-      infoTitle: `mb-1 text-xl font-bold leading-none text-secondary`,
-      infoSubtitle: `text-xs font-medium capitalize text-slate-900`,
-      chevron: `ml-auto transition-transform duration-300 2xl:ml-0`,
-    },
-    accordionPanel: {
-      wrapper: `mt-5`,
-      brandRow: `flex items-center gap-2`,
-      brandIcon: `h-10 w-10 rounded-md bg-slate-100 p-0.5`,
-      brandTitle: `font-semibold capitalize text-slate-900`,
-      brandInfo: `ml-auto flex items-center gap-2 rounded-md bg-slate-100 px-2 py-1 text-sm font-bold`,
-      brandOrders: `text-slate-900 after:ml-2 after:content-['/']`,
-      brandAmount: `text-secondary`,
-    },
+    container: `mb-4 flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg py-3 pl-2 pr-3 bg-white hover:bg-slate-100 2xl:flex-row ring-1 ring-slate-200`,
+    titleWrapper: `flex w-full items-center gap-2 2xl:w-40`,
+    icon: `h-14 w-14 shrink-0 object-contain`,
+    title: `text-lg font-bold leading-tight capitalize text-slate-900`,
+    subtitle: `font-semibold text-slate-400`,
+    infoWrapper: `flex w-full flex-1 items-center justify-around gap-4 rounded-md text-center 2xl:justify-end`,
+    infoTitle: `mb-1 text-xl font-bold leading-none text-secondary`,
+    infoSubtitle: `text-xs font-medium capitalize text-slate-900`,
   },
   statusTable: {
-    row: `grid grid-cols-5 gap-8`,
+    row: `grid grid-cols-6 gap-8`,
     column: `flex items-center capitalize`,
     columnCells: `flex w-full items-center justify-between gap-2.5 py-1 px-2 text-center font-medium`,
     columnSpan: `flex-1 text-sm`,
@@ -68,20 +57,161 @@ const styles = {
     },
   },
 };
-const {
-  orderSummary,
-  categoryCard,
-  categoryCard: { wrapper, accordionButton, accordionPanel },
-  statusTable,
-} = styles;
+const { orderSummary, categoryCard, statusTable } = styles;
 
 const Main = () => {
+  const [clients, setClients] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [status, setStatus] = useState([]);
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [{ data: clients }, { data: brands }, { data: status }] =
+          await Promise.all([
+            axios.get("/clients", {
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+              },
+            }),
+            axios.get("/brands", {
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+              },
+            }),
+            axios.get("/order-statuses", {
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+              },
+            }),
+          ]);
+        setClients(clients);
+        setBrands(brands);
+        setStatus(status);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(clients);
+
+  // Category Wise Clients
+  const categorySummary = (categoryName) => {
+    const filteredClients = clients.filter(
+      (client) => client.category?.title === categoryName
+    );
+
+    const clientsLength = filteredClients.length;
+
+    const clientsWorth = formattedCurrency(
+      filteredClients.reduce((pv, c) => {
+        return pv + c.worth;
+      }, 0)
+    );
+
+    const clientsRatio = `${
+      parseInt(((clientsLength / clients.length) * 100).toFixed()) || 0
+    }%`;
+
+    return { clientsLength, clientsWorth, clientsRatio };
+  };
+  const categoryWiseClients = useCallback(
+    (categoryName) => categorySummary(categoryName),
+    [clients]
+  );
+
+  // Status Wise Clients
+  const statusSummary = (status) => {
+    const filteredClients = clients.filter(
+      (client) => client.status?.title === status
+    );
+
+    const clientsLength = filteredClients.length;
+
+    const clientsWorth = formattedCurrency(
+      filteredClients.reduce((pv, c) => {
+        return pv + c.worth;
+      }, 0)
+    );
+
+    const clientsRatio = `${
+      parseInt(((clientsLength / clients.length) * 100).toFixed()) || 0
+    }%`;
+
+    return { clientsLength, clientsWorth, clientsRatio, filteredClients };
+  };
+  const statusWiseClients = useCallback(
+    (status) => statusSummary(status),
+    [clients]
+  );
+
+  // Brand Wise Clients
+  const brandSummary = (brandId, status) => {
+    const filteredClients = clients.filter(
+      (client) =>
+        brandId &&
+        client.brand?._id === brandId &&
+        client.status?.title === status
+    );
+
+    const clientsLength = filteredClients.length;
+
+    const clientsWorth = formattedCurrency(
+      filteredClients.reduce((pv, c) => {
+        return pv + c.worth;
+      }, 0)
+    );
+
+    const clientsRatio = `${
+      parseInt(((clientsLength / clients.length) * 100).toFixed()) || 0
+    }%`;
+
+    return { clientsLength, clientsWorth, clientsRatio, filteredClients };
+  };
+  const brandWiseClients = useCallback(
+    (brandId, status) => brandSummary(brandId, status),
+    [clients]
+  );
+
+  // Brand Wise Clients
+  const brandSummary2 = (brandId, statusId) => {
+    const filteredClients = clients.filter(
+      (client) =>
+        client.brand?._id === brandId && client.statusId?._id === statusId
+    );
+
+    // clients.forEach((i) => console.log(i.status._id));
+    console.log(clients.filter((i) => i.status._id.toString() === statusId));
+    // console.log(statusId);
+
+    const clientsLength = filteredClients.length;
+
+    const clientsWorth = formattedCurrency(
+      filteredClients.reduce((pv, c) => {
+        return pv + c.worth;
+      }, 0)
+    );
+
+    const clientsRatio = `${
+      parseInt(((clientsLength / clients.length) * 100).toFixed()) || 0
+    }%`;
+
+    return { clientsLength, clientsWorth, clientsRatio, filteredClients };
+  };
+  const brandWiseClients2 = useCallback(
+    (brandId, statusId) => brandSummary2(brandId, statusId),
+    [clients]
+  );
+
   return (
     <>
       <div className="flex flex-col items-start gap-5 xl:flex-row">
         <div className="w-full xl:w-2/3">
           <h4 className="mb-3 text-xl font-semibold capitalize text-slate-900">
-            Orders Overview
+            Clients Overview
           </h4>
           <div className="grid grid-cols-2 gap-5">
             <Box>
@@ -91,16 +221,20 @@ const Main = () => {
                 >
                   <HiCheck className="h-full w-full" />
                 </div>
-                <span className={orderSummary.title}>Orders delivered</span>
+                <span className={orderSummary.title}>Clients delivered</span>
               </div>
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>58</h5>
-                    <h6 className={orderSummary.percentage}>25%</h6>
+                    <h5 className={orderSummary.orders}>
+                      {statusWiseClients("delivered").clientsLength}
+                    </h5>
+                    <h6 className={orderSummary.percentage}>
+                      {statusWiseClients("delivered").clientsRatio}
+                    </h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-emerald-400`}>
-                    $45.8k
+                    {statusWiseClients("delivered").clientsWorth}
                   </h6>
                 </div>
                 <div className={orderSummary.chart}>
@@ -115,16 +249,20 @@ const Main = () => {
                 >
                   <HiOutlineArrowPath className="h-full w-full" />
                 </div>
-                <span className={orderSummary.title}>Orders in-process</span>
+                <span className={orderSummary.title}>Clients in-process</span>
               </div>
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>20</h5>
-                    <h6 className={orderSummary.percentage}>18%</h6>
+                    <h5 className={orderSummary.orders}>
+                      {statusWiseClients("in process").clientsLength}
+                    </h5>
+                    <h6 className={orderSummary.percentage}>
+                      {statusWiseClients("in process").clientsRatio}
+                    </h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-amber-400`}>
-                    $11.2k
+                    {statusWiseClients("in process").clientsWorth}
                   </h6>
                 </div>
                 <div className={orderSummary.chart}>
@@ -137,16 +275,20 @@ const Main = () => {
                 <div className={`${orderSummary.icon} bg-red-50 text-red-500`}>
                   <HiXMark className="h-full w-full" />
                 </div>
-                <span className={orderSummary.title}>Orders refunded</span>
+                <span className={orderSummary.title}>Clients refunded</span>
               </div>
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>5</h5>
-                    <h6 className={orderSummary.percentage}>18%</h6>
+                    <h5 className={orderSummary.orders}>
+                      {statusWiseClients("refunded").clientsLength}
+                    </h5>
+                    <h6 className={orderSummary.percentage}>
+                      {statusWiseClients("refunded").clientsRatio}
+                    </h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-red-500`}>
-                    $8.2k
+                    {statusWiseClients("refunded").clientsWorth}
                   </h6>
                 </div>
                 <div className={orderSummary.chart}>
@@ -159,16 +301,20 @@ const Main = () => {
                 <div className={`${orderSummary.icon} bg-red-50 text-red-600`}>
                   <HiXMark className="h-full w-full" />
                 </div>
-                <span className={orderSummary.title}>Orders chargedback</span>
+                <span className={orderSummary.title}>Clients chargedback</span>
               </div>
               <div className={orderSummary.body}>
                 <div>
                   <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>2</h5>
-                    <h6 className={orderSummary.percentage}>4%</h6>
+                    <h5 className={orderSummary.orders}>
+                      {statusWiseClients("chargeback").clientsLength}
+                    </h5>
+                    <h6 className={orderSummary.percentage}>
+                      {statusWiseClients("chargeback").clientsRatio}
+                    </h6>
                   </div>
                   <h6 className={`${orderSummary.amount} text-red-600`}>
-                    $4.5k
+                    {statusWiseClients("chargeback").clientsWorth}
                   </h6>
                 </div>
                 <div className={orderSummary.chart}>
@@ -180,487 +326,186 @@ const Main = () => {
         </div>
         <div className="w-full xl:w-1/3">
           <h4 className="mb-3 text-xl font-semibold capitalize text-slate-900">
-            Category Wise Orders
+            Category Wise Clients
           </h4>
-          <div className={categoryCard.wrapper}>
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button
-                    as="div"
-                    className={`${accordionButton.wrapper} ${
-                      open && "bg-slate-100"
-                    }`}
-                  >
-                    <div className={accordionButton.titleWrapper}>
-                      <img
-                        src={diamondIcon}
-                        alt="package icon"
-                        className={accordionButton.icon}
-                      />
-                      <div>
-                        <h5 className={accordionButton.title}>diamond</h5>
-                        <h6 className={accordionButton.subtitle}>25%</h6>
-                      </div>
-                    </div>
-                    <div className={accordionButton.infoWrapper}>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>77</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Total Orders
-                        </li>
-                      </ul>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>$45.5k</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Orders Worth
-                        </li>
-                      </ul>
-                      <HiChevronDown
-                        className={`${accordionButton.chevron} ${
-                          open && "rotate-180"
-                        }`}
-                      />
-                    </div>
-                  </Disclosure.Button>
-                  <Disclosure.Panel className={accordionPanel.wrapper}>
-                    <div className={accordionPanel.brandRow}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand1}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        The Website Designs
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>21</li>
-                        <li className={accordionPanel.brandAmount}>$28.4k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand2}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        web Districts
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>5</li>
-                        <li className={accordionPanel.brandAmount}>$4.2k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand3}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        Website Design Engine
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>68</li>
-                        <li className={accordionPanel.brandAmount}>$56.1k</li>
-                      </ul>
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
+          <div className={categoryCard.container}>
+            <div className={categoryCard.titleWrapper}>
+              <img
+                src={diamondIcon}
+                alt="package icon"
+                className={categoryCard.icon}
+              />
+              <div>
+                <h5 className={categoryCard.title}>diamond</h5>
+                <h6 className={categoryCard.subtitle}>
+                  {categoryWiseClients("diamond").clientsRatio}
+                </h6>
+              </div>
+            </div>
+            <div className={categoryCard.infoWrapper}>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("diamond").clientsLength}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Total Clients</li>
+              </ul>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("diamond").clientsWorth}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Clients Worth</li>
+              </ul>
+            </div>
           </div>
-          <div className={categoryCard.wrapper}>
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button
-                    as="div"
-                    className={`${accordionButton.wrapper} ${
-                      open && "bg-slate-100"
-                    }`}
-                  >
-                    <div className={accordionButton.titleWrapper}>
-                      <img
-                        src={platinumIcon}
-                        alt="package icon"
-                        className={accordionButton.icon}
-                      />
-                      <div>
-                        <h5 className={accordionButton.title}>platinum</h5>
-                        <h6 className={accordionButton.subtitle}>10%</h6>
-                      </div>
-                    </div>
-                    <div className={accordionButton.infoWrapper}>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>77</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Total Orders
-                        </li>
-                      </ul>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>$45.5k</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Orders Worth
-                        </li>
-                      </ul>
-                      <HiChevronDown
-                        className={`${accordionButton.chevron} ${
-                          open && "rotate-180"
-                        }`}
-                      />
-                    </div>
-                  </Disclosure.Button>
-                  <Disclosure.Panel className={accordionPanel.wrapper}>
-                    <div className={accordionPanel.brandRow}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand1}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        The Website Designs
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>21</li>
-                        <li className={accordionPanel.brandAmount}>$28.4k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand2}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        web Districts
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>5</li>
-                        <li className={accordionPanel.brandAmount}>$4.2k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand3}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        Website Design Engine
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>68</li>
-                        <li className={accordionPanel.brandAmount}>$56.1k</li>
-                      </ul>
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
+          <div className={categoryCard.container}>
+            <div className={categoryCard.titleWrapper}>
+              <img
+                src={platinumIcon}
+                alt="package icon"
+                className={categoryCard.icon}
+              />
+              <div>
+                <h5 className={categoryCard.title}>platinum</h5>
+                <h6 className={categoryCard.subtitle}>
+                  {categoryWiseClients("platinum").clientsRatio}
+                </h6>
+              </div>
+            </div>
+            <div className={categoryCard.infoWrapper}>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("platinum").clientsLength}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Total Clients</li>
+              </ul>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("platinum").clientsWorth}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Clients Worth</li>
+              </ul>
+            </div>
           </div>
-          <div className={categoryCard.wrapper}>
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button
-                    as="div"
-                    className={`${accordionButton.wrapper} ${
-                      open && "bg-slate-100"
-                    }`}
-                  >
-                    <div className={accordionButton.titleWrapper}>
-                      <img
-                        src={goldIcon}
-                        alt="package icon"
-                        className={accordionButton.icon}
-                      />
-                      <div>
-                        <h5 className={accordionButton.title}>gold</h5>
-                        <h6 className={accordionButton.subtitle}>34%</h6>
-                      </div>
-                    </div>
-                    <div className={accordionButton.infoWrapper}>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>77</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Total Orders
-                        </li>
-                      </ul>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>$45.5k</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Orders Worth
-                        </li>
-                      </ul>
-                      <HiChevronDown
-                        className={`${accordionButton.chevron} ${
-                          open && "rotate-180"
-                        }`}
-                      />
-                    </div>
-                  </Disclosure.Button>
-                  <Disclosure.Panel className={accordionPanel.wrapper}>
-                    <div className={accordionPanel.brandRow}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand1}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        The Website Designs
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>21</li>
-                        <li className={accordionPanel.brandAmount}>$28.4k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand2}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        web Districts
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>5</li>
-                        <li className={accordionPanel.brandAmount}>$4.2k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand3}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        Website Design Engine
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>68</li>
-                        <li className={accordionPanel.brandAmount}>$56.1k</li>
-                      </ul>
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
+          <div className={categoryCard.container}>
+            <div className={categoryCard.titleWrapper}>
+              <img
+                src={goldIcon}
+                alt="package icon"
+                className={categoryCard.icon}
+              />
+              <div>
+                <h5 className={categoryCard.title}>gold</h5>
+                <h6 className={categoryCard.subtitle}>
+                  {categoryWiseClients("gold").clientsRatio}
+                </h6>
+              </div>
+            </div>
+            <div className={categoryCard.infoWrapper}>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("gold").clientsLength}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Total Clients</li>
+              </ul>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("gold").clientsWorth}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Clients Worth</li>
+              </ul>
+            </div>
           </div>
-          <div className={categoryCard.wrapper}>
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button
-                    as="div"
-                    className={`${accordionButton.wrapper} ${
-                      open && "bg-slate-100"
-                    }`}
-                  >
-                    <div className={accordionButton.titleWrapper}>
-                      <img
-                        src={silverIcon}
-                        alt="package icon"
-                        className={accordionButton.icon}
-                      />
-                      <div>
-                        <h5 className={accordionButton.title}>silver</h5>
-                        <h6 className={accordionButton.subtitle}>9%</h6>
-                      </div>
-                    </div>
-                    <div className={accordionButton.infoWrapper}>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>77</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Total Orders
-                        </li>
-                      </ul>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>$45.5k</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Orders Worth
-                        </li>
-                      </ul>
-                      <HiChevronDown
-                        className={`${accordionButton.chevron} ${
-                          open && "rotate-180"
-                        }`}
-                      />
-                    </div>
-                  </Disclosure.Button>
-                  <Disclosure.Panel className={accordionPanel.wrapper}>
-                    <div className={accordionPanel.brandRow}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand1}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        The Website Designs
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>21</li>
-                        <li className={accordionPanel.brandAmount}>$28.4k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand2}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        web Districts
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>5</li>
-                        <li className={accordionPanel.brandAmount}>$4.2k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand3}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        Website Design Engine
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>68</li>
-                        <li className={accordionPanel.brandAmount}>$56.1k</li>
-                      </ul>
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
+          <div className={categoryCard.container}>
+            <div className={categoryCard.titleWrapper}>
+              <img
+                src={silverIcon}
+                alt="package icon"
+                className={categoryCard.icon}
+              />
+              <div>
+                <h5 className={categoryCard.title}>silver</h5>
+                <h6 className={categoryCard.subtitle}>
+                  {categoryWiseClients("silver").clientsRatio}
+                </h6>
+              </div>
+            </div>
+            <div className={categoryCard.infoWrapper}>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("silver").clientsLength}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Total Clients</li>
+              </ul>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("silver").clientsWorth}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Clients Worth</li>
+              </ul>
+            </div>
           </div>
-          <div className={categoryCard.wrapper}>
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button
-                    as="div"
-                    className={`${accordionButton.wrapper} ${
-                      open && "bg-slate-100"
-                    }`}
-                  >
-                    <div className={accordionButton.titleWrapper}>
-                      <img
-                        src={bronzeIcon}
-                        alt="package icon"
-                        className={accordionButton.icon}
-                      />
-                      <div>
-                        <h5 className={accordionButton.title}>Bronze</h5>
-                        <h6 className={accordionButton.subtitle}>22%</h6>
-                      </div>
-                    </div>
-                    <div className={accordionButton.infoWrapper}>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>77</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Total Orders
-                        </li>
-                      </ul>
-                      <ul>
-                        <li className={accordionButton.infoTitle}>$45.5k</li>
-                        <li className={accordionButton.infoSubtitle}>
-                          Orders Worth
-                        </li>
-                      </ul>
-                      <HiChevronDown
-                        className={`${accordionButton.chevron} ${
-                          open && "rotate-180"
-                        }`}
-                      />
-                    </div>
-                  </Disclosure.Button>
-                  <Disclosure.Panel className={accordionPanel.wrapper}>
-                    <div className={accordionPanel.brandRow}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand1}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        The Website Designs
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>21</li>
-                        <li className={accordionPanel.brandAmount}>$28.4k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand2}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        web Districts
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>5</li>
-                        <li className={accordionPanel.brandAmount}>$4.2k</li>
-                      </ul>
-                    </div>
-                    <div className={`mt-3 ${accordionPanel.brandRow}`}>
-                      <div className={accordionPanel.brandIcon}>
-                        <img
-                          src={brand3}
-                          alt="brand icon"
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <h5 className={accordionPanel.brandTitle}>
-                        Website Design Engine
-                      </h5>
-                      <ul className={accordionPanel.brandInfo}>
-                        <li className={accordionPanel.brandOrders}>68</li>
-                        <li className={accordionPanel.brandAmount}>$56.1k</li>
-                      </ul>
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
+          <div className={categoryCard.container}>
+            <div className={categoryCard.titleWrapper}>
+              <img
+                src={bronzeIcon}
+                alt="package icon"
+                className={categoryCard.icon}
+              />
+              <div>
+                <h5 className={categoryCard.title}>bronze</h5>
+                <h6 className={categoryCard.subtitle}>
+                  {categoryWiseClients("bronze").clientsRatio}
+                </h6>
+              </div>
+            </div>
+            <div className={categoryCard.infoWrapper}>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("bronze").clientsLength}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Total Clients</li>
+              </ul>
+              <ul>
+                <li className={categoryCard.infoTitle}>
+                  {categoryWiseClients("bronze").clientsWorth}
+                </li>
+                <li className={categoryCard.infoSubtitle}>Clients Worth</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
       <div className="mt-2">
         <Box>
+          <table>
+            <thead>
+              <tr>
+                <th>Brands</th>
+                {status.map((status) => {
+                  return <th key={status._id}>{status.title}</th>;
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {brands.map((brand) => {
+                return (
+                  <tr key={brand._id}>
+                    <td>{brand.title}</td>
+                    {status.map((status) => {
+                      return (
+                        <td key={status._id}>
+                          {
+                            brandWiseClients2(brand._id, status._id)
+                              .clientsLength
+                          }
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
           <div className={`${statusTable.row} ${statusTable.header.row}`}>
             <div className={statusTable.column}>
               <h5 className={statusTable.header.columnTitle}>Brand</h5>
@@ -676,7 +521,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-emerald-50 text-emerald-700`}
               >
-                <li className={statusTable.columnSpan}>orders</li>
+                <li className={statusTable.columnSpan}>clients</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
@@ -692,7 +537,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-amber-50 text-amber-700`}
               >
-                <li className={statusTable.columnSpan}>orders</li>
+                <li className={statusTable.columnSpan}>clients</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
@@ -706,7 +551,7 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-red-50 text-red-700`}
               >
-                <li className={statusTable.columnSpan}>orders</li>
+                <li className={statusTable.columnSpan}>clients</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
@@ -720,117 +565,162 @@ const Main = () => {
               <ul
                 className={`${statusTable.columnCells} rounded-md bg-red-50 text-red-700`}
               >
-                <li className={statusTable.columnSpan}>orders</li>
+                <li className={statusTable.columnSpan}>clients</li>
+                <li className={statusTable.columnSpan}>Percentage</li>
+                <li className={statusTable.columnSpan}>Worth</li>
+              </ul>
+            </div>
+            <div
+              className={`${statusTable.column} ${statusTable.header.column}`}
+            >
+              <h5
+                className={`${statusTable.header.columnTitle} text-secondary`}
+              >
+                Total
+              </h5>
+              <ul
+                className={`${statusTable.columnCells} rounded-md bg-secondary bg-opacity-10 text-secondary`}
+              >
+                <li className={statusTable.columnSpan}>clients</li>
                 <li className={statusTable.columnSpan}>Percentage</li>
                 <li className={statusTable.columnSpan}>Worth</li>
               </ul>
             </div>
           </div>
-          <Link
-            to="/brandDetails"
-            state={{ brandIcon: brand1, brandName: "The Website Designs" }}
-          >
-            <div className={`${statusTable.row} ${statusTable.body.row}`}>
-              <div className={`${statusTable.column} gap-2`}>
-                <img
-                  src={brand1}
-                  alt="brand icon"
-                  className={statusTable.icon}
-                />
-                <h5 className="font-medium">The website designs</h5>
+          {brands.map((brand) => {
+            return (
+              <div
+                className={`${statusTable.row} ${statusTable.body.row}`}
+                key={brand._id}
+              >
+                <div className={`${statusTable.column} gap-2`}>
+                  <img
+                    src={`http://localhost:8000/${brand.imgUrl}`}
+                    alt={brand.title}
+                    className={statusTable.icon}
+                  />
+                  <h5 className="overflow-hidden text-ellipsis whitespace-nowrap font-medium">
+                    {brand.title}
+                  </h5>
+                </div>
+                <ul className={statusTable.columnCells}>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "delivered").clientsLength}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "delivered").clientsRatio}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "delivered").clientsWorth}
+                  </li>
+                </ul>
+                <ul className={statusTable.columnCells}>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "in process").clientsLength}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "in process").clientsRatio}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "in process").clientsWorth}
+                  </li>
+                </ul>
+                <ul className={statusTable.columnCells}>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "refunded").clientsLength}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "refunded").clientsRatio}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "refunded").clientsWorth}
+                  </li>
+                </ul>
+                <ul className={statusTable.columnCells}>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "chargeback").clientsLength}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "chargeback").clientsRatio}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "chargeback").clientsWorth}
+                  </li>
+                </ul>
+                <ul className={statusTable.columnCells}>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "chargeback").clientsLength}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "chargeback").clientsRatio}
+                  </li>
+                  <li className={statusTable.columnSpan}>
+                    {brandWiseClients(brand._id, "chargeback").clientsWorth}
+                  </li>
+                </ul>
               </div>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
+            );
+          })}
+          <div className={`${statusTable.row} ${statusTable.body.row}`}>
+            <div className={`${statusTable.column} gap-2`}>
+              <h5 className="font-medium">Total</h5>
             </div>
-          </Link>
-          <Link
-            to="/brandDetails"
-            state={{ brandIcon: brand2, brandName: "web Districts" }}
-          >
-            <div className={`${statusTable.row} ${statusTable.body.row}`}>
-              <div className={`${statusTable.column} gap-2`}>
-                <img
-                  src={brand2}
-                  alt="brand icon"
-                  className={statusTable.icon}
-                />
-                <h5 className="font-medium">web Districts</h5>
-              </div>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-            </div>
-          </Link>
-          <Link
-            to="/brandDetails"
-            state={{ brandIcon: brand3, brandName: "Website Design Engine" }}
-          >
-            <div className={`${statusTable.row} ${statusTable.body.row}`}>
-              <div className={`${statusTable.column} gap-2`}>
-                <img
-                  src={brand3}
-                  alt="brand icon"
-                  className={statusTable.icon}
-                />
-                <h5 className="font-medium">Website Design Engine</h5>
-              </div>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-              <ul className={statusTable.columnCells}>
-                <li className={statusTable.columnSpan}>110</li>
-                <li className={statusTable.columnSpan}>25%</li>
-                <li className={statusTable.columnSpan}>$45.5k</li>
-              </ul>
-            </div>
-          </Link>
+            <ul className={statusTable.columnCells}>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("delivered").clientsLength}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("delivered").clientsRatio}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("delivered").clientsWorth}
+              </li>
+            </ul>
+            <ul className={statusTable.columnCells}>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("in process").clientsLength}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("in process").clientsRatio}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("in process").clientsWorth}
+              </li>
+            </ul>
+            <ul className={statusTable.columnCells}>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("refunded").clientsLength}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("refunded").clientsRatio}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("refunded").clientsWorth}
+              </li>
+            </ul>
+            <ul className={statusTable.columnCells}>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("chargeback").clientsLength}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("chargeback").clientsRatio}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("chargeback").clientsWorth}
+              </li>
+            </ul>
+            <ul className={statusTable.columnCells}>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("chargeback").clientsLength}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("chargeback").clientsRatio}
+              </li>
+              <li className={statusTable.columnSpan}>
+                {statusWiseClients("chargeback").clientsWorth}
+              </li>
+            </ul>
+          </div>
         </Box>
       </div>
     </>

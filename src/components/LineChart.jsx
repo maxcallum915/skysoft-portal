@@ -9,7 +9,7 @@ const LineChart = ({ width, height, tempProp }) => {
     },
   ]);
 
-  const [options, setOptions] = useState({
+  const options = {
     stroke: {
       curve: "smooth",
     },
@@ -68,7 +68,7 @@ const LineChart = ({ width, height, tempProp }) => {
     dataLabels: {
       enabled: false,
     },
-  });
+  };
 
   return (
     <Chart

@@ -1,5 +1,3 @@
-import { useId } from "react";
-
 const styles = {
   inputWrapper: `mb-5`,
   label: `mb-2 block select-none font-medium capitalize leading-5 text-slate-700`,
@@ -10,29 +8,29 @@ const styles = {
   errorText: `ml-1 mt-0.5 block text-sm font-medium text-red-500 first-letter:uppercase`,
 };
 
-// @param {string} type=text - Set input type
+// @param {string} [type=text] - Set input type
 // @param {string} [value] - Set input value
 // @param {string} [name] - Set name attribute
 // @param {string} [label] - Show label tag
 // @param {string} [widthVariant=auto] - Set input width variants
 // @param {boolean} [required=false] - Set required attribute
-// @param {string} [error] - Get input error
+// @param {string} [error] - Set input error
 // @param {function} [handleChange] - Get input value
 const Input = ({
   type = "text",
-  value,
+  value = "",
   name,
   label,
   widthVariant = "auto",
   required = false,
   error,
   handleChange,
+  ...props
 }) => {
-  const id = useId();
   return (
     <div className={`${styles.inputWrapper} w-${widthVariant}`}>
       {label && (
-        <label className={styles.label} htmlFor={id}>
+        <label className={styles.label} htmlFor={name}>
           {label}
           {required && (
             <span className={`${error ? "text-red-500" : "text-secondary"}`}>
@@ -50,7 +48,8 @@ const Input = ({
         className={`${styles.input} ${
           error ? styles.inputError : styles.inputFocused
         }`}
-        id={id}
+        id={name}
+        {...props}
       />
       {error && <span className={styles.errorText}>{error}</span>}
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { toast } from "react-hot-toast";
 import { HiDocumentDuplicate, HiOutlinePencil } from "react-icons/hi2";
 import Box from "../../components/Box";
 import Chip from "../../components/Chip";
@@ -6,7 +7,9 @@ import Input from "../../components/Input";
 import Select from "../../components/Select";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
+import EmptyPlaceholder from "../../components/EmptyPlaceholder";
 import axios from "../../config/axios";
+import useAuth from "../../hooks/useAuth";
 
 const styles = {
   chips: {
@@ -18,23 +21,19 @@ const styles = {
     actionWrapper: `relative ml-6 flex items-center gap-2`,
     action: `h-6 w-6 rounded-md text-secondary hover:text-secondary focus:text-secondary focus:outline-none`,
   },
-  emptyPlaceholder: {
-    wrapper: `block w-full rounded-lg bg-slate-100 p-4 text-center text-lg text-slate-300`,
-    icon: `mx-auto mb-2 block h-12 w-12`,
-  },
 };
-const { chips, emptyPlaceholder } = styles;
+const { chips } = styles;
 
 const options = [
-  "black",
-  "danger",
-  "default",
-  "info",
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "white",
+  { id: 1, title: "black" },
+  { id: 2, title: "danger" },
+  { id: 3, title: "default" },
+  { id: 4, title: "info" },
+  { id: 5, title: "primary" },
+  { id: 6, title: "secondary" },
+  { id: 7, title: "success" },
+  { id: 8, title: "warning" },
+  { id: 9, title: "white" },
 ];
 
 const OrderHealth = () => {
@@ -43,52 +42,64 @@ const OrderHealth = () => {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [editId, setEditId] = useState(null);
+  const { auth } = useAuth();
   const modal = useRef(null);
 
   useEffect(() => {
-    const controller = new AbortController();
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/admin-settings/order-health", {
-          signal: controller.signal,
+        const { data: fetchedHealth } = await axios.get("/order-health", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         });
-        setHealth(data);
+        setHealth(fetchedHealth);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-    return () => controller.abort();
   }, [editId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
       title: input,
-      className: selected,
+      className: selected.title,
     };
     try {
       if (editId) {
-        const response = await axios.put(
-          `/admin-settings/order-health/${editId}`,
-          data
+        const { data: updatedHealth } = await axios.put(
+          `/order-health/${editId}`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
         );
         setHealth((prevState) => [
-          ...prevState.map((i) => (i.id === editId ? (i = response.data) : i)),
+          ...prevState.map((i) => (i.id === editId ? { ...updatedHealth } : i)),
         ]);
+        setEditId(null);
+        toast.success("Order health updated successfully");
       } else {
-        const response = await axios.post("/admin-settings/order-health", data);
-        setHealth((prevState) => [...prevState, response.data]);
+        const { data: newHealth } = await axios.post("/order-health", data, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
+        setHealth((prevState) => [...prevState, newHealth]);
+        toast.success("Order health created successfully");
       }
       modal.current.toggleModal();
       setInput("");
       setSelected([]);
-      setEditId(null);
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message);
+      if (error?.response) {
+        setError(error?.response?.data.message);
       } else {
-        console.log("err", error);
+        console.log(error);
       }
     }
   };
@@ -157,12 +168,10 @@ const OrderHealth = () => {
             })}
           </div>
         ) : (
-          <div className={emptyPlaceholder.wrapper}>
-            <span className={emptyPlaceholder.icon}>
-              <HiDocumentDuplicate className="h-full w-full" />
-            </span>
-            <p>Create an order health to display here</p>
-          </div>
+          <EmptyPlaceholder
+            icon={<HiDocumentDuplicate className="h-full w-full" />}
+            title={"Create order health to display here"}
+          />
         )}
       </Box>
     </>

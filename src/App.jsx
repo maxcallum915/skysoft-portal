@@ -1,21 +1,55 @@
-import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
 import Orders from "./pages/orders/Orders";
 import NewOrder from "./pages/orders/NewOrder";
+import OrderDetails from "./pages/orders/OrderDetails";
 import Clients from "./pages/clients/Clients";
-import BrandDetail from "./pages/BrandDetail";
+import NewClient from "./pages/clients/NewClient";
+import ClientDetails from "./pages/clients/ClientDetails";
+import BrandDetails from "./pages/brands/BrandDetails";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import UserProfile from "./pages/UserProfile";
-import OrderDetails from "./pages/orders/OrderDetails";
-import ClientDetails from "./pages/clients/ClientDetails";
-import NewClient from "./pages/clients/NewClient";
 import Teams from "./pages/Teams";
+import { Toaster } from "react-hot-toast";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import useAuth from "./hooks/useAuth";
+
+const toastOptions = {
+  position: "bottom-center",
+  duration: 5000,
+  success: {
+    className: "bg-green-400 text-white",
+    iconTheme: {
+      primary: "#fff",
+      secondary: "#4ade80",
+    },
+  },
+  error: {
+    className: "bg-red-500 text-white",
+    iconTheme: {
+      primary: "#fff",
+      secondary: "#ef4444",
+    },
+  },
+};
 
 const App = () => {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log();
+    if (!auth.token) {
+      navigate("/login");
+    }
+  }, [auth, navigate]);
+
   return (
     <>
       <Routes>
@@ -36,12 +70,14 @@ const App = () => {
             <Route index element={<Users />} />
             <Route path=":id" element={<UserProfile />} />
           </Route>
-          <Route path="brandDetails" element={<BrandDetail />} />
+          <Route path="brands" element={<BrandDetails />}>
+            <Route path=":id" element={<BrandDetails />} />
+          </Route>
           <Route path="admin-settings/*" element={<Settings />} />
         </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
+      <Toaster toastOptions={toastOptions} />
     </>
   );
 };

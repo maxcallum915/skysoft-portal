@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   HiArrowTrendingUp,
   HiCheck,
+  HiDocumentDuplicate,
   HiOutlineUserPlus,
   HiOutlineXMark,
   HiPlus,
@@ -11,19 +13,29 @@ import Avatar from "../../components/Avatar";
 import Chip from "../../components/Chip";
 import InfoChip from "../../components/InfoChip";
 import Progressbar from "../../components/Progressbar";
+import Loader from "../../components/Loader";
+import EmptyPlaceholder from "../../components/EmptyPlaceholder";
+import Button from "../../components/Button";
+import formattedCurrency from "../../utils/formattedCurrency";
+import formattedDate from "../../utils/formattedDate";
+import useAxios from "../../hooks/useAxios";
+import { DateRange } from "react-date-range";
+import { formatISO } from "date-fns";
+import useAuth from "../../hooks/useAuth";
+import axios from "../../config/axios";
 
-const VisitManager = ({ params }) => {
+const VisitClient = ({ params }) => {
   return (
     <Link
-      to={`/users/${params.row.managerProfile}`}
+      to={`/clients/${params?.value?._id}`}
       className="flex items-center gap-3"
     >
-      <Avatar icon="https://xsgames.co/randomusers/avatar.php?g=male" rounded />
+      <Avatar title={params?.value?.title} rounded />
       <div>
         <h5 className="font-semibold capitalize leading-none text-slate-900">
-          {params.row.accountManager}
+          {params?.value?.title}
         </h5>
-        <h6 className="text-sm text-slate-400">{params.row.managerEmail}</h6>
+        {/* <h6 className="text-sm text-slate-400">{params.value.email}</h6> */}
       </div>
     </Link>
   );
@@ -31,199 +43,110 @@ const VisitManager = ({ params }) => {
 
 const ShowProgress = ({ params }) => {
   return (
-    <div className="flex items-center gap-2">
-      <Progressbar width="w-20" rounded progress={params.row.orderProgress} />
-      <span className="text-sm font-semibold text-slate-900">
-        {params.row.orderProgress}%
-      </span>
+    <div className="flex flex-col">
+      <div className="flex items-center gap-2">
+        <Progressbar
+          width="w-20"
+          rounded
+          progress={params.value.percentage.toFixed()}
+        />
+        <span className="text-sm font-semibold text-slate-900">
+          {params?.value?.percentage.toFixed()}%
+        </span>
+      </div>
+      {/* <Chip label={params.value.title} variant={params.value.className} /> */}
     </div>
   );
 };
 
-const rows = [
-  {
-    id: 1,
-    orderId: 461850657,
-    orderTitle: `Order Title`,
-    accountManager: "John doe",
-    managerEmail: "johndoe@gmail.com",
-    managerProfile: "johndoe",
-    orderStatus: "active",
-    orderProgress: `25`,
-    brand: "The website design",
-    package: "Gold",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 2,
-    orderId: 506574618,
-    orderTitle: `Order Title`,
-    accountManager: "Silver Green",
-    managerEmail: "silvergreen@gmail.com",
-    managerProfile: "silvergreen",
-    orderStatus: "inactive",
-    orderProgress: `68`,
-    brand: "Web districts",
-    package: "Bronze",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 3,
-    orderId: 574661508,
-    orderTitle: `Order Title`,
-    accountManager: "Brad ford",
-    managerEmail: "bradford@gmail.com",
-    managerProfile: "bradford",
-    orderStatus: "delivered",
-    orderProgress: `41`,
-    brand: "Seo maisters",
-    package: "Silver",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 4,
-    orderId: 746501865,
-    orderTitle: `Order Title`,
-    accountManager: "Joey Tribbiani",
-    managerEmail: "joeytribbiani@gmail.com",
-    managerProfile: "joeytribbiani",
-    orderStatus: "active",
-    orderProgress: `89`,
-    brand: "Web districts",
-    package: "Bronze",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 5,
-    orderId: 616574850,
-    orderTitle: `Order Title`,
-    accountManager: "Matthew Perry",
-    managerEmail: "matthewperry@gmail.com",
-    managerProfile: "matthewperry",
-    orderStatus: "inactive",
-    orderProgress: `29`,
-    brand: "The Website Design",
-    package: "Bronze",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 6,
-    orderId: 661505748,
-    orderTitle: `Order Title`,
-    accountManager: "David Schwimmer",
-    managerEmail: "davidschwimmer@gmail.com",
-    managerProfile: "davidschwimmer",
-    orderStatus: "active",
-    orderProgress: `58`,
-    brand: "Web districts",
-    package: "Silver",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 7,
-    orderId: 506574618,
-    orderTitle: `Order Title`,
-    accountManager: "Matt Le Blanc",
-    managerEmail: "mattleblanc@gmail.com",
-    managerProfile: "mattleblanc",
-    orderStatus: "active",
-    orderProgress: `45`,
-    brand: "Web districts",
-    package: "Gold",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 8,
-    orderId: 506574618,
-    orderTitle: `Order Title`,
-    accountManager: "Ross Geller",
-    managerEmail: "rossgeller@gmail.com",
-    managerProfile: "rossgeller",
-    orderStatus: "delivered",
-    orderProgress: `91`,
-    brand: "SEO Maisters",
-    package: "Bronze",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-  {
-    id: 9,
-    orderId: 506574618,
-    orderTitle: `Order Title`,
-    accountManager: "Silver Green",
-    managerEmail: "silvergreen@gmail.com",
-    managerProfile: "silvergreen",
-    orderStatus: "active",
-    orderProgress: `12`,
-    brand: "Web districts",
-    package: "Bronze",
-    orderWorth: 5040.25,
-    createdAt: "10-10-2022",
-  },
-];
 const columns = [
-  { field: "orderId", headerName: "Order ID" },
-  { field: "orderTitle", headerName: "Order Title", width: 150 },
+  { field: "_id", headerName: "Order ID" },
+  {
+    field: "title",
+    headerName: "Order Title",
+    width: 150,
+    renderCell: (params) => (
+      <Link
+        to={`/orders/${params.row._id}`}
+        className="block w-full font-medium capitalize text-secondary"
+      >
+        {params.value}
+      </Link>
+    ),
+    flex: 1,
+  },
   {
     field: "brand",
     headerName: "Brand",
-    width: 250,
-    renderCell: (params) => <InfoChip title={params.value} />,
+    width: 200,
+    renderCell: (params) => (
+      <InfoChip
+        icon={`http://localhost:8000/${params.value.imgUrl}`}
+        title={params.value.title}
+      />
+    ),
+    flex: 1,
   },
   {
-    field: "accountManager",
-    headerName: "Account Manager",
-    width: 220,
-    renderCell: (params) => <VisitManager params={params} />,
+    field: "client",
+    headerName: "Client",
+    width: 200,
+    renderCell: (params) => <VisitClient params={params} />,
+    flex: 1,
   },
   {
-    field: "orderStatus",
-    headerName: "Order Status",
+    field: "orderHealth",
+    headerName: "Order Health",
     width: 140,
     headerAlign: "center",
     align: "center",
     renderCell: (params) => (
-      <Chip
-        variant={
-          params.value === "active" || params.value === "delivered"
-            ? "success"
-            : "warning"
-        }
-        label={params.value}
-      />
+      <Chip label={params.value.title} variant={params.value.className} />
     ),
   },
   {
-    field: "orderProgress",
+    field: "orderStage",
     headerName: "Order Progress",
-    width: 140,
+    width: 150,
+    // flex: 1,
     headerAlign: "center",
     align: "center",
     renderCell: (params) => <ShowProgress params={params} />,
+    flex: 1,
   },
   {
-    field: "package",
+    field: "orderType",
     width: 140,
     headerAlign: "center",
     align: "center",
-    headerName: `Package Name`,
+    headerName: `Order Type`,
+    renderCell: (params) => (
+      <div className="flex items-center gap-2">
+        <img
+          src={`http://localhost:8000/${params.value.imgUrl}`}
+          alt={params.value.title}
+          className="block h-5 w-5 object-contain"
+        />
+        <span className="capitalize">{params.value.title}</span>
+      </div>
+    ),
   },
   {
-    field: "orderWorth",
+    field: "amount",
     width: 135,
     headerAlign: "center",
     align: "center",
     headerName: `Order Worth`,
-    valueFormatter: (params) => {
-      return `$ ${params.value}`;
+    valueFormatter: ({ value }) => {
+      return formattedCurrency(value);
     },
+  },
+  {
+    field: "paymentType",
+    width: 135,
+    headerAlign: "center",
+    align: "center",
+    headerName: `Payment Type`,
   },
   {
     field: "createdAt",
@@ -232,7 +155,7 @@ const columns = [
     align: "center",
     headerName: `Created On`,
     valueFormatter: ({ value }) => {
-      return new Date(value).toISOString().split("T")[0];
+      return formattedDate(value);
     },
   },
 ];
@@ -255,9 +178,71 @@ const styles = {
 const { summaryChip, addOrder } = styles;
 
 const Orders = () => {
+  // const { response: orders, loading, error, axiosFetch } = useAxios();
+  const [orders, setOrders] = useState();
+  const [filteredOrders, setFilteredOrders] = useState();
+  const { auth } = useAuth();
+
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+  const [toggleDateRange, setToggleDateRange] = useState(false);
+
+  const handleToggleRange = () => setToggleDateRange((prev) => !prev);
+
+  const handleRangeSelection = () => {
+    setToggleDateRange((prevState) => !prevState);
+    const { startDate, endDate } = dateRange[0];
+    const filtered = orders.filter(
+      (order) =>
+        order.createdAt >= formatISO(startDate) &&
+        order.createdAt <= formatISO(endDate)
+    );
+    setFilteredOrders(filtered);
+  };
+
+  useEffect(() => {
+    // axiosFetch({
+    //   method: "GET",
+    //   url: "orders",
+
+    // });
+    const fetchOrders = async () => {
+      try {
+        const { data: orders } = await axios.get("orders", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
+        setOrders(orders);
+        setFilteredOrders(orders);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchOrders(orders);
+  }, []);
+
   return (
     <>
-      <div className={styles.summaryChips}>
+      {/* {loading && <Loader />}
+  {!loading && error && <div>{error}</div>}
+  {!loading && !error && !orders?.length && (
+    <Link to="new">
+      <EmptyPlaceholder
+        icon={<HiUsers className="h-full w-full" />}
+        title="No orders to display Click to Add"
+      />
+    </Link>
+  )} */}
+      {/* {!loading && !error && orders?.length > 0 && ( */}
+      {orders?.length > 0 ? (
+        <>
+          {/* <div className={styles.summaryChips}>
         <div className={summaryChip.wrapper}>
           <div
             className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
@@ -296,46 +281,92 @@ const Orders = () => {
             <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
           </div>
         </div>
-      </div>
-      <div className={addOrder.wrapper}>
-        <div>
-          <h6 className={addOrder.subtitle}>Total</h6>
-          <h5 className={addOrder.title}>
-            orders: <span className="font-bold text-secondary">458</span>
-          </h5>
-        </div>
-        <Link to="new" className={addOrder.icon}>
-          <HiPlus className="h-full w-full" />
+      </div> */}
+          <div className="flex justify-between">
+            <div className={addOrder.wrapper}>
+              <div>
+                <h6 className={addOrder.subtitle}>Total</h6>
+                <h5 className={addOrder.title}>
+                  orders:{" "}
+                  <span className="font-bold text-secondary">
+                    {filteredOrders.length}
+                  </span>
+                </h5>
+              </div>
+              {auth.role === "user" && (
+                <Link to="new" className={addOrder.icon}>
+                  <HiPlus className="h-full w-full" />
+                </Link>
+              )}
+            </div>
+            <div>
+              <Button handleClick={handleToggleRange}>Search By Date</Button>
+              {toggleDateRange && (
+                <div className="relative">
+                  <div className="absolute top-0 right-0 z-50 shadow-lg">
+                    <DateRange
+                      onChange={(item) => setDateRange([item.selection])}
+                      moveRangeOnFirstSelection={false}
+                      ranges={dateRange}
+                      rangeColors={["#019dff"]}
+                      showDateDisplay={true}
+                    />
+                    <Button
+                      widthVariant="full"
+                      handleClick={handleRangeSelection}
+                    >
+                      Search
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="h-[800px] w-full">
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={filteredOrders}
+              columns={columns}
+              // loading={loading}
+              components={{ Toolbar: GridToolbar }}
+              sx={{
+                background: "#f1f5f9",
+                border: "none",
+                borderRadius: "0.75rem",
+                padding: `0.5rem`,
+                "& .MuiDataGrid-row": {
+                  maxHeight: `65px !important`,
+                  minHeight: `65px !important`,
+                  background: "#fff",
+                  borderRadius: "0.75rem",
+                  marginTop: `1rem`,
+                  transition: `all 300ms ease-in-out`,
+                },
+                "& .MuiDataGrid-row:hover": {
+                  background: `#e2e8f0`,
+                  boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
+                },
+                "& .MuiDataGrid-cell": {
+                  maxHeight: `100% !important`,
+                  minHeight: `100% !important`,
+                },
+              }}
+            />
+          </div>
+        </>
+      ) : auth.role === "user" ? (
+        <Link to="new">
+          <EmptyPlaceholder
+            icon={<HiDocumentDuplicate className="h-full w-full" />}
+            title="No orders to display Click to Add"
+          />
         </Link>
-      </div>
-      <div className="h-[1000px] w-full">
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          sx={{
-            background: "#f1f5f9",
-            border: "none",
-            borderRadius: "0.75rem",
-            padding: `0.5rem`,
-            "& .MuiDataGrid-row": {
-              maxHeight: `65px !important`,
-              minHeight: `65px !important`,
-              background: "#fff",
-              borderRadius: "0.75rem",
-              marginTop: `1rem`,
-              transition: `all 300ms ease-in-out`,
-            },
-            "& .MuiDataGrid-row:hover": {
-              background: `#e2e8f0`,
-              boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
-            },
-            "& .MuiDataGrid-cell": {
-              maxHeight: `100% !important`,
-              minHeight: `100% !important`,
-            },
-          }}
+      ) : (
+        <EmptyPlaceholder
+          icon={<HiDocumentDuplicate className="h-full w-full" />}
+          title="No orders to display Click to Add"
         />
-      </div>
+      )}
     </>
   );
 };

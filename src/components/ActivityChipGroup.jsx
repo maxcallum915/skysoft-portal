@@ -1,9 +1,11 @@
 const styles = {
-  activityContainer: `relative ml-3 border-l border-gray-200 dark:border-gray-700`,
+  activityContainer: `before:content relative before:absolute before:left-6 before:h-full before:w-[1px] before:bg-slate-200`,
 };
 
-const ActivityChipGroup = ({ children }) => {
-  return <ol className={styles.activityContainer}>{children}</ol>;
+const ActivityChipGroup = ({ classes, children }) => {
+  return (
+    <ol className={`${styles.activityContainer} ${classes}`}>{children}</ol>
+  );
 };
 
 export default ActivityChipGroup;
