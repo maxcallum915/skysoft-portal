@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
-  HiArrowTrendingUp,
-  HiCheck,
-  HiOutlineUserPlus,
-  HiOutlineXMark,
+  HiOutlineUsers,
+  HiOutlineCurrencyDollar,
   HiPlus,
   HiUsers,
 } from "react-icons/hi2";
@@ -148,12 +146,12 @@ const columns = [
 ];
 
 const styles = {
-  summaryChips: `mb-5 grid gap-5 lg:grid-cols-4`,
+  summaryChips: `mb-5 grid gap-5 md:grid-cols-2`,
   summaryChip: {
     wrapper: `flex items-center gap-3 rounded-lg bg-white p-4 ring-1 ring-slate-200`,
-    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5`,
+    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5 bg-secondary bg-opacity-10 text-secondary`,
     subtitle: `text-sm capitalize text-slate-400 font-medium`,
-    title: `mt-1 text-2xl font-semibold leading-none`,
+    title: `mt-1 text-2xl font-semibold leading-none text-secondary`,
   },
   addClient: {
     wrapper: `mb-5 flex items-end gap-2`,
@@ -164,19 +162,21 @@ const styles = {
 };
 const { summaryChip, addClient } = styles;
 
+const initialDateRange = [
+  {
+    startDate: new Date(),
+    endDate: null,
+    key: "selection",
+  },
+];
+
 const Clients = () => {
   // const { response: clients, loading, error, axiosFetch } = useAxios();
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState();
   const { auth } = useAuth();
 
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: null,
-      key: "selection",
-    },
-  ]);
+  const [dateRange, setDateRange] = useState(initialDateRange);
   const [toggleDateRange, setToggleDateRange] = useState(false);
 
   const handleToggleRange = () => setToggleDateRange((prev) => !prev);
@@ -192,15 +192,21 @@ const Clients = () => {
     setFilteredClients(filtered);
   };
 
+  const resetRangeSelection = () => {
+    setToggleDateRange((prevState) => !prevState);
+    setFilteredClients(clients);
+  };
+
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const { data: clients } = await axios.get("clients", {
+        const { data: clients } = await axios.get("/clients", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
         });
         setClients(clients);
+        setFilteredClients(clients);
       } catch (error) {
         console.log(error);
       }
@@ -227,46 +233,30 @@ const Clients = () => {
       {/* {!loading && !error && clients?.length > 0 && ( */}
       {clients?.length > 0 ? (
         <>
-          {/* <div className={styles.summaryChips}>
+          <div className={styles.summaryChips}>
             <div className={summaryChip.wrapper}>
-              <div
-                className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
-              >
-                <HiOutlineUserPlus className="h-full w-full" />
+              <div className={summaryChip.icon}>
+                <HiOutlineUsers className="h-full w-full" />
               </div>
               <div>
-                <h6 className={summaryChip.subtitle}>New clients</h6>
-                <h5 className={`${summaryChip.title} text-secondary`}>26</h5>
+                <h6 className={summaryChip.subtitle}>No. of Clients</h6>
+                <h5 className={summaryChip.title}>{filteredClients.length}</h5>
               </div>
             </div>
             <div className={summaryChip.wrapper}>
-              <div className={`${summaryChip.icon} bg-amber-50 text-amber-500`}>
-                <HiArrowTrendingUp className="h-full w-full" />
+              <div className={summaryChip.icon}>
+                <HiOutlineCurrencyDollar className="h-full w-full" />
               </div>
               <div>
-                <h6 className={summaryChip.subtitle}>clients in-process</h6>
-                <h5 className={`${summaryChip.title} text-amber-500`}>587</h5>
+                <h6 className={summaryChip.subtitle}>Clients Worth</h6>
+                <h5 className={summaryChip.title}>
+                  {formattedCurrency(
+                    filteredClients.reduce((pv, c) => pv + c.worth, 0)
+                  )}
+                </h5>
               </div>
             </div>
-            <div className={summaryChip.wrapper}>
-              <div className={`${summaryChip.icon} bg-green-50 text-green-500`}>
-                <HiCheck className="h-full w-full" />
-              </div>
-              <div>
-                <h6 className={summaryChip.subtitle}>clients delivered</h6>
-                <h5 className={`${summaryChip.title} text-green-500`}>408</h5>
-              </div>
-            </div>
-            <div className={summaryChip.wrapper}>
-              <div className={`${summaryChip.icon} bg-red-50 text-red-500`}>
-                <HiOutlineXMark className="h-full w-full" />
-              </div>
-              <div>
-                <h6 className={summaryChip.subtitle}>chargedback clients</h6>
-                <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
-              </div>
-            </div>
-          </div> */}
+          </div>
           <div className="flex justify-between">
             <div className={addClient.wrapper}>
               <div>
@@ -296,12 +286,20 @@ const Clients = () => {
                       rangeColors={["#019dff"]}
                       showDateDisplay={true}
                     />
-                    <Button
-                      widthVariant="full"
-                      handleClick={handleRangeSelection}
-                    >
-                      Search
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        widthVariant="full"
+                        handleClick={resetRangeSelection}
+                      >
+                        Reset
+                      </Button>
+                      <Button
+                        widthVariant="full"
+                        handleClick={handleRangeSelection}
+                      >
+                        Search
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}

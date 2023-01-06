@@ -239,33 +239,10 @@ const UserProfile = () => {
                 </h5>
               </li>
             </ul>
-            {/* <h5 className="mt-6 mb-4 flex items-center gap-2 text-sm font-medium uppercase text-slate-500 after:inline-block after:h-0.5 after:w-full after:bg-slate-200">
-              Contact
-            </h5>
-            <ul className="ml-2">
-              <li className="flex items-center gap-2 text-slate-700">
-                <HiOutlineEnvelope className="h-6 w-6 text-secondary" />
-                <h5>
-                  <b className="mr-2 font-semibold capitalize text-slate-900">
-                    email:
-                  </b>
-                  johndoe@email.com
-                </h5>
-              </li>
-              <li className="mt-4 flex items-center gap-2 text-slate-700">
-                <HiOutlinePhone className="h-6 w-6 text-secondary" />
-                <h5>
-                  <b className="mr-2 font-semibold capitalize text-slate-900">
-                    phone:
-                  </b>
-                  (000)-000-0000
-                </h5>
-              </li>
-            </ul> */}
           </Box>
         </div>
         <div className="flex w-2/3 flex-col gap-5">
-          <h5 className="mr-auto text-xl font-semibold capitalize text-slate-700">
+          <h5 className="mr-auto text-xl font-semibold capitalize text-slate-900">
             Clients
           </h5>
           <div className="h-[500px] w-full">

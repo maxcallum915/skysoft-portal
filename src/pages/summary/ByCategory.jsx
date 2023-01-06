@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import Box from "../components/Box";
-import Avatar from "../components/Avatar";
-import formattedCurrency from "../utils/formattedCurrency";
-import axios from "../config/axios";
-import useAuth from "../hooks/useAuth";
+import Box from "../../components/Box";
+import Avatar from "../../components/Avatar";
+import formattedCurrency from "../../utils/formattedCurrency";
+import axios from "../../config/axios";
+import useAuth from "../../hooks/useAuth";
 
 const styles = {
   sectionTitle: `mb-3 text-xl font-semibold capitalize text-slate-900`,
@@ -31,7 +31,8 @@ const styles = {
 };
 const { summaryTable } = styles;
 
-const Summary = () => {
+const ByBrand = () => {
+  const [brands, setBrands] = useState([]);
   const [clients, setClients] = useState([]);
   const [categories, setCategories] = useState([]);
   const [statuses, setStatuses] = useState([]);
@@ -39,16 +40,19 @@ const Summary = () => {
   const { auth } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const q = Object.fromEntries(searchParams);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
-          { data: clients },
+          { data: brands },
           { data: categories },
           { data: status },
           { data: users },
+          { data: summary },
         ] = await Promise.all([
-          axios.get("/clients", {
+          axios.get("/admin-settings/brands", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
@@ -63,16 +67,23 @@ const Summary = () => {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/users", {
+          axios.get("/users/managers", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
+          axios.get("/summary", {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+            params: q,
+          }),
         ]);
-        setClients(clients);
+        setBrands(brands);
         setCategories(categories);
         setStatuses(status);
         setUsers(users);
+        setClients(summary);
       } catch (error) {
         console.log(error);
       }
@@ -134,12 +145,12 @@ const Summary = () => {
   return (
     <>
       <div>
-        <h4 className={styles.sectionTitle}>Category Wise Summary</h4>
+        <h4 className={styles.sectionTitle}>Brand Wise Summary</h4>
         <Box>
           <table className={summaryTable.wrapper}>
             <thead>
               <tr className={summaryTable.row}>
-                <th className={summaryTable.titleLg}>Categories</th>
+                <th className={summaryTable.titleLg}>Brands</th>
                 {statuses.map((status) => {
                   return (
                     <th key={status._id}>
@@ -163,35 +174,35 @@ const Summary = () => {
               </tr>
             </thead>
             <tbody>
-              {categories.map((category) => {
+              {brands.map((brand) => {
                 return (
                   <tr
-                    key={category._id}
+                    key={brand._id}
                     className={`${summaryTable.row} ${summaryTable.rowHover}`}
                   >
                     <td className={summaryTable.rowTitleWrapper}>
                       <img
-                        src={`http://localhost:8000/${category.imgUrl}`}
-                        alt={category.title}
+                        src={`http://localhost:8000/${brand.imgUrl}`}
+                        alt={brand.title}
                         className={summaryTable.icon}
                       />
-                      <h5 className={summaryTable.rowTitle}>
-                        {category.title}
-                      </h5>
+                      <h5 className={summaryTable.rowTitle}>{brand.title}</h5>
                     </td>
                     {statuses.map((status) => {
                       return (
                         <td key={status._id}>
                           <Link
-                            to={`/summary/byCategory?category=${category._id}&status=${status._id}`}
+                            to={`/summary/byClient?brand=${brand._id}&status=${
+                              status._id
+                            }&category=${searchParams.get("category")}`}
                             className={summaryTable.columnGrid}
                           >
                             <span className={summaryTable.columnCell}>
                               {
                                 categorySummary(
-                                  "category",
+                                  "brand",
                                   "status",
-                                  category._id,
+                                  brand._id,
                                   status._id
                                 ).XYLength
                               }
@@ -199,9 +210,9 @@ const Summary = () => {
                             <span className={summaryTable.columnCell}>
                               {
                                 categorySummary(
-                                  "category",
+                                  "brand",
                                   "status",
-                                  category._id,
+                                  brand._id,
                                   status._id
                                 ).XYRatio
                               }
@@ -209,9 +220,9 @@ const Summary = () => {
                             <span className={summaryTable.columnCell}>
                               {
                                 categorySummary(
-                                  "category",
+                                  "brand",
                                   "status",
-                                  category._id,
+                                  brand._id,
                                   status._id
                                 ).XYWorth
                               }
@@ -222,26 +233,22 @@ const Summary = () => {
                     })}
                     <td>
                       <Link
-                        to={`/summary/byCategory?category=${category._id}`}
+                        to={`/summary/byClient?brand=${
+                          brand._id
+                        }&category=${searchParams.get("category")}`}
                         className={summaryTable.columnGrid}
                       >
                         <span className={summaryTable.columnCell}>
                           {
-                            categorySummary("category", "status", category._id)
+                            categorySummary("brand", "status", brand._id)
                               .XLength
                           }
                         </span>
                         <span className={summaryTable.columnCell}>
-                          {
-                            categorySummary("category", "status", category._id)
-                              .XRatio
-                          }
+                          {categorySummary("brand", "status", brand._id).XRatio}
                         </span>
                         <span className={summaryTable.columnCell}>
-                          {
-                            categorySummary("category", "status", category._id)
-                              .XWorth
-                          }
+                          {categorySummary("brand", "status", brand._id).XWorth}
                         </span>
                       </Link>
                     </td>
@@ -258,37 +265,27 @@ const Summary = () => {
                   return (
                     <td key={status._id}>
                       <Link
-                        to={`/summary/byCategory?status=${status._id}`}
+                        to={`/summary/byClient?status=${
+                          status._id
+                        }&category=${searchParams.get("category")}`}
                         className={summaryTable.columnGrid}
                       >
                         <span className={summaryTable.columnCell}>
                           {
-                            categorySummary(
-                              "category",
-                              "status",
-                              "",
-                              status._id
-                            ).YLength
+                            categorySummary("brand", "status", "", status._id)
+                              .YLength
                           }
                         </span>
                         <span className={summaryTable.columnCell}>
                           {
-                            categorySummary(
-                              "category",
-                              "status",
-                              "",
-                              status._id
-                            ).YRatio
+                            categorySummary("brand", "status", "", status._id)
+                              .YRatio
                           }
                         </span>
                         <span className={summaryTable.columnCell}>
                           {
-                            categorySummary(
-                              "category",
-                              "status",
-                              "",
-                              status._id
-                            ).YWorth
+                            categorySummary("brand", "status", "", status._id)
+                              .YWorth
                           }
                         </span>
                       </Link>
@@ -297,17 +294,19 @@ const Summary = () => {
                 })}
                 <td>
                   <Link
-                    to={`/summary/byCategory`}
+                    to={`/summary/byClient?category=${searchParams.get(
+                      "category"
+                    )}`}
                     className={summaryTable.columnGrid}
                   >
                     <span className={summaryTable.columnCell}>
-                      {categorySummary("category", "status").ZLength}
+                      {categorySummary("brand", "status").ZLength}
                     </span>
                     <span className={summaryTable.columnCell}>
-                      {categorySummary("category", "status").ZRatio}
+                      {categorySummary("brand", "status").ZRatio}
                     </span>
                     <span className={summaryTable.columnCell}>
-                      {categorySummary("category", "status").ZWorth}
+                      {categorySummary("brand", "status").ZWorth}
                     </span>
                   </Link>
                 </td>
@@ -361,7 +360,9 @@ const Summary = () => {
                       return (
                         <td key={status._id}>
                           <Link
-                            to={`/summary/byUser?user=${user._id}&status=${status._id}`}
+                            to={`/summary/byClient?user=${user._id}&status=${
+                              status._id
+                            }&category=${searchParams.get("category")}`}
                             className={summaryTable.columnGrid}
                           >
                             <span className={summaryTable.columnCell}>
@@ -400,7 +401,9 @@ const Summary = () => {
                     })}
                     <td>
                       <Link
-                        to={`/summary/byUser?category=${user._id}`}
+                        to={`/summary/byClient?user=${
+                          user._id
+                        }&category=${searchParams.get("category")}`}
                         className={summaryTable.columnGrid}
                       >
                         <span className={summaryTable.columnCell}>
@@ -427,7 +430,9 @@ const Summary = () => {
                   return (
                     <td key={status._id}>
                       <Link
-                        to={`/summary/byUser?status=${status._id}`}
+                        to={`/summary/byClient?status=${
+                          status._id
+                        }&category=${searchParams.get("category")}`}
                         className={summaryTable.columnGrid}
                       >
                         <span className={summaryTable.columnCell}>
@@ -454,7 +459,9 @@ const Summary = () => {
                 })}
                 <td>
                   <Link
-                    to={`/summary/byUser`}
+                    to={`/summary/byClient?category=${searchParams.get(
+                      "category"
+                    )}`}
                     className={summaryTable.columnGrid}
                   >
                     <span className={summaryTable.columnCell}>
@@ -477,4 +484,4 @@ const Summary = () => {
   );
 };
 
-export default Summary;
+export default ByBrand;

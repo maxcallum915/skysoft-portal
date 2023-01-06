@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
-  HiOutlineClipboardDocumentList,
-  HiOutlineCurrencyDollar,
-  HiDocumentDuplicate,
+  HiArrowTrendingUp,
+  HiCheck,
+  HiOutlineUserPlus,
+  HiOutlineXMark,
   HiPlus,
+  HiUsers,
 } from "react-icons/hi2";
 import Avatar from "../../components/Avatar";
 import Chip from "../../components/Chip";
 import InfoChip from "../../components/InfoChip";
-import Progressbar from "../../components/Progressbar";
 import Loader from "../../components/Loader";
 import EmptyPlaceholder from "../../components/EmptyPlaceholder";
 import Button from "../../components/Button";
-import formattedCurrency from "../../utils/formattedCurrency";
 import formattedDate from "../../utils/formattedDate";
+import formattedCurrency from "../../utils/formattedCurrency";
 import useAxios from "../../hooks/useAxios";
 import { DateRange } from "react-date-range";
 import { formatISO } from "date-fns";
@@ -24,36 +25,33 @@ import axios from "../../config/axios";
 
 const VisitClient = ({ params }) => {
   return (
-    <Link
-      to={`/clients/${params?.value?._id}`}
-      className="flex items-center gap-3"
-    >
-      <Avatar title={params?.value?.title} rounded />
+    <Link to={`/clients/${params.row._id}`} className="flex items-center gap-3">
+      <Avatar title={params.row.title} rounded />
       <div>
         <h5 className="font-semibold capitalize leading-none text-slate-900">
-          {params?.value?.title}
+          {params.row.title}
         </h5>
-        {/* <h6 className="text-sm text-slate-400">{params.value.email}</h6> */}
+        <h6 className="text-sm text-slate-400">{params.row.email}</h6>
       </div>
     </Link>
   );
 };
 
-const ShowProgress = ({ params }) => {
+const VisitUser = ({ params }) => {
+  const { auth } = useAuth();
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-2">
-        <Progressbar
-          width="w-20"
-          rounded
-          progress={params.value.percentage.toFixed()}
-        />
-        <span className="text-sm font-semibold text-slate-900">
-          {params?.value?.percentage.toFixed()}%
-        </span>
+    <Link to={`/users/${params.value._id}`} className="flex items-center gap-3">
+      <Avatar
+        title={auth.name === params.value.name ? "You" : params.value.name}
+        rounded
+      />
+      <div>
+        <h5 className="font-semibold capitalize leading-none text-slate-900">
+          {auth.name === params.value.name ? "You" : params.value.name}
+        </h5>
+        <h6 className="text-sm text-slate-400">{params.value.email}</h6>
       </div>
-      {/* <Chip label={params.value.title} variant={params.value.className} /> */}
-    </div>
+    </Link>
   );
 };
 
@@ -61,16 +59,9 @@ const columns = [
   { field: "_id", headerName: "Order ID" },
   {
     field: "title",
-    headerName: "Order Title",
-    width: 150,
-    renderCell: (params) => (
-      <Link
-        to={`/orders/${params.row._id}`}
-        className="block w-full font-medium capitalize text-secondary"
-      >
-        {params.value}
-      </Link>
-    ),
+    headerName: "Client",
+    width: 200,
+    renderCell: (params) => <VisitClient params={params} />,
     flex: 1,
   },
   {
@@ -86,15 +77,15 @@ const columns = [
     flex: 1,
   },
   {
-    field: "client",
-    headerName: "Client",
+    field: "user",
+    headerName: "Manager",
     width: 200,
-    renderCell: (params) => <VisitClient params={params} />,
+    renderCell: (params) => <VisitUser params={params} />,
     flex: 1,
   },
   {
-    field: "orderHealth",
-    headerName: "Order Health",
+    field: "status",
+    headerName: "Client Status",
     width: 140,
     headerAlign: "center",
     align: "center",
@@ -103,48 +94,45 @@ const columns = [
     ),
   },
   {
-    field: "orderStage",
-    headerName: "Order Progress",
-    width: 150,
-    // flex: 1,
-    headerAlign: "center",
-    align: "center",
-    renderCell: (params) => <ShowProgress params={params} />,
-    flex: 1,
-  },
-  {
-    field: "orderType",
+    field: "category",
     width: 140,
     headerAlign: "center",
     align: "center",
-    headerName: `Order Type`,
-    renderCell: (params) => (
-      <div className="flex items-center gap-2">
-        <img
-          src={`http://localhost:8000/${params.value.imgUrl}`}
-          alt={params.value.title}
-          className="block h-5 w-5 object-contain"
-        />
-        <span className="capitalize">{params.value.title}</span>
-      </div>
-    ),
+    headerName: `Category`,
+    renderCell: (params) =>
+      !!params.value ? (
+        <div className="flex items-center gap-2">
+          <img
+            src={`http://localhost:8000/${params.value.imgUrl}`}
+            alt={params.value.title}
+            className="block h-5 w-5 object-contain"
+          />
+          <span className="capitalize">{params.value.title}</span>
+        </div>
+      ) : (
+        "No orders yet"
+      ),
+    flex: 1,
   },
   {
-    field: "amount",
+    field: "worth",
     width: 135,
     headerAlign: "center",
     align: "center",
-    headerName: `Order Worth`,
+    headerName: `Client Worth`,
     valueFormatter: ({ value }) => {
       return formattedCurrency(value);
     },
   },
   {
-    field: "paymentType",
+    field: "orders",
+    headerName: "No. of orders",
     width: 135,
     headerAlign: "center",
     align: "center",
-    headerName: `Payment Type`,
+    valueFormatter: ({ value }) => {
+      return value.length;
+    },
   },
   {
     field: "createdAt",
@@ -155,41 +143,42 @@ const columns = [
     valueFormatter: ({ value }) => {
       return formattedDate(value);
     },
+    flex: 1,
   },
 ];
 
 const styles = {
-  summaryChips: `mb-5 grid gap-5 lg:grid-cols-2`,
+  summaryChips: `mb-5 grid gap-5 lg:grid-cols-4`,
   summaryChip: {
     wrapper: `flex items-center gap-3 rounded-lg bg-white p-4 ring-1 ring-slate-200`,
-    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5 bg-secondary bg-opacity-10 text-secondary`,
+    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5`,
     subtitle: `text-sm capitalize text-slate-400 font-medium`,
-    title: `mt-1 text-2xl font-semibold leading-none text-secondary`,
+    title: `mt-1 text-2xl font-semibold leading-none`,
   },
-  addOrder: {
+  addClient: {
     wrapper: `mb-5 flex items-end gap-2`,
     subtitle: `text-sm capitalize leading-none text-slate-400`,
     title: `text-xl font-semibold capitalize text-slate-900`,
     icon: `relative mb-1 h-6 w-6 rounded-full border-2 border-secondary text-secondary after:invisible after:absolute after:top-1/2 after:left-full after:ml-1 after:mt-2 after:w-max after:-translate-y-1/2 after:rounded-md after:bg-slate-900 after:px-3 after:py-1 after:text-sm after:capitalize after:text-white after:opacity-0 after:transition-all after:duration-300 after:content-['add_order'] hover:bg-secondary hover:text-white hover:after:visible hover:after:mt-0 hover:after:opacity-100`,
   },
 };
-const { summaryChip, addOrder } = styles;
+const { summaryChip, addClient } = styles;
 
-const initialDateRange = [
-  {
-    startDate: new Date(),
-    endDate: null,
-    key: "selection",
-  },
-];
-
-const Orders = () => {
-  // const { response: orders, loading, error, axiosFetch } = useAxios();
-  const [orders, setOrders] = useState();
-  const [filteredOrders, setFilteredOrders] = useState();
+const Clients = () => {
+  const [clients, setClients] = useState([]);
+  const [filteredClients, setFilteredClients] = useState();
   const { auth } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [dateRange, setDateRange] = useState(initialDateRange);
+  const q = Object.fromEntries(searchParams);
+
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
   const [toggleDateRange, setToggleDateRange] = useState(false);
 
   const handleToggleRange = () => setToggleDateRange((prev) => !prev);
@@ -197,96 +186,102 @@ const Orders = () => {
   const handleRangeSelection = () => {
     setToggleDateRange((prevState) => !prevState);
     const { startDate, endDate } = dateRange[0];
-    const filtered = orders.filter(
+    const filtered = clients.filter(
       (order) =>
         order.createdAt >= formatISO(startDate) &&
         order.createdAt <= formatISO(endDate)
     );
-    setFilteredOrders(filtered);
-  };
-
-  const resetRangeSelection = () => {
-    setToggleDateRange((prevState) => !prevState);
-    setFilteredOrders(orders);
+    setFilteredClients(filtered);
   };
 
   useEffect(() => {
-    // axiosFetch({
-    //   method: "GET",
-    //   url: "orders",
-
-    // });
-    const fetchOrders = async () => {
+    const fetchClients = async () => {
       try {
-        const { data: orders } = await axios.get("/orders", {
+        const { data: clients } = await axios.get("/summary", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
+          params: q,
         });
-        setOrders(orders);
-        setFilteredOrders(orders);
+        setClients(clients);
+        console.log(clients);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchOrders(orders);
+    fetchClients();
+    // axiosFetch({
+    //   method: "GET",
+    //   url: "clients",
+    // });
   }, []);
 
   return (
     <>
       {/* {loading && <Loader />}
-  {!loading && error && <div>{error}</div>}
-  {!loading && !error && !orders?.length && (
-    <Link to="new">
-      <EmptyPlaceholder
-        icon={<HiUsers className="h-full w-full" />}
-        title="No orders to display Click to Add"
-      />
-    </Link>
-  )} */}
-      {/* {!loading && !error && orders?.length > 0 && ( */}
-      {orders?.length > 0 ? (
+      {!loading && error && <div>{error}</div>}
+      {!loading && !error && !clients?.length && (
+        <Link to="new">
+          <EmptyPlaceholder
+            icon={<HiUsers className="h-full w-full" />}
+            title="No clients to display Click to Add"
+          />
+        </Link>
+      )} */}
+      {/* {!loading && !error && clients?.length > 0 && ( */}
+      {clients?.length > 0 ? (
         <>
-          <div className={styles.summaryChips}>
+          {/* <div className={styles.summaryChips}>
             <div className={summaryChip.wrapper}>
-              <div className={summaryChip.icon}>
-                <HiOutlineClipboardDocumentList className="h-full w-full" />
+              <div
+                className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
+              >
+                <HiOutlineUserPlus className="h-full w-full" />
               </div>
               <div>
-                <h6 className={summaryChip.subtitle}>No. of Orders</h6>
-                <h5 className={summaryChip.title}>{filteredOrders.length}</h5>
+                <h6 className={summaryChip.subtitle}>New clients</h6>
+                <h5 className={`${summaryChip.title} text-secondary`}>26</h5>
               </div>
             </div>
             <div className={summaryChip.wrapper}>
-              <div className={summaryChip.icon}>
-                <HiOutlineCurrencyDollar className="h-full w-full" />
+              <div className={`${summaryChip.icon} bg-amber-50 text-amber-500`}>
+                <HiArrowTrendingUp className="h-full w-full" />
               </div>
               <div>
-                <h6 className={summaryChip.subtitle}>Orders Worth</h6>
-                <h5 className={summaryChip.title}>
-                  {formattedCurrency(
-                    filteredOrders.reduce((pv, c) => pv + c.amount, 0)
-                  )}
-                </h5>
+                <h6 className={summaryChip.subtitle}>clients in-process</h6>
+                <h5 className={`${summaryChip.title} text-amber-500`}>587</h5>
               </div>
             </div>
-          </div>
+            <div className={summaryChip.wrapper}>
+              <div className={`${summaryChip.icon} bg-green-50 text-green-500`}>
+                <HiCheck className="h-full w-full" />
+              </div>
+              <div>
+                <h6 className={summaryChip.subtitle}>clients delivered</h6>
+                <h5 className={`${summaryChip.title} text-green-500`}>408</h5>
+              </div>
+            </div>
+            <div className={summaryChip.wrapper}>
+              <div className={`${summaryChip.icon} bg-red-50 text-red-500`}>
+                <HiOutlineXMark className="h-full w-full" />
+              </div>
+              <div>
+                <h6 className={summaryChip.subtitle}>chargedback clients</h6>
+                <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
+              </div>
+            </div>
+          </div> */}
           <div className="flex justify-between">
-            <div className={addOrder.wrapper}>
+            <div className={addClient.wrapper}>
               <div>
-                <h6 className={addOrder.subtitle}>Total</h6>
-                <h5 className={addOrder.title}>
-                  orders:{" "}
+                <h6 className={addClient.subtitle}>Total</h6>
+                <h5 className={addClient.title}>
+                  clients:{" "}
                   <span className="font-bold text-secondary">
-                    {filteredOrders.length}
+                    {clients.length}
                   </span>
                 </h5>
               </div>
-              {auth.role === "user" && (
-                <Link to="new" className={addOrder.icon}>
-                  <HiPlus className="h-full w-full" />
-                </Link>
-              )}
             </div>
             <div>
               <Button handleClick={handleToggleRange}>Search By Date</Button>
@@ -300,20 +295,12 @@ const Orders = () => {
                       rangeColors={["#019dff"]}
                       showDateDisplay={true}
                     />
-                    <div className="flex gap-2">
-                      <Button
-                        widthVariant="full"
-                        handleClick={resetRangeSelection}
-                      >
-                        Reset
-                      </Button>
-                      <Button
-                        widthVariant="full"
-                        handleClick={handleRangeSelection}
-                      >
-                        Search
-                      </Button>
-                    </div>
+                    <Button
+                      widthVariant="full"
+                      handleClick={handleRangeSelection}
+                    >
+                      Search
+                    </Button>
                   </div>
                 </div>
               )}
@@ -322,7 +309,7 @@ const Orders = () => {
           <div className="h-[800px] w-full">
             <DataGrid
               getRowId={(row) => row._id}
-              rows={filteredOrders}
+              rows={!filteredClients ? clients : filteredClients}
               columns={columns}
               // loading={loading}
               components={{ Toolbar: GridToolbar }}
@@ -354,18 +341,18 @@ const Orders = () => {
       ) : auth.role === "user" ? (
         <Link to="new">
           <EmptyPlaceholder
-            icon={<HiDocumentDuplicate className="h-full w-full" />}
-            title="No orders to display Click to Add"
+            icon={<HiUsers className="h-full w-full" />}
+            title="No clients to display Click to Add"
           />
         </Link>
       ) : (
         <EmptyPlaceholder
-          icon={<HiDocumentDuplicate className="h-full w-full" />}
-          title="No orders to display Click to Add"
+          icon={<HiUsers className="h-full w-full" />}
+          title="No clients to display Click to Add"
         />
       )}
     </>
   );
 };
 
-export default Orders;
+export default Clients;

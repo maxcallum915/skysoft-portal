@@ -23,6 +23,20 @@ const styles = {
     percentage: `font-medium text-slate-400`,
     amount: `text-lg font-semibold leading-none`,
     chart: `2xl:w-2/3`,
+    theme: {
+      bg: {
+        success: `bg-emerald-50`,
+        warning: `bg-amber-50`,
+        danger: `bg-red-50`,
+        default: `bg-slate-100`,
+      },
+      text: {
+        success: `text-emerald-500`,
+        warning: `text-amber-500`,
+        danger: `text-red-500`,
+        default: `text-slate-500`,
+      },
+    },
   },
   categoryCard: {
     container: `mb-4 flex cursor-pointer select-none flex-col items-center gap-3 rounded-lg py-3 pl-2 pr-3 bg-white hover:bg-slate-100 2xl:flex-row ring-1 ring-slate-200`,
@@ -146,18 +160,20 @@ const Main = () => {
   );
 
   // Two dimentional summary function
-  const XYsummary = (x, y) => {
-    const X = clients.filter((i) => i.brand._id === x);
+  const XYsummary = (XQuery, YQuery, x, y) => {
+    const X = clients.filter((i) => i[XQuery]._id === x);
     const XLength = X.length;
     const XWorth = formattedCurrency(X.reduce((pv, c) => pv + c.worth, 0));
     const XRatio = `${parseInt((XLength / clients.length) * 100) || 0}%`;
 
-    const XY = clients.filter((i) => i.brand._id === x && i.status._id === y);
+    const XY = clients.filter(
+      (i) => i[XQuery]._id === x && i[YQuery]._id === y
+    );
     const XYLength = XY.length;
     const XYWorth = formattedCurrency(XY.reduce((pv, c) => pv + c.worth, 0));
     const XYRatio = `${parseInt((XYLength / XLength) * 100) || 0}%`;
 
-    const Y = clients.filter((i) => i.status._id === y);
+    const Y = clients.filter((i) => i[YQuery]._id === y);
     const YLength = Y.length;
     const YWorth = formattedCurrency(Y.reduce((pv, c) => pv + c.worth, 0));
     const YRatio = `${parseInt((YLength / clients.length) * 100) || 0}%`;
@@ -184,168 +200,14 @@ const Main = () => {
     };
   };
 
-  const tabularSummary = useCallback((x, y) => XYsummary(x, y), [clients]);
+  const brandSummary = useCallback(
+    (XQuery, YQuery, x, y) => XYsummary(XQuery, YQuery, x, y),
+    [clients]
+  );
 
   return (
     <>
-      <div className="flex flex-col items-start gap-5 xl:flex-row">
-        <div className="w-full xl:w-2/3">
-          <h4 className={styles.sectionTitle}>Clients Overview</h4>
-          <div className="grid grid-cols-2 gap-5">
-            <Box>
-              <div className={orderSummary.wrapper}>
-                <div
-                  className={`${orderSummary.icon} bg-emerald-50 text-emerald-500`}
-                >
-                  <HiCheck className="h-full w-full" />
-                </div>
-                <span className={orderSummary.title}>Clients delivered</span>
-              </div>
-              <div className={orderSummary.body}>
-                <div>
-                  <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>
-                      {statusWiseClients("delivered").clientsLength}
-                    </h5>
-                    <h6 className={orderSummary.percentage}>
-                      {statusWiseClients("delivered").clientsRatio}
-                    </h6>
-                  </div>
-                  <h6 className={`${orderSummary.amount} text-emerald-400`}>
-                    {statusWiseClients("delivered").clientsWorth}
-                  </h6>
-                </div>
-                <div className={orderSummary.chart}>
-                  <LineChart width="100%" height={115} tempProp="Delivered" />
-                </div>
-              </div>
-            </Box>
-            <Box>
-              <div className={orderSummary.wrapper}>
-                <div
-                  className={`${orderSummary.icon} bg-amber-50 text-amber-500`}
-                >
-                  <HiOutlineArrowPath className="h-full w-full" />
-                </div>
-                <span className={orderSummary.title}>Clients in-process</span>
-              </div>
-              <div className={orderSummary.body}>
-                <div>
-                  <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>
-                      {statusWiseClients("in process").clientsLength}
-                    </h5>
-                    <h6 className={orderSummary.percentage}>
-                      {statusWiseClients("in process").clientsRatio}
-                    </h6>
-                  </div>
-                  <h6 className={`${orderSummary.amount} text-amber-400`}>
-                    {statusWiseClients("in process").clientsWorth}
-                  </h6>
-                </div>
-                <div className={orderSummary.chart}>
-                  <LineChart width="100%" height={115} tempProp="Delivered" />
-                </div>
-              </div>
-            </Box>
-            <Box>
-              <div className={orderSummary.wrapper}>
-                <div className={`${orderSummary.icon} bg-red-50 text-red-500`}>
-                  <HiXMark className="h-full w-full" />
-                </div>
-                <span className={orderSummary.title}>Clients refunded</span>
-              </div>
-              <div className={orderSummary.body}>
-                <div>
-                  <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>
-                      {statusWiseClients("refunded").clientsLength}
-                    </h5>
-                    <h6 className={orderSummary.percentage}>
-                      {statusWiseClients("refunded").clientsRatio}
-                    </h6>
-                  </div>
-                  <h6 className={`${orderSummary.amount} text-red-500`}>
-                    {statusWiseClients("refunded").clientsWorth}
-                  </h6>
-                </div>
-                <div className={orderSummary.chart}>
-                  <LineChart width="100%" height={115} tempProp="Delivered" />
-                </div>
-              </div>
-            </Box>
-            <Box>
-              <div className={orderSummary.wrapper}>
-                <div className={`${orderSummary.icon} bg-red-50 text-red-600`}>
-                  <HiXMark className="h-full w-full" />
-                </div>
-                <span className={orderSummary.title}>Clients chargedback</span>
-              </div>
-              <div className={orderSummary.body}>
-                <div>
-                  <div className={orderSummary.textInfo}>
-                    <h5 className={orderSummary.orders}>
-                      {statusWiseClients("chargeback").clientsLength}
-                    </h5>
-                    <h6 className={orderSummary.percentage}>
-                      {statusWiseClients("chargeback").clientsRatio}
-                    </h6>
-                  </div>
-                  <h6 className={`${orderSummary.amount} text-red-600`}>
-                    {statusWiseClients("chargeback").clientsWorth}
-                  </h6>
-                </div>
-                <div className={orderSummary.chart}>
-                  <LineChart width="100%" height={115} tempProp="Delivered" />
-                </div>
-              </div>
-            </Box>
-          </div>
-        </div>
-        <div className="w-full xl:w-1/3">
-          <h4 className={styles.sectionTitle}>Category Wise Summary</h4>
-          {categories
-            .map((category) => {
-              return (
-                <div className={categoryCard.container} key={category._id}>
-                  <div className={categoryCard.titleWrapper}>
-                    <img
-                      src={`http://localhost:8000/${category.imgUrl}`}
-                      alt={category.title}
-                      className={categoryCard.icon}
-                    />
-                    <div>
-                      <h5 className={categoryCard.title}>{category.title}</h5>
-                      <h6 className={categoryCard.subtitle}>
-                        {categoryWiseClients(category._id).clientsRatio}
-                      </h6>
-                    </div>
-                  </div>
-                  <div className={categoryCard.infoWrapper}>
-                    <ul>
-                      <li className={categoryCard.infoTitle}>
-                        {categoryWiseClients(category._id).clientsLength}
-                      </li>
-                      <li className={categoryCard.infoSubtitle}>
-                        Total Clients
-                      </li>
-                    </ul>
-                    <ul>
-                      <li className={categoryCard.infoTitle}>
-                        {categoryWiseClients(category._id).clientsWorth}
-                      </li>
-                      <li className={categoryCard.infoSubtitle}>
-                        Clients Worth
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              );
-            })
-            .reverse()}
-        </div>
-      </div>
-      <div className="mt-4">
+      <div className="mb-6">
         <h4 className={styles.sectionTitle}>Brand Wise Summary</h4>
         <Box>
           <table className={summaryTable.wrapper}>
@@ -393,17 +255,38 @@ const Main = () => {
                       return (
                         <td key={status._id}>
                           <Link
-                            to={`/summary?brand=${brand._id}&status=${status._id}`}
+                            to={`/summary/byBrand?brand=${brand._id}&status=${status._id}`}
                             className={summaryTable.columnGrid}
                           >
                             <span className={summaryTable.columnCell}>
-                              {tabularSummary(brand._id, status._id).XYLength}
+                              {
+                                brandSummary(
+                                  "brand",
+                                  "status",
+                                  brand._id,
+                                  status._id
+                                ).XYLength
+                              }
                             </span>
                             <span className={summaryTable.columnCell}>
-                              {tabularSummary(brand._id, status._id).XYRatio}
+                              {
+                                brandSummary(
+                                  "brand",
+                                  "status",
+                                  brand._id,
+                                  status._id
+                                ).XYRatio
+                              }
                             </span>
                             <span className={summaryTable.columnCell}>
-                              {tabularSummary(brand._id, status._id).XYWorth}
+                              {
+                                brandSummary(
+                                  "brand",
+                                  "status",
+                                  brand._id,
+                                  status._id
+                                ).XYWorth
+                              }
                             </span>
                           </Link>
                         </td>
@@ -411,17 +294,17 @@ const Main = () => {
                     })}
                     <td>
                       <Link
-                        to={`/summary?brand=${brand._id}`}
+                        to={`/summary/byBrand?brand=${brand._id}`}
                         className={summaryTable.columnGrid}
                       >
                         <span className={summaryTable.columnCell}>
-                          {tabularSummary(brand._id).XLength}
+                          {brandSummary("brand", "status", brand._id).XLength}
                         </span>
                         <span className={summaryTable.columnCell}>
-                          {tabularSummary(brand._id).XRatio}
+                          {brandSummary("brand", "status", brand._id).XRatio}
                         </span>
                         <span className={summaryTable.columnCell}>
-                          {tabularSummary(brand._id).XWorth}
+                          {brandSummary("brand", "status", brand._id).XWorth}
                         </span>
                       </Link>
                     </td>
@@ -438,32 +321,44 @@ const Main = () => {
                   return (
                     <td key={status._id}>
                       <Link
-                        to={`/summary?status=${status._id}`}
+                        to={`/summary/byBrand?status=${status._id}`}
                         className={summaryTable.columnGrid}
                       >
                         <span className={summaryTable.columnCell}>
-                          {tabularSummary("", status._id).YLength}
+                          {
+                            brandSummary("brand", "status", "", status._id)
+                              .YLength
+                          }
                         </span>
                         <span className={summaryTable.columnCell}>
-                          {tabularSummary("", status._id).YRatio}
+                          {
+                            brandSummary("brand", "status", "", status._id)
+                              .YRatio
+                          }
                         </span>
                         <span className={summaryTable.columnCell}>
-                          {tabularSummary("", status._id).YWorth}
+                          {
+                            brandSummary("brand", "status", "", status._id)
+                              .YWorth
+                          }
                         </span>
                       </Link>
                     </td>
                   );
                 })}
                 <td>
-                  <Link to={`/summary/`} className={summaryTable.columnGrid}>
+                  <Link
+                    to={`/summary/byBrand/`}
+                    className={summaryTable.columnGrid}
+                  >
                     <span className={summaryTable.columnCell}>
-                      {tabularSummary().ZLength}
+                      {brandSummary("brand", "status").ZLength}
                     </span>
                     <span className={summaryTable.columnCell}>
-                      {tabularSummary().ZRatio}
+                      {brandSummary("brand", "status").ZRatio}
                     </span>
                     <span className={summaryTable.columnCell}>
-                      {tabularSummary().ZWorth}
+                      {brandSummary("brand", "status").ZWorth}
                     </span>
                   </Link>
                 </td>
@@ -471,6 +366,112 @@ const Main = () => {
             </tfoot>
           </table>
         </Box>
+      </div>
+      <div className="flex flex-col items-start gap-5 xl:flex-row">
+        <div className="w-full xl:w-2/3">
+          <h4 className={styles.sectionTitle}>Clients Overview</h4>
+          <div className="grid grid-cols-3 gap-5">
+            {statuses.map((status) => {
+              return (
+                <Box key={status._id}>
+                  <div className={orderSummary.wrapper}>
+                    <div
+                      className={`${orderSummary.icon} ${
+                        orderSummary.theme.bg[status.className]
+                      } ${orderSummary.theme.text[status.className]}`}
+                    >
+                      {status.className === "success" && (
+                        <HiCheck className="h-full w-full" />
+                      )}
+                      {status.className === "warning" && (
+                        <HiOutlineArrowPath className="h-full w-full" />
+                      )}
+                      {status.className === "danger" && (
+                        <HiXMark className="h-full w-full" />
+                      )}
+                      {status.className === "default" && (
+                        <HiXMark className="h-full w-full" />
+                      )}
+                    </div>
+                    <span className={orderSummary.title}>{status.title}</span>
+                  </div>
+                  <div className={orderSummary.body}>
+                    <div>
+                      <div className={orderSummary.textInfo}>
+                        <h5 className={orderSummary.orders}>
+                          {statusWiseClients(status.title).clientsLength}
+                        </h5>
+                        <h6 className={orderSummary.percentage}>
+                          {statusWiseClients(status.title).clientsRatio}
+                        </h6>
+                      </div>
+                      <h6
+                        className={`${orderSummary.amount} ${
+                          orderSummary.theme.text[status.className]
+                        }`}
+                      >
+                        {statusWiseClients(status.title).clientsWorth}
+                      </h6>
+                    </div>
+                    <div className={orderSummary.chart}>
+                      <LineChart
+                        width="100%"
+                        height={50}
+                        tempProp="Delivered"
+                      />
+                    </div>
+                  </div>
+                </Box>
+              );
+            })}
+          </div>
+        </div>
+        <div className="w-full xl:w-1/3">
+          <h4 className={styles.sectionTitle}>Category Wise Summary</h4>
+          {categories
+            .map((category) => {
+              return (
+                <Link
+                  to={`/summary/byCategory?category=${category._id}`}
+                  className={categoryCard.container}
+                  key={category._id}
+                >
+                  <div className={categoryCard.titleWrapper}>
+                    <img
+                      src={`http://localhost:8000/${category.imgUrl}`}
+                      alt={category.title}
+                      className={categoryCard.icon}
+                    />
+                    <div>
+                      <h5 className={categoryCard.title}>{category.title}</h5>
+                      <h6 className={categoryCard.subtitle}>
+                        {categoryWiseClients(category._id).clientsRatio}
+                      </h6>
+                    </div>
+                  </div>
+                  <div className={categoryCard.infoWrapper}>
+                    <ul>
+                      <li className={categoryCard.infoTitle}>
+                        {categoryWiseClients(category._id).clientsLength}
+                      </li>
+                      <li className={categoryCard.infoSubtitle}>
+                        Total Clients
+                      </li>
+                    </ul>
+                    <ul>
+                      <li className={categoryCard.infoTitle}>
+                        {categoryWiseClients(category._id).clientsWorth}
+                      </li>
+                      <li className={categoryCard.infoSubtitle}>
+                        Clients Worth
+                      </li>
+                    </ul>
+                  </div>
+                </Link>
+              );
+            })
+            .reverse()}
+        </div>
       </div>
     </>
   );

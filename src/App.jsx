@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
 import Orders from "./pages/orders/Orders";
@@ -10,16 +9,18 @@ import OrderDetails from "./pages/orders/OrderDetails";
 import Clients from "./pages/clients/Clients";
 import NewClient from "./pages/clients/NewClient";
 import ClientDetails from "./pages/clients/ClientDetails";
-import BrandDetails from "./pages/brands/BrandDetails";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import UserProfile from "./pages/UserProfile";
+import ByBrand from "./pages/summary/ByBrand";
+import ByCategory from "./pages/summary/ByCategory";
+import ByClient from "./pages/summary/ByClient";
+import useAuth from "./hooks/useAuth";
+import ForgotPassword from "./pages/ForgotPassword";
 import Teams from "./pages/Teams";
 import { Toaster } from "react-hot-toast";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import useAuth from "./hooks/useAuth";
-import Summary from "./pages/Summary";
 
 const toastOptions = {
   position: "bottom-center",
@@ -70,8 +71,10 @@ const App = () => {
             <Route index element={<Users />} />
             <Route path=":id" element={<UserProfile />} />
           </Route>
-          <Route path="summary" element={<Summary />}>
-            <Route path=":id" element={<Summary />} />
+          <Route path="summary">
+            <Route path="byBrand" element={<ByBrand />} />
+            <Route path="byCategory" element={<ByCategory />} />
+            <Route path="byClient" element={<ByClient />} />
           </Route>
           <Route path="admin-settings/*" element={<Settings />} />
         </Route>

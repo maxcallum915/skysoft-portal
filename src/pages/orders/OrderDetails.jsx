@@ -32,7 +32,7 @@ const styles = {
   orderSubtitle: `text-xs font-medium text-slate-400`,
   avatarWrapper: `flex items-start gap-3`,
   avatarBox: `flex min-w-[225px] items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-2.5 py-3`,
-  avatarSubtitle: `text-xs font-semibold leading-tight text-slate-400`,
+  avatarSubtitle: `text-xs font-semibold leading-tight text-slate-400 capitalize`,
   avatarTitle: `font-semibold text-secondary capitalize`,
   infoRow: {
     wrapper: `mt-10 flex flex-wrap items-start justify-between gap-6`,
@@ -113,7 +113,6 @@ const OrderDetails = () => {
         console.log(error);
       }
     };
-    console.log("first");
     fetchData();
   }, [id, refresh]);
 
@@ -154,13 +153,14 @@ const OrderDetails = () => {
         }
       }
     }
-    setCommentInputs(initialCommentInputs);
     const { data: newComment } = await axios.post("/comments", formData, {
       headers: {
         Authorization: `Bearer ${auth.token}`,
       },
     });
+    setCommentInputs(initialCommentInputs);
     setComments((prevState) => [...prevState, newComment]);
+    setRefresh((prev) => !prev);
   };
 
   const toggleEditable = () => setIsEditable((prevState) => !prevState);
@@ -223,9 +223,7 @@ const OrderDetails = () => {
   //     ),
   //   }));
   // };
-  {
-    console.log(auth, order);
-  }
+
   return (
     <>
       {/* {loading && <Loader />}
@@ -284,18 +282,18 @@ const OrderDetails = () => {
                     </h5>
                   </div>
                 </Link>
-                {/* <div className={styles.avatarBox}>
-                  <Avatar
-                    icon={"https://xsgames.co/randomusers/avatar.php?g=male"}
-                    rounded
-                    title={"John doe"}
-                    shadow
-                  />
+                <Link
+                  to={`/users/${order?.user?._id}`}
+                  className={styles.avatarBox}
+                >
+                  <Avatar rounded title={order?.user?.name} />
                   <div>
-                    <h5 className={styles.avatarSubtitle}>Account Manager</h5>
-                    <h5 className={styles.avatarTitle}>Sylvia Serenity</h5>
+                    <h5 className={styles.avatarSubtitle}>
+                      {order?.user?.name}
+                    </h5>
+                    <h5 className={styles.avatarTitle}>{order?.user?.name}</h5>
                   </div>
-                </div> */}
+                </Link>
               </div>
             </div>
             <div className={infoRow.wrapper}>
@@ -406,6 +404,14 @@ const OrderDetails = () => {
                 />
               </div>
             </div>
+            <div className={`mt-5`}>
+              <h5 className={`${infoRow.title} mb-3`}>Services</h5>
+              <div className={infoRow.subtitleWrapper}>
+                {order?.services.map((service) => (
+                  <Chip label={service} key={service} />
+                ))}
+              </div>
+            </div>
           </Box>
           <Tab.Group as={"div"} className={"mt-5"}>
             <Tab.List className={`${tabs.tabList}`}>
@@ -428,7 +434,7 @@ const OrderDetails = () => {
                             key={comment._id}
                             title={comment.comment}
                             date={relativeDate(comment.createdAt)}
-                            subtitle={auth.name}
+                            subtitle={comment.user.name}
                           />
                         );
                       })}

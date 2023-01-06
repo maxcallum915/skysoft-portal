@@ -40,6 +40,7 @@ const Brands = () => {
   const [selected, setSelected] = useState([]);
   const [error, setError] = useState("");
   const [editId, setEditId] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const { auth } = useAuth();
   const modal = useRef(null);
 
@@ -89,6 +90,7 @@ const Brands = () => {
           ...prevState.map((i) => (i.id === editId ? { ...updatedBrand } : i)),
         ]);
         setEditId(null);
+        setRefresh((prev) => !prev);
         toast.success("Brand updated successfully");
       } else {
         const { data: newBrand } = await axios.post(
@@ -101,6 +103,7 @@ const Brands = () => {
           }
         );
         setBrands((prevState) => [...prevState, newBrand]);
+        setRefresh((prev) => !prev);
         toast.success("Brand created successfully");
       }
       modal.current.toggleModal();

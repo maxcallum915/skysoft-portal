@@ -258,7 +258,7 @@ const ClientDetails = () => {
       {/* {loading && <Loader />}
       {!loading && error && <div>{error}</div>}
       {!loading && !error && !client && <div>Resource not found</div>} */}
-      {client ? (
+      {client && (
         <>
           {auth?._id === client?.user?._id &&
             (isEditable ? (
@@ -303,7 +303,10 @@ const ClientDetails = () => {
                 </h5>
               </div>
               <div className={styles.avatarWrapper}>
-                <div className={styles.avatarBox}>
+                <Link
+                  to={`/users/${client?.user?._id}`}
+                  className={styles.avatarBox}
+                >
                   <Avatar rounded title={client?.user.name} shadow />
                   <div>
                     <h6 className={styles.avatarSubtitle}>
@@ -311,7 +314,7 @@ const ClientDetails = () => {
                     </h6>
                     <h5 className={styles.avatarTitle}>{client?.user.name}</h5>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
             <div className={infoRow.wrapper}>
@@ -573,8 +576,6 @@ const ClientDetails = () => {
             </Tab.Panels>
           </Tab.Group>
         </>
-      ) : (
-        <div>{error}</div>
       )}
     </>
   );
