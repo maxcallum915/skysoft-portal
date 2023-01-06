@@ -124,6 +124,8 @@ const UserProfile = () => {
   const params = useParams();
   const { auth } = useAuth();
 
+  console.log(params);
+
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -214,21 +216,21 @@ const UserProfile = () => {
                   <b className="mr-2 font-semibold text-slate-900">
                     full name:
                   </b>
-                  {auth.name}
+                  {user.name}
                 </h5>
               </li>
               <li className="mt-4 flex items-center gap-2 capitalize text-slate-700">
                 <HiOutlineUserCircle className="h-6 w-6 text-secondary" />
                 <h5>
                   <b className="mr-2 font-semibold text-slate-900">email:</b>
-                  {auth.email}
+                  {user.email}
                 </h5>
               </li>
               <li className="mt-4 flex items-center gap-2 capitalize text-slate-700">
                 <HiOutlineStar className="h-6 w-6 text-secondary" />
                 <h5>
                   <b className="mr-2 font-semibold text-slate-900">Role:</b>
-                  {auth.role}
+                  {user.role}
                 </h5>
               </li>
               <li className="mt-4 flex items-center gap-2 capitalize text-slate-700">

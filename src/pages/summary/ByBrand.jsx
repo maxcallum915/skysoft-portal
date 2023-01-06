@@ -326,162 +326,166 @@ const ByBrand = () => {
         </Box>
       </div>
 
-      <div className="mt-6">
-        <h4 className={styles.sectionTitle}>Manager Wise Summary</h4>
-        <Box>
-          <table className={summaryTable.wrapper}>
-            <thead>
-              <tr className={summaryTable.row}>
-                <th className={summaryTable.titleLg}>Users</th>
-                {statuses.map((status) => {
+      {auth.role !== "user" && (
+        <div className="mt-6">
+          <h4 className={styles.sectionTitle}>Manager Wise Summary</h4>
+          <Box>
+            <table className={summaryTable.wrapper}>
+              <thead>
+                <tr className={summaryTable.row}>
+                  <th className={summaryTable.titleLg}>Users</th>
+                  {statuses.map((status) => {
+                    return (
+                      <th key={status._id}>
+                        <span className={`capitalize`}>{status.title}</span>
+                        <div className={summaryTable.columnGrid}>
+                          <span className={summaryTable.columnCell}>
+                            Clients
+                          </span>
+                          <span className={summaryTable.columnCell}>%</span>
+                          <span className={summaryTable.columnCell}>$</span>
+                        </div>
+                      </th>
+                    );
+                  })}
+                  <th>
+                    <span>Total</span>
+                    <div className={summaryTable.columnGrid}>
+                      <span className={summaryTable.columnCell}>Clients</span>
+                      <span className={summaryTable.columnCell}>%</span>
+                      <span className={summaryTable.columnCell}>$</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => {
                   return (
-                    <th key={status._id}>
-                      <span className={`capitalize`}>{status.title}</span>
-                      <div className={summaryTable.columnGrid}>
-                        <span className={summaryTable.columnCell}>Clients</span>
-                        <span className={summaryTable.columnCell}>%</span>
-                        <span className={summaryTable.columnCell}>$</span>
-                      </div>
-                    </th>
+                    <tr
+                      key={user._id}
+                      className={`${summaryTable.row} ${summaryTable.rowHover}`}
+                    >
+                      <td className={summaryTable.rowTitleWrapper}>
+                        <Avatar title={user.name} rounded />
+                        <h5 className={summaryTable.rowTitle}>{user.name}</h5>
+                      </td>
+                      {statuses.map((status) => {
+                        return (
+                          <td key={status._id}>
+                            <Link
+                              to={`/summary/byClient?user=${user._id}&status=${status._id}&${brand}`}
+                              className={summaryTable.columnGrid}
+                            >
+                              <span className={summaryTable.columnCell}>
+                                {
+                                  usersSummary(
+                                    "user",
+                                    "status",
+                                    user._id,
+                                    status._id
+                                  ).XYLength
+                                }
+                              </span>
+                              <span className={summaryTable.columnCell}>
+                                {
+                                  usersSummary(
+                                    "user",
+                                    "status",
+                                    user._id,
+                                    status._id
+                                  ).XYRatio
+                                }
+                              </span>
+                              <span className={summaryTable.columnCell}>
+                                {
+                                  usersSummary(
+                                    "user",
+                                    "status",
+                                    user._id,
+                                    status._id
+                                  ).XYWorth
+                                }
+                              </span>
+                            </Link>
+                          </td>
+                        );
+                      })}
+                      <td>
+                        <Link
+                          to={`/summary/byClient?user=${user._id}&${brand}&${status}`}
+                          className={summaryTable.columnGrid}
+                        >
+                          <span className={summaryTable.columnCell}>
+                            {usersSummary("user", "status", user._id).XLength}
+                          </span>
+                          <span className={summaryTable.columnCell}>
+                            {usersSummary("user", "status", user._id).XRatio}
+                          </span>
+                          <span className={summaryTable.columnCell}>
+                            {usersSummary("user", "status", user._id).XWorth}
+                          </span>
+                        </Link>
+                      </td>
+                    </tr>
                   );
                 })}
-                <th>
-                  <span>Total</span>
-                  <div className={summaryTable.columnGrid}>
-                    <span className={summaryTable.columnCell}>Clients</span>
-                    <span className={summaryTable.columnCell}>%</span>
-                    <span className={summaryTable.columnCell}>$</span>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => {
-                return (
-                  <tr
-                    key={user._id}
-                    className={`${summaryTable.row} ${summaryTable.rowHover}`}
-                  >
-                    <td className={summaryTable.rowTitleWrapper}>
-                      <Avatar title={user.name} rounded />
-                      <h5 className={summaryTable.rowTitle}>{user.name}</h5>
-                    </td>
-                    {statuses.map((status) => {
-                      return (
-                        <td key={status._id}>
-                          <Link
-                            to={`/summary/byClient?user=${user._id}&status=${status._id}&${brand}`}
-                            className={summaryTable.columnGrid}
-                          >
-                            <span className={summaryTable.columnCell}>
-                              {
-                                usersSummary(
-                                  "user",
-                                  "status",
-                                  user._id,
-                                  status._id
-                                ).XYLength
-                              }
-                            </span>
-                            <span className={summaryTable.columnCell}>
-                              {
-                                usersSummary(
-                                  "user",
-                                  "status",
-                                  user._id,
-                                  status._id
-                                ).XYRatio
-                              }
-                            </span>
-                            <span className={summaryTable.columnCell}>
-                              {
-                                usersSummary(
-                                  "user",
-                                  "status",
-                                  user._id,
-                                  status._id
-                                ).XYWorth
-                              }
-                            </span>
-                          </Link>
-                        </td>
-                      );
-                    })}
-                    <td>
-                      <Link
-                        to={`/summary/byClient?user=${user._id}&${brand}&${status}`}
-                        className={summaryTable.columnGrid}
-                      >
-                        <span className={summaryTable.columnCell}>
-                          {usersSummary("user", "status", user._id).XLength}
-                        </span>
-                        <span className={summaryTable.columnCell}>
-                          {usersSummary("user", "status", user._id).XRatio}
-                        </span>
-                        <span className={summaryTable.columnCell}>
-                          {usersSummary("user", "status", user._id).XWorth}
-                        </span>
-                      </Link>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-            <tfoot>
-              <tr
-                className={`${summaryTable.row} ${summaryTable.footer.row} ${summaryTable.rowHover}`}
-              >
-                <td className={summaryTable.titleLg}>Total</td>
-                {statuses.map((status) => {
-                  return (
-                    <td key={status._id}>
-                      <Link
-                        to={`/summary/byClient?status=${status._id}&${brand}`}
-                        className={summaryTable.columnGrid}
-                      >
-                        <span className={summaryTable.columnCell}>
-                          {
-                            usersSummary("user", "status", "", status._id)
-                              .YLength
-                          }
-                        </span>
-                        <span className={summaryTable.columnCell}>
-                          {
-                            usersSummary("user", "status", "", status._id)
-                              .YRatio
-                          }
-                        </span>
-                        <span className={summaryTable.columnCell}>
-                          {
-                            usersSummary("user", "status", "", status._id)
-                              .YWorth
-                          }
-                        </span>
-                      </Link>
-                    </td>
-                  );
-                })}
-                <td>
-                  <Link
-                    to={`/summary/byClient?${brand}&${status}`}
-                    className={summaryTable.columnGrid}
-                  >
-                    <span className={summaryTable.columnCell}>
-                      {usersSummary("user", "status").ZLength}
-                    </span>
-                    <span className={summaryTable.columnCell}>
-                      {usersSummary("user", "status").ZRatio}
-                    </span>
-                    <span className={summaryTable.columnCell}>
-                      {usersSummary("user", "status").ZWorth}
-                    </span>
-                  </Link>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </Box>
-      </div>
+              </tbody>
+              <tfoot>
+                <tr
+                  className={`${summaryTable.row} ${summaryTable.footer.row} ${summaryTable.rowHover}`}
+                >
+                  <td className={summaryTable.titleLg}>Total</td>
+                  {statuses.map((status) => {
+                    return (
+                      <td key={status._id}>
+                        <Link
+                          to={`/summary/byClient?status=${status._id}&${brand}`}
+                          className={summaryTable.columnGrid}
+                        >
+                          <span className={summaryTable.columnCell}>
+                            {
+                              usersSummary("user", "status", "", status._id)
+                                .YLength
+                            }
+                          </span>
+                          <span className={summaryTable.columnCell}>
+                            {
+                              usersSummary("user", "status", "", status._id)
+                                .YRatio
+                            }
+                          </span>
+                          <span className={summaryTable.columnCell}>
+                            {
+                              usersSummary("user", "status", "", status._id)
+                                .YWorth
+                            }
+                          </span>
+                        </Link>
+                      </td>
+                    );
+                  })}
+                  <td>
+                    <Link
+                      to={`/summary/byClient?${brand}&${status}`}
+                      className={summaryTable.columnGrid}
+                    >
+                      <span className={summaryTable.columnCell}>
+                        {usersSummary("user", "status").ZLength}
+                      </span>
+                      <span className={summaryTable.columnCell}>
+                        {usersSummary("user", "status").ZRatio}
+                      </span>
+                      <span className={summaryTable.columnCell}>
+                        {usersSummary("user", "status").ZWorth}
+                      </span>
+                    </Link>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </Box>
+        </div>
+      )}
     </>
   );
 };
