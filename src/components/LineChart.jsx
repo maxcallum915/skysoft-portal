@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Chart from "react-apexcharts";
 
-const LineChart = ({ width, height, tempProp }) => {
+const LineChart = ({ width, height, title, dates }) => {
   const [data, setData] = useState([
     {
-      name: tempProp,
+      name: title,
       data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
     },
   ]);

@@ -113,6 +113,12 @@ const Main = () => {
     fetchData();
   }, []);
 
+  const clientDates = [
+    ...new Set(clients.map((client) => client.createdAt.split("T")[0])),
+  ];
+
+  console.log(clientDates);
+
   // Category Wise Clients
   const categorySummary = (categoryId) => {
     const filteredClients = clients.filter(
@@ -417,7 +423,8 @@ const Main = () => {
                       <LineChart
                         width="100%"
                         height={50}
-                        tempProp="Delivered"
+                        title={status.title}
+                        dates={clientDates}
                       />
                     </div>
                   </div>
