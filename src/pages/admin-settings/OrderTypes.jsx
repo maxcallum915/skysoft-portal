@@ -122,7 +122,7 @@ const OrderTypes = () => {
                 src={
                   typeof selectedFile === "object"
                     ? URL.createObjectURL(selectedFile)
-                    : `http://localhost:8000/${selectedFile}`
+                    : `https://backend-production-56ca.up.railway.app/${selectedFile}`
                 }
                 alt="image"
                 className={imgUploader.img}
@@ -167,7 +167,7 @@ const OrderTypes = () => {
               return (
                 <div className={chips.chip} key={type._id}>
                   <img
-                    src={`http://localhost:8000/${type.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${type.imgUrl}`}
                     alt={type.title}
                     className={chips.logo}
                   />

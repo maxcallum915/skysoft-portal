@@ -74,7 +74,7 @@ const columns = [
       !!params.value ? (
         <div className="flex items-center gap-2">
           <img
-            src={`http://localhost:8000/${params.value.imgUrl}`}
+            src={`https://backend-production-56ca.up.railway.app/${params.value.imgUrl}`}
             alt={params.value.title}
             className="block h-5 w-5 object-contain"
           />

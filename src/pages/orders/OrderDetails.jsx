@@ -301,7 +301,7 @@ const OrderDetails = () => {
                 <h5 className={`mb-3 ${infoRow.title}`}>Associated Brand</h5>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`http://localhost:8000/${order?.brand?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${order?.brand?.imgUrl}`}
                     className="w-8 object-contain"
                   />
                   <h6 className={infoRow.subtitle}>{order?.brand?.title}</h6>
@@ -342,7 +342,7 @@ const OrderDetails = () => {
                 </div>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`http://localhost:8000/${order?.orderType?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${order?.orderType?.imgUrl}`}
                     className="w-5 object-contain"
                   />
                   <h6 className={infoRow.subtitle}>

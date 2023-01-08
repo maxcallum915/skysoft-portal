@@ -134,7 +134,7 @@ const Categories = () => {
                 src={
                   typeof selectedFile === "object"
                     ? URL.createObjectURL(selectedFile)
-                    : `http://localhost:8000/${selectedFile}`
+                    : `https://backend-production-56ca.up.railway.app/${selectedFile}`
                 }
                 alt="image"
                 className={imgUploader.img}
@@ -195,7 +195,7 @@ const Categories = () => {
               return (
                 <div className={chips.chip} key={category._id}>
                   <img
-                    src={`http://localhost:8000/${category.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${category.imgUrl}`}
                     alt={category.title}
                     className={chips.logo}
                   />

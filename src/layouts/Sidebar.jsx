@@ -49,7 +49,7 @@ const SidebarLayout = () => {
           src={
             auth?.role === "admin"
               ? admin
-              : `http://localhost:8000/${auth?.company?.imgUrl}`
+              : `https://backend-production-56ca.up.railway.app/${auth?.company?.imgUrl}`
           }
           alt="logo"
           className={styles.logoImg}

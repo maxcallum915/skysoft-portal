@@ -124,7 +124,7 @@ const Companies = () => {
                 src={
                   typeof selectedFile === "object"
                     ? URL.createObjectURL(selectedFile)
-                    : `http://localhost:8000/${selectedFile}`
+                    : `https://backend-production-56ca.up.railway.app/${selectedFile}`
                 }
                 alt="image"
                 className={imgUploader.img}
@@ -169,7 +169,7 @@ const Companies = () => {
               return (
                 <div className={chips.chip} key={company._id}>
                   <img
-                    src={`http://localhost:8000/${company.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${company.imgUrl}`}
                     alt={company.title}
                     className={chips.logo}
                   />

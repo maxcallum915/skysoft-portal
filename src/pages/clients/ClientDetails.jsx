@@ -87,7 +87,7 @@ const columns = [
     renderCell: (params) => (
       <div className="flex items-center gap-2">
         <img
-          src={`http://localhost:8000/${params.value.imgUrl}`}
+          src={`https://backend-production-56ca.up.railway.app/${params.value.imgUrl}`}
           alt={params.value.title}
           className="block h-5 w-5 object-contain"
         />
@@ -322,7 +322,7 @@ const ClientDetails = () => {
                 <h5 className={`mb-3 ${infoRow.title}`}>Associated Brand</h5>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`http://localhost:8000/${client?.brand?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${client?.brand?.imgUrl}`}
                     className="w-8 object-contain"
                   />
                   <h6 className={infoRow.subtitle}>{client?.brand?.title}</h6>
@@ -334,7 +334,7 @@ const ClientDetails = () => {
                   {client?.orders?.length ? (
                     <>
                       <img
-                        src={`http://localhost:8000/${client?.category?.imgUrl}`}
+                        src={`https://backend-production-56ca.up.railway.app/${client?.category?.imgUrl}`}
                         className="w-5 object-contain"
                       />
                       <h6 className={infoRow.subtitle}>
@@ -486,7 +486,7 @@ const ClientDetails = () => {
                                   </span>
                                   <div className="flex items-center gap-1">
                                     <img
-                                      src={`http://localhost:8000/${order.orderType.imgUrl}`}
+                                      src={`https://backend-production-56ca.up.railway.app/${order.orderType.imgUrl}`}
                                       alt={order.orderType.title}
                                       className={orderCard.icon}
                                     />

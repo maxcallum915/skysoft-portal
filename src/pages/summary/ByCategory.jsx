@@ -182,7 +182,7 @@ const ByBrand = () => {
                   >
                     <td className={summaryTable.rowTitleWrapper}>
                       <img
-                        src={`http://localhost:8000/${brand.imgUrl}`}
+                        src={`https://backend-production-56ca.up.railway.app/${brand.imgUrl}`}
                         alt={brand.title}
                         className={summaryTable.icon}
                       />

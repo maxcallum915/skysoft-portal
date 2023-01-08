@@ -135,7 +135,7 @@ const Brands = () => {
                 src={
                   typeof selectedIcon === "object"
                     ? URL.createObjectURL(selectedIcon)
-                    : `http://localhost:8000/${selectedIcon}`
+                    : `https://backend-production-56ca.up.railway.app/${selectedIcon}`
                 }
                 alt="image"
                 className={imgUploader.img}
@@ -188,7 +188,7 @@ const Brands = () => {
               return (
                 <div className={chips.chip} key={brand._id}>
                   <img
-                    src={`http://localhost:8000/${brand.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${brand.imgUrl}`}
                     alt={brand.title}
                     className={chips.logo}
                   />
