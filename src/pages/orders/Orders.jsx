@@ -218,7 +218,7 @@ const Orders = () => {
     // });
     const fetchOrders = async () => {
       try {
-        const { data: orders } = await axios.get("/orders", {
+        const { data: orders } = await axios.get("/api/orders", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },

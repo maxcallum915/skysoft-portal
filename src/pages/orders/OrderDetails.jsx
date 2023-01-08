@@ -93,12 +93,12 @@ const OrderDetails = () => {
     const fetchData = async () => {
       try {
         const [{ data: order }, { data: comments }] = await Promise.all([
-          axios.get(`orders/${id}`, {
+          axios.get(`/api/orders/${id}`, {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/comments", {
+          axios.get("/api/comments", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
@@ -153,7 +153,7 @@ const OrderDetails = () => {
         }
       }
     }
-    const { data: newComment } = await axios.post("/comments", formData, {
+    const { data: newComment } = await axios.post("/api/comments", formData, {
       headers: {
         Authorization: `Bearer ${auth.token}`,
       },
@@ -194,7 +194,7 @@ const OrderDetails = () => {
     e.preventDefault();
     try {
       const response = await axios.patch(
-        `/orders/${id}`,
+        `/api/orders/${id}`,
         {
           ...changes.selectedOption,
           fieldName: changes.fieldName,
@@ -330,7 +330,7 @@ const OrderDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/admin-settings/order-types",
+                          requestPath: "/api/order-types",
                           modalTitle: "Update Order Type",
                           fieldName: "orderType",
                         })
@@ -357,7 +357,7 @@ const OrderDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/admin-settings/order-health",
+                          requestPath: "/api/order-health",
                           modalTitle: "Update Order Health",
                           fieldName: "orderHealth",
                         })
@@ -388,7 +388,7 @@ const OrderDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/admin-settings/order-stages",
+                          requestPath: "/api/order-stages",
                           modalTitle: "Update Order Stage",
                           fieldName: "orderStage",
                         })

@@ -2,11 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
-  HiArrowTrendingUp,
-  HiCheck,
-  HiOutlineUserPlus,
-  HiOutlineXMark,
-  HiPlus,
+  HiOutlineCurrencyDollar,
+  HiOutlineUsers,
   HiUsers,
 } from "react-icons/hi2";
 import Avatar from "../../components/Avatar";
@@ -197,14 +194,13 @@ const Clients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const { data: clients } = await axios.get("/summary", {
+        const { data: clients } = await axios.get("/api/summary", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
           params: q,
         });
         setClients(clients);
-        console.log(clients);
       } catch (error) {
         console.log(error);
       }
@@ -231,46 +227,30 @@ const Clients = () => {
       {/* {!loading && !error && clients?.length > 0 && ( */}
       {clients?.length > 0 ? (
         <>
-          {/* <div className={styles.summaryChips}>
+          <div className={styles.summaryChips}>
             <div className={summaryChip.wrapper}>
-              <div
-                className={`${summaryChip.icon} bg-secondary bg-opacity-10 text-secondary`}
-              >
-                <HiOutlineUserPlus className="h-full w-full" />
+              <div className={summaryChip.icon}>
+                <HiOutlineUsers className="h-full w-full" />
               </div>
               <div>
-                <h6 className={summaryChip.subtitle}>New clients</h6>
-                <h5 className={`${summaryChip.title} text-secondary`}>26</h5>
+                <h6 className={summaryChip.subtitle}>No. of Clients</h6>
+                <h5 className={summaryChip.title}>{filteredClients.length}</h5>
               </div>
             </div>
             <div className={summaryChip.wrapper}>
-              <div className={`${summaryChip.icon} bg-amber-50 text-amber-500`}>
-                <HiArrowTrendingUp className="h-full w-full" />
+              <div className={summaryChip.icon}>
+                <HiOutlineCurrencyDollar className="h-full w-full" />
               </div>
               <div>
-                <h6 className={summaryChip.subtitle}>clients in-process</h6>
-                <h5 className={`${summaryChip.title} text-amber-500`}>587</h5>
+                <h6 className={summaryChip.subtitle}>Clients Worth</h6>
+                <h5 className={summaryChip.title}>
+                  {formattedCurrency(
+                    filteredClients.reduce((pv, c) => pv + c.worth, 0)
+                  )}
+                </h5>
               </div>
             </div>
-            <div className={summaryChip.wrapper}>
-              <div className={`${summaryChip.icon} bg-green-50 text-green-500`}>
-                <HiCheck className="h-full w-full" />
-              </div>
-              <div>
-                <h6 className={summaryChip.subtitle}>clients delivered</h6>
-                <h5 className={`${summaryChip.title} text-green-500`}>408</h5>
-              </div>
-            </div>
-            <div className={summaryChip.wrapper}>
-              <div className={`${summaryChip.icon} bg-red-50 text-red-500`}>
-                <HiOutlineXMark className="h-full w-full" />
-              </div>
-              <div>
-                <h6 className={summaryChip.subtitle}>chargedback clients</h6>
-                <h5 className={`${summaryChip.title} text-red-500`}>12</h5>
-              </div>
-            </div>
-          </div> */}
+          </div>
           <div className="flex justify-between">
             <div className={addClient.wrapper}>
               <div>

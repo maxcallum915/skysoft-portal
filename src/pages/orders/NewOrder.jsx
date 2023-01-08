@@ -41,12 +41,12 @@ const NewOrder = () => {
     const fetchData = async () => {
       try {
         const [{ data: clients }, { data: types }] = await Promise.all([
-          axios.get("/clients", {
+          axios.get("/api/clients", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/order-types", {
+          axios.get("/api/order-types", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
@@ -90,7 +90,7 @@ const NewOrder = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/orders/new", fields, {
+      const { data } = await axios.post("/api/orders/new", fields, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

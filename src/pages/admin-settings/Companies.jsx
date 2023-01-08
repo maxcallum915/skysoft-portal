@@ -43,14 +43,11 @@ const Companies = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: fetchedCompanies } = await axios.get(
-          "/admin-settings/companies",
-          {
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-            },
-          }
-        );
+        const { data: fetchedCompanies } = await axios.get("/api/companies", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
         setCompanies(fetchedCompanies);
       } catch (error) {
         console.log(error);
@@ -67,7 +64,7 @@ const Companies = () => {
     try {
       if (editId) {
         const { data: updatedCompany } = await axios.put(
-          `/admin-settings/companies/${editId}`,
+          `/api/companies/${editId}`,
           formData,
           {
             headers: {
@@ -84,7 +81,7 @@ const Companies = () => {
         toast.success("Company updated successfully");
       } else {
         const { data: newCompany } = await axios.post(
-          "/admin-settings/companies",
+          "/api/companies",
           formData,
           {
             headers: {

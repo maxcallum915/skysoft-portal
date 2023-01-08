@@ -81,22 +81,22 @@ const Main = () => {
           { data: status },
           { data: categories },
         ] = await Promise.all([
-          axios.get("/clients", {
+          axios.get("/api/clients", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/brands", {
+          axios.get("/api/brands", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/order-statuses", {
+          axios.get("/api/order-statuses", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/categories", {
+          axios.get("/api/categories", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },

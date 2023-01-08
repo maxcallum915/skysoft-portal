@@ -182,7 +182,7 @@ const ClientDetails = () => {
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const { data: client } = await axios.get(`clients/${id}`, {
+        const { data: client } = await axios.get(`/api/clients/${id}`, {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
@@ -232,7 +232,7 @@ const ClientDetails = () => {
     e.preventDefault();
     try {
       const response = await axios.patch(
-        `/clients/${id}`,
+        `/api/clients/${id}`,
         {
           ...changes.selectedOption,
           fieldName: changes.fieldName,
@@ -367,7 +367,7 @@ const ClientDetails = () => {
                     <button
                       onClick={() =>
                         handleEdit({
-                          requestPath: "/admin-settings/order-statuses",
+                          requestPath: "/api/order-statuses",
                           modalTitle: "Update Client Status",
                           fieldName: "status",
                         })

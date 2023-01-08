@@ -200,7 +200,7 @@ const Clients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const { data: clients } = await axios.get("/clients", {
+        const { data: clients } = await axios.get("/api/clients", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
