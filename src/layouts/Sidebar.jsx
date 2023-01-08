@@ -47,15 +47,15 @@ const SidebarLayout = () => {
       <div className={styles.logo}>
         <img
           src={
-            auth.role === "admin"
+            auth?.role === "admin"
               ? admin
-              : `http://localhost:8000/${auth.company.imgUrl}`
+              : `http://localhost:8000/${auth?.company?.imgUrl}`
           }
           alt="logo"
           className={styles.logoImg}
         />
         <p className={styles.logoText}>
-          {auth.role === "admin" ? "Admin" : auth.company.title}
+          {auth?.role === "admin" ? "Admin" : auth?.company?.title}
         </p>
       </div>
       <Menu
