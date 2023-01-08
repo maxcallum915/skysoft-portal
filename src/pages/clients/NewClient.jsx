@@ -60,7 +60,7 @@ const NewClient = () => {
       return setMatchPassword("Password does not match");
     }
     try {
-      const { data } = await axios.post("/clients/new", fields, {
+      const { data } = await axios.post("/api/clients/new", fields, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

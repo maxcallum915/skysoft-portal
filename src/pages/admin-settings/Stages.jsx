@@ -53,14 +53,11 @@ const Stages = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: fetchedStages } = await axios.get(
-          "/admin-settings/order-stages",
-          {
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-            },
-          }
-        );
+        const { data: fetchedStages } = await axios.get("/api/order-stages", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
         setStages(fetchedStages);
       } catch (error) {
         console.log(error);
@@ -79,7 +76,7 @@ const Stages = () => {
     try {
       if (editId) {
         const { data: updatedStage } = await axios.put(
-          `/admin-settings/order-stages/${editId}`,
+          `/api/order-stages/${editId}`,
           data,
           {
             headers: {
@@ -93,15 +90,11 @@ const Stages = () => {
         setEditId(null);
         toast.success("Stage updated successfully");
       } else {
-        const { data: newStage } = await axios.post(
-          "/admin-settings/order-stages",
-          data,
-          {
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-            },
-          }
-        );
+        const { data: newStage } = await axios.post("/api/order-stages", data, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
         setStages((prevState) => [...prevState, newStage]);
         toast.success("Stage created successfully");
       }

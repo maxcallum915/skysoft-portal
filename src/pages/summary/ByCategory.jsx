@@ -52,27 +52,27 @@ const ByBrand = () => {
           { data: users },
           { data: summary },
         ] = await Promise.all([
-          axios.get("/admin-settings/brands", {
+          axios.get("/api/brands", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/categories", {
+          axios.get("/api/categories", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/order-statuses", {
+          axios.get("/api/order-statuses", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/users/managers", {
+          axios.get("/api/users/managers", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/summary", {
+          axios.get("/api/summary", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },

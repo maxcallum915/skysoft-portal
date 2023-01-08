@@ -130,7 +130,7 @@ const UserProfile = () => {
     const fetchClients = async () => {
       try {
         const [{ data: clients }, { data: user }] = await Promise.all([
-          axios.get("/clients/byUser", {
+          axios.get("/api/clients/byUser", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
@@ -138,7 +138,7 @@ const UserProfile = () => {
               userId: params.id,
             },
           }),
-          axios.get(`/users/${params.id}`, {
+          axios.get(`/api/users/${params.id}`, {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },

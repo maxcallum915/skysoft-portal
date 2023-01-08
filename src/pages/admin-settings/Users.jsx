@@ -60,17 +60,17 @@ const Users = () => {
           { data: fetchedBrands },
           { data: fetchedCompanies },
         ] = await Promise.all([
-          axios.get("/users", {
+          axios.get("/api/users", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/brands", {
+          axios.get("/api/brands", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
           }),
-          axios.get("/admin-settings/companies", {
+          axios.get("/api/companies", {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
@@ -109,7 +109,7 @@ const Users = () => {
     try {
       if (editId) {
         const { data: updatedUser } = await axios.patch(
-          `/users/create/${editId}`,
+          `/api/users/create/${editId}`,
           inputs,
           {
             headers: {
@@ -124,11 +124,15 @@ const Users = () => {
         setRefresh((prev) => !prev);
         toast.success("Status updated successfully");
       } else {
-        const { data: newUser } = await axios.post("/users/create", inputs, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
+        const { data: newUser } = await axios.post(
+          "/api/users/create",
+          inputs,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        );
         setRefresh((prev) => !prev);
         setUsers((prev) => [...prev, newUser]);
         toast.success("Status created successfully");

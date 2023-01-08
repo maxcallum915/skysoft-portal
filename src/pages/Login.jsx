@@ -32,7 +32,7 @@ const Login = () => {
     e.preventDefault();
     const loginUser = async () => {
       try {
-        const { data: user } = await axios.post("/users/login", {
+        const { data: user } = await axios.post("/api/users/login", {
           email,
           password,
         });
