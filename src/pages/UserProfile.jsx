@@ -48,7 +48,7 @@ const columns = [
     width: 200,
     renderCell: (params) => (
       <InfoChip
-        icon={`http://localhost:8000/${params.value.imgUrl}`}
+        icon={`https://backend-production-56ca.up.railway.app/${params.value.imgUrl}`}
         title={params.value.title}
       />
     ),
@@ -123,8 +123,6 @@ const UserProfile = () => {
   const [user, setUser] = useState();
   const params = useParams();
   const { auth } = useAuth();
-
-  console.log(params);
 
   useEffect(() => {
     const fetchClients = async () => {

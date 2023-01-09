@@ -100,7 +100,7 @@ const columns = [
       !!params.value ? (
         <div className="flex items-center gap-2">
           <img
-            src={`http://localhost:8000/${params.value.imgUrl}`}
+            src={`https://backend-production-56ca.up.railway.app/${params.value.imgUrl}`}
             alt={params.value.title}
             className="block h-5 w-5 object-contain"
           />
@@ -145,12 +145,12 @@ const columns = [
 ];
 
 const styles = {
-  summaryChips: `mb-5 grid gap-5 lg:grid-cols-4`,
+  summaryChips: `mb-5 grid gap-5 lg:grid-cols-2`,
   summaryChip: {
     wrapper: `flex items-center gap-3 rounded-lg bg-white p-4 ring-1 ring-slate-200`,
-    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5`,
+    icon: `h-12 w-12 shrink-0 rounded-lg p-2.5 bg-secondary bg-opacity-10 text-secondary`,
     subtitle: `text-sm capitalize text-slate-400 font-medium`,
-    title: `mt-1 text-2xl font-semibold leading-none`,
+    title: `mt-1 text-2xl font-semibold leading-none text-secondary`,
   },
   addClient: {
     wrapper: `mb-5 flex items-end gap-2`,
@@ -201,6 +201,7 @@ const Clients = () => {
           params: q,
         });
         setClients(clients);
+        setFilteredClients(clients);
       } catch (error) {
         console.log(error);
       }

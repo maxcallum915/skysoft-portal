@@ -113,12 +113,6 @@ const Main = () => {
     fetchData();
   }, []);
 
-  const clientDates = [
-    ...new Set(clients.map((client) => client.createdAt.split("T")[0])),
-  ];
-
-  console.log(clientDates);
-
   // Category Wise Clients
   const categorySummary = (categoryId) => {
     const filteredClients = clients.filter(
@@ -376,7 +370,7 @@ const Main = () => {
       <div className="flex flex-col items-start gap-5 xl:flex-row">
         <div className="w-full xl:w-2/3">
           <h4 className={styles.sectionTitle}>Clients Overview</h4>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-4 gap-5">
             {statuses.map((status) => {
               return (
                 <Box key={status._id}>
@@ -419,14 +413,14 @@ const Main = () => {
                         {statusWiseClients(status.title).clientsWorth}
                       </h6>
                     </div>
-                    <div className={orderSummary.chart}>
+                    {/* <div className={orderSummary.chart}>
                       <LineChart
                         width="100%"
                         height={50}
                         title={status.title}
                         dates={clientDates}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </Box>
               );

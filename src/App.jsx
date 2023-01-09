@@ -26,14 +26,14 @@ const toastOptions = {
   position: "bottom-center",
   duration: 5000,
   success: {
-    className: "bg-green-400 text-white",
+    style: { backgroundColor: "#4ade80", color: "#fff" },
     iconTheme: {
       primary: "#fff",
       secondary: "#4ade80",
     },
   },
   error: {
-    className: "bg-red-500 text-white",
+    style: { backgroundColor: "#ef4444", color: "#fff" },
     iconTheme: {
       primary: "#fff",
       secondary: "#ef4444",
@@ -46,7 +46,6 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log();
     if (!auth.token) {
       navigate("/login");
     }
