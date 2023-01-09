@@ -331,7 +331,14 @@ const ClientDetails = () => {
               <div>
                 <h5 className={`mb-3 ${infoRow.title}`}>Client Category</h5>
                 <div className={infoRow.subtitleWrapper}>
-                  {client?.orders?.length ? (
+                  <img
+                    src={`https://backend-production-56ca.up.railway.app/${client?.category?.imgUrl}`}
+                    className="w-5 object-contain"
+                  />
+                  <h6 className={infoRow.subtitle}>
+                    {client?.category?.title}
+                  </h6>
+                  {/* {client?.orders?.length ? (
                     <>
                       <img
                         src={`https://backend-production-56ca.up.railway.app/${client?.category?.imgUrl}`}
@@ -343,7 +350,7 @@ const ClientDetails = () => {
                     </>
                   ) : (
                     <h6 className={infoRow.subtitle}>-</h6>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div>
