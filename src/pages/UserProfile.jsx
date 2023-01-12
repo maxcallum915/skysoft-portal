@@ -2,9 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
-  HiCheck,
-  HiOutlineEnvelope,
-  HiOutlinePhone,
+  HiOutlineBriefcase,
+  HiOutlineCurrencyDollar,
   HiOutlineStar,
   HiOutlineUser,
   HiOutlineUserCircle,
@@ -12,12 +11,13 @@ import {
 import Box from "../components/Box";
 import Avatar from "../components/Avatar";
 import Chip from "../components/Chip";
-import axios from "../config/axios";
-import useAuth from "../hooks/useAuth";
 import InfoChip from "../components/InfoChip";
+import Loader from "../components/Loader";
 import formattedCurrency from "../utils/formattedCurrency";
 import formattedDate from "../utils/formattedDate";
-import { toast } from "react-hot-toast";
+import formattedNumber from "../utils/formattedNumber";
+import axios from "../config/axios";
+import useAuth from "../hooks/useAuth";
 
 const VisitClient = ({ params }) => {
   return (
@@ -118,9 +118,34 @@ const columns = [
   },
 ];
 
+const styles = {
+  userInfo: {
+    avatar: `mx-auto w-max`,
+    titleWrapper: `mt-5 mb-8 flex flex-col items-center gap-2`,
+    title: `text-xl font-semibold capitalize text-slate-900`,
+  },
+  infoChips: `mb-8 flex w-full justify-evenly gap-5`,
+  infoChip: {
+    wrapper: `flex items-center gap-3`,
+    icon: `h-12 w-12 shrink-0 rounded-md bg-secondary bg-opacity-10 p-2.5 text-secondary`,
+    title: `text-xl font-semibold leading-none text-slate-900`,
+    subtitle: `text-sm capitalize text-slate-400`,
+  },
+  iconList: {
+    heading: `mb-4 flex items-center gap-2 text-sm font-medium uppercase text-slate-500 after:inline-block after:h-0.5 after:w-full after:bg-slate-200`,
+    wrapper: `ml-2 space-y-5`,
+    item: `flex items-center gap-2 capitalize text-slate-700`,
+    icon: `h-6 w-6 text-secondary`,
+    label: `font-semibold text-slate-900`,
+  },
+  sectionTitle: `mb-3 text-xl font-semibold capitalize text-slate-900`,
+};
+const { userInfo, infoChip, iconList } = styles;
+
 const UserProfile = () => {
   const [clients, setClients] = useState([]);
   const [user, setUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const params = useParams();
   const { auth } = useAuth();
 
@@ -144,16 +169,13 @@ const UserProfile = () => {
         ]);
         setClients(clients);
         setUser(user);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
-        toast.error(error?.response?.data.message);
+        setIsLoading(false);
       }
     };
     fetchClients();
-    // axiosFetch({
-    //   method: "GET",
-    //   url: "clients",
-    // });
   }, []);
 
   const getTotalWorth = formattedCurrency(
@@ -163,122 +185,107 @@ const UserProfile = () => {
   const clientsWorth = useMemo(() => getTotalWorth, [clients]);
 
   return (
-    user && (
-      <div className="flex gap-5">
-        <div className="w-1/3">
-          <Box>
-            <div className="mx-auto w-max">
-              <Avatar title={user.name} size="xl" rounded />
-            </div>
-            <div className="mt-5 mb-8 flex flex-col items-center gap-2">
-              <h5 className="text-xl font-semibold capitalize text-slate-900">
-                {user.name}
-              </h5>
-              <Chip label="project manager" variant="secondary" />
-              <div className="mt-8 flex w-full justify-evenly gap-5">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 shrink-0 rounded-md bg-secondary bg-opacity-10 p-2.5 text-secondary">
-                    <HiOutlineStar className="h-full w-full" />
+    <>
+      {isLoading && (!user || !clients.length) ? (
+        <Loader />
+      ) : (
+        <div className="flex gap-5">
+          <div className="w-1/3">
+            <Box>
+              <div className={userInfo.avatar}>
+                <Avatar title={user.name} size="xl" rounded />
+              </div>
+              <div className={userInfo.titleWrapper}>
+                <h5 className={userInfo.title}>{user.name}</h5>
+                <Chip label={user.role} variant="secondary" />
+              </div>
+              <div className={styles.infoChips}>
+                <div className={infoChip.wrapper}>
+                  <div className={infoChip.icon}>
+                    <HiOutlineBriefcase className="h-full w-full" />
                   </div>
                   <div>
-                    <h5 className="text-xl font-semibold leading-none text-slate-900">
-                      {clients.length}
+                    <h6 className={infoChip.subtitle}>total clients</h6>
+                    <h5 className={infoChip.title}>
+                      {formattedNumber(clients.length)}
                     </h5>
-                    <h6 className="text-sm capitalize text-slate-400">
-                      total clients
-                    </h6>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 shrink-0 rounded-md bg-secondary bg-opacity-10 p-2.5 text-secondary">
-                    <HiCheck className="h-full w-full" />
+                <div className={infoChip.wrapper}>
+                  <div className={infoChip.icon}>
+                    <HiOutlineCurrencyDollar className="h-full w-full" />
                   </div>
                   <div>
-                    <h5 className="text-xl font-semibold leading-none text-slate-900">
-                      {clientsWorth}
-                    </h5>
-                    <h6 className="text-sm capitalize text-slate-400">
-                      Clients worth
-                    </h6>
+                    <h6 className={infoChip.subtitle}>Clients worth</h6>
+                    <h5 className={infoChip.title}>{clientsWorth}</h5>
                   </div>
                 </div>
               </div>
-            </div>
-            <h5 className="mb-4 flex items-center gap-2 text-sm font-medium uppercase text-slate-500 after:inline-block after:h-0.5 after:w-full after:bg-slate-200">
-              About
-            </h5>
-            <ul className="ml-2">
-              <li className="flex items-center gap-2 capitalize text-slate-700">
-                <HiOutlineUser className="h-6 w-6 text-secondary" />
-                <h5>
-                  <b className="mr-2 font-semibold text-slate-900">
-                    full name:
-                  </b>
-                  {user.name}
-                </h5>
-              </li>
-              <li className="mt-4 flex items-center gap-2 capitalize text-slate-700">
-                <HiOutlineUserCircle className="h-6 w-6 text-secondary" />
-                <h5>
-                  <b className="mr-2 font-semibold text-slate-900">email:</b>
-                  {user.email}
-                </h5>
-              </li>
-              <li className="mt-4 flex items-center gap-2 capitalize text-slate-700">
-                <HiOutlineStar className="h-6 w-6 text-secondary" />
-                <h5>
-                  <b className="mr-2 font-semibold text-slate-900">Role:</b>
-                  {user.role}
-                </h5>
-              </li>
-              <li className="mt-4 flex items-center gap-2 capitalize text-slate-700">
-                <HiCheck className="h-6 w-6 text-secondary" />
-                <h5 className="flex items-center">
-                  <b className="mr-2 font-semibold text-slate-900">status:</b>
-                  <Chip label="active" variant="success" />
-                </h5>
-              </li>
-            </ul>
-          </Box>
-        </div>
-        <div className="flex w-2/3 flex-col gap-5">
-          <h5 className="mr-auto text-xl font-semibold capitalize text-slate-900">
-            Clients
-          </h5>
-          <div className="h-[500px] w-full">
-            <DataGrid
-              getRowId={(row) => row._id}
-              rows={clients}
-              columns={columns}
-              // loading={loading}
-              components={{ Toolbar: GridToolbar }}
-              sx={{
-                background: "#f1f5f9",
-                border: "none",
-                borderRadius: "0.75rem",
-                padding: `0.5rem`,
-                "& .MuiDataGrid-row": {
-                  maxHeight: `65px !important`,
-                  minHeight: `65px !important`,
-                  background: "#fff",
-                  borderRadius: "0.75rem",
-                  marginTop: `1rem`,
-                  transition: `all 300ms ease-in-out`,
-                },
-                "& .MuiDataGrid-row:hover": {
-                  background: `#e2e8f0`,
-                  boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
-                },
-                "& .MuiDataGrid-cell": {
-                  maxHeight: `100% !important`,
-                  minHeight: `100% !important`,
-                },
-              }}
-            />
+              <h5 className={iconList.heading}>About</h5>
+              <ul className={iconList.wrapper}>
+                <li className={iconList.item}>
+                  <HiOutlineUser className={iconList.icon} />
+                  <h5 className={iconList.label}>full name:</h5>
+                  <span>{user.name}</span>
+                </li>
+                <li className={iconList.item}>
+                  <HiOutlineUserCircle className={iconList.icon} />
+                  <h5 className={iconList.label}>email:</h5>
+                  <span className="!lowercase">{user.email}</span>
+                </li>
+                <li className={iconList.item}>
+                  <HiOutlineStar className={iconList.icon} />
+                  <h5 className={iconList.label}>Role:</h5>
+                  <span>{user.role}</span>
+                </li>
+              </ul>
+            </Box>
+          </div>
+          <div className="w-2/3">
+            <h5 className={styles.sectionTitle}>Clients</h5>
+            <>
+              {clients.length > 0 ? (
+                <div className="h-[500px] w-full">
+                  <DataGrid
+                    getRowId={(row) => row._id}
+                    rows={clients}
+                    columns={columns}
+                    components={{ Toolbar: GridToolbar }}
+                    sx={{
+                      background: "#f1f5f9",
+                      border: "none",
+                      borderRadius: "0.75rem",
+                      padding: `0.5rem`,
+                      "& .MuiDataGrid-row": {
+                        maxHeight: `65px !important`,
+                        minHeight: `65px !important`,
+                        background: "#fff",
+                        borderRadius: "0.75rem",
+                        marginTop: `1rem`,
+                        transition: `all 300ms ease-in-out`,
+                      },
+                      "& .MuiDataGrid-row:hover": {
+                        background: `#e2e8f0`,
+                        boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
+                      },
+                      "& .MuiDataGrid-cell": {
+                        maxHeight: `100% !important`,
+                        minHeight: `100% !important`,
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <EmptyPlaceholder
+                  icon={<HiUsers className="h-full w-full" />}
+                  title="No clients to display"
+                />
+              )}
+            </>
           </div>
         </div>
-      </div>
-    )
+      )}
+    </>
   );
 };
 

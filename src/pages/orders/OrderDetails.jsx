@@ -23,7 +23,6 @@ import EmptyPlaceholder from "../../components/EmptyPlaceholder";
 import Modal from "../../components/Modal";
 import relativeDate from "../../utils/relativeDate";
 import formattedCurrency from "../../utils/formattedCurrency";
-import useAxios from "../../hooks/useAxios";
 import axios from "../../config/axios";
 import useAuth from "../../hooks/useAuth";
 
@@ -71,25 +70,21 @@ const initialChanges = {
 };
 
 const OrderDetails = () => {
-  const { id } = useParams();
-  const [commentInputs, setCommentInputs] = useState(initialCommentInputs);
-  const [comments, setComments] = useState([]);
+  const [order, setOrder] = useState();
   const [isEditable, setIsEditable] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [commentInputs, setCommentInputs] = useState(initialCommentInputs);
   const [changes, setChanges] = useState(initialChanges);
-  const [order, setOrder] = useState("");
-  const { auth } = useAuth();
   const [refresh, setRefresh] = useState(false);
-  // const { response: order, loading, error, axiosFetch } = useAxios();
+  const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
+  const { auth } = useAuth();
 
   const modal = useRef(null);
 
   const commentRef = useRef(null);
 
   useEffect(() => {
-    // axiosFetch({
-    //   method: "GET",
-    //   url: `orders/${id}`,
-    // });
     const fetchData = async () => {
       try {
         const [{ data: order }, { data: comments }] = await Promise.all([
@@ -109,8 +104,10 @@ const OrderDetails = () => {
         ]);
         setOrder(order);
         setComments(comments);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     };
     fetchData();
@@ -193,7 +190,7 @@ const OrderDetails = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `/api/orders/${id}`,
         {
           ...changes.selectedOption,
@@ -226,13 +223,11 @@ const OrderDetails = () => {
 
   return (
     <>
-      {/* {loading && <Loader />}
-      {!loading && error && <div>{error}</div>}
-      {!loading && !error && !order && <div>Resource not available</div>} */}
-      {/* {!loading && !error && order && ( */}
-      {order && (
+      {isLoading && !order ? (
+        <Loader />
+      ) : (
         <>
-          {auth?._id === order?.user?._id &&
+          {auth._id === order.user._id &&
             (isEditable ? (
               <Button handleClick={toggleEditable} classes={"mb-3 ml-auto"}>
                 Cancel
@@ -261,37 +256,33 @@ const OrderDetails = () => {
           <Box>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h2 className={styles.orderTitle}>{order?.title}</h2>
+                <h2 className={styles.orderTitle}>{order.title}</h2>
                 <h5 className={`${styles.orderSubtitle} mb-0.5`}>
-                  Order ID: {order?._id}
+                  Order ID: {order._id}
                 </h5>
                 <h5 className={styles.orderSubtitle}>
-                  Created on: {relativeDate(order?.createdAt)}
+                  Created on: {relativeDate(order.createdAt)}
                 </h5>
               </div>
               <div className={styles.avatarWrapper}>
                 <Link
-                  to={`/clients/${order?.client?._id}`}
+                  to={`/clients/${order.client._id}`}
                   className={styles.avatarBox}
                 >
-                  <Avatar rounded title={order?.client?.title} />
+                  <Avatar rounded title={order.client.title} />
                   <div>
                     <h5 className={styles.avatarSubtitle}>Client</h5>
-                    <h5 className={styles.avatarTitle}>
-                      {order?.client?.title}
-                    </h5>
+                    <h5 className={styles.avatarTitle}>{order.client.title}</h5>
                   </div>
                 </Link>
                 <Link
-                  to={`/users/${order?.user?._id}`}
+                  to={`/users/${order.user._id}`}
                   className={styles.avatarBox}
                 >
-                  <Avatar rounded title={order?.user?.name} />
+                  <Avatar rounded title={order.user.name} />
                   <div>
-                    <h5 className={styles.avatarSubtitle}>
-                      {order?.user?.name}
-                    </h5>
-                    <h5 className={styles.avatarTitle}>{order?.user?.name}</h5>
+                    <h5 className={styles.avatarSubtitle}>{order.user.role}</h5>
+                    <h5 className={styles.avatarTitle}>{order.user.name}</h5>
                   </div>
                 </Link>
               </div>
@@ -301,26 +292,26 @@ const OrderDetails = () => {
                 <h5 className={`mb-3 ${infoRow.title}`}>Associated Brand</h5>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`https://backend-production-56ca.up.railway.app/${order?.brand?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${order.brand.imgUrl}`}
                     className="w-8 object-contain"
                   />
-                  <h6 className={infoRow.subtitle}>{order?.brand?.title}</h6>
+                  <h6 className={infoRow.subtitle}>{order.brand.title}</h6>
                 </div>
               </div>
               <div>
                 <h5 className={`mb-3 ${infoRow.title}`}>Sale by</h5>
                 <h6 className={`${infoRow.subtitle} !lowercase`}>
-                  {order?.salesEmail}
+                  {order.salesEmail}
                 </h6>
               </div>
               <div>
                 <h5 className={`mb-3 ${infoRow.title}`}>Payment Type</h5>
-                <h6 className={infoRow.subtitle}>{order?.paymentType}</h6>
+                <h6 className={infoRow.subtitle}>{order.paymentType}</h6>
               </div>
               <div>
                 <h5 className={`mb-3 ${infoRow.title}`}>Order Amount</h5>
                 <h6 className={infoRow.subtitle}>
-                  {formattedCurrency(order?.amount)}
+                  {formattedCurrency(order.amount)}
                 </h6>
               </div>
               <div>
@@ -342,12 +333,10 @@ const OrderDetails = () => {
                 </div>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`https://backend-production-56ca.up.railway.app/${order?.orderType?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${order.orderType.imgUrl}`}
                     className="w-5 object-contain"
                   />
-                  <h6 className={infoRow.subtitle}>
-                    {order?.orderType?.title}
-                  </h6>
+                  <h6 className={infoRow.subtitle}>{order.orderType.title}</h6>
                 </div>
               </div>
               <div>
@@ -368,8 +357,8 @@ const OrderDetails = () => {
                   )}
                 </div>
                 <Chip
-                  label={order?.orderHealth?.title}
-                  variant={order?.orderHealth?.className}
+                  label={order.orderHealth.title}
+                  variant={order.orderHealth.className}
                 />
               </div>
               <div>
@@ -379,10 +368,10 @@ const OrderDetails = () => {
                     height="h-1"
                     width="w-12"
                     rounded
-                    progress={order?.orderStage?.percentage.toFixed()}
+                    progress={order.orderStage.percentage.toFixed()}
                   />
                   <h6 className="text-xs font-semibold text-slate-900">
-                    {order?.orderStage?.percentage.toFixed()}%
+                    {order.orderStage.percentage.toFixed()}%
                   </h6>
                   {isEditable && (
                     <button
@@ -399,15 +388,15 @@ const OrderDetails = () => {
                   )}
                 </div>
                 <Chip
-                  label={order?.orderStage?.title}
-                  variant={order?.orderStage?.className}
+                  label={order.orderStage.title}
+                  variant={order.orderStage.className}
                 />
               </div>
             </div>
             <div className={`mt-5`}>
               <h5 className={`${infoRow.title} mb-3`}>Services</h5>
               <div className={infoRow.subtitleWrapper}>
-                {order?.services.map((service) => (
+                {order.services.map((service) => (
                   <Chip label={service} key={service} />
                 ))}
               </div>
@@ -478,22 +467,22 @@ const OrderDetails = () => {
                       <HiPaperAirplane className="h-5 w-5" />
                     </Button>
                   </form>
-                  <div className="flex flex-wrap items-center gap-2">
+                  {/* <div className="flex flex-wrap items-center gap-2">
                     {commentInputs.files &&
                       Object.values(commentInputs.files).map((file) => {
                         return (
                           <div className={commentForm.fileChip} key={file.name}>
                             {file.name}
-                            {/* <button
+                            <button
                             onClick={() => deleteFiles(file.name)}
                             className={commentForm.fileChipBtn}
                           >
                             <HiXMark className="h-full w-full" />
-                          </button> */}
+                          </button>
                           </div>
                         );
                       })}
-                  </div>
+                  </div> */}
                 </Box>
               </Tab.Panel>
             </Tab.Panels>

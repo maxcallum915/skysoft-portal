@@ -1,10 +1,4 @@
 import { Link, useMatch } from "react-router-dom";
-import admin from "../assets/admin.png";
-import {
-  HiOutlineHome,
-  HiOutlineBriefcase,
-  HiOutlineClipboardDocumentList,
-} from "react-icons/hi2";
 import {
   Sidebar,
   Menu,
@@ -12,6 +6,12 @@ import {
   sidebarClasses,
   useProSidebar,
 } from "react-pro-sidebar";
+import {
+  HiOutlineHome,
+  HiOutlineBriefcase,
+  HiOutlineClipboardDocumentList,
+} from "react-icons/hi2";
+import admin from "../assets/admin.png";
 import useAuth from "../hooks/useAuth";
 
 const styles = {

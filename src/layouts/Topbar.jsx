@@ -1,13 +1,13 @@
+import { Fragment } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, Transition } from "@headlessui/react";
+import { useProSidebar } from "react-pro-sidebar";
 import {
   HiArrowRightOnRectangle,
   HiOutlineBars3BottomLeft,
   HiOutlineCog,
 } from "react-icons/hi2";
-import { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { useProSidebar } from "react-pro-sidebar";
 import Avatar from "../components/Avatar";
-import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const styles = {
@@ -16,7 +16,7 @@ const styles = {
   hamburgerActive: `bg-gradient-to-l from-primary to-secondary text-white`,
   title: `mr-auto text-xl font-semibold capitalize text-slate-900`,
   menu: `relative`,
-  menuButton: `flex items-center gap-2 rounded-full font-medium capitalize text-slate-700 outline-blue-700 hover:bg-secondary hover:text-white ml-auto`,
+  menuButton: `flex items-center gap-2 rounded-full font-medium capitalize text-slate-700 outline-blue-700 ml-auto`,
   menuItems: `absolute right-0 mt-1 w-36 min-w-max rounded-md bg-white p-1 shadow-xl outline-blue-700`,
   menuItem: `flex w-full gap-2 rounded-md py-1.5 px-2 text-sm font-medium capitalize`,
 };
@@ -42,10 +42,7 @@ const Topbar = () => {
       <h5 className={styles.title}>Hi {auth.name}! 👋</h5>
       <Menu as="div" className={styles.menu}>
         <Menu.Button className={styles.menuButton}>
-          <Avatar
-            icon="https://xsgames.co/randomusers/avatar.php?g=male"
-            rounded
-          />
+          <Avatar title={auth.name} rounded />
         </Menu.Button>
         <Transition
           as={Fragment}

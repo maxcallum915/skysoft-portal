@@ -1,7 +1,8 @@
 import format from "date-fns/format";
 
 const formattedDate = (date) => {
-  return format(new Date(date), "MMMM dd, yyyy");
+  let dateFormatted = date.split("T")[0];
+  return format(new Date(dateFormatted), "MMMM dd, yyyy");
 };
 
 export default formattedDate;

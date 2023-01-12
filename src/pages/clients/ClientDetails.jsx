@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { Tab } from "@headlessui/react";
 import { toast } from "react-hot-toast";
 import {
@@ -20,7 +20,7 @@ import Select from "../../components/Select";
 import Modal from "../../components/Modal";
 import relativeDate from "../../utils/relativeDate";
 import formattedCurrency from "../../utils/formattedCurrency";
-import useAxios from "../../hooks/useAxios";
+import formattedDate from "../../utils/formattedDate";
 import axios from "../../config/axios";
 import useAuth from "../../hooks/useAuth";
 
@@ -120,8 +120,7 @@ const columns = [
     align: "center",
     headerName: `Created On`,
     valueFormatter: ({ value }) => {
-      return relativeDate(value);
-      // return new Date(value).toISOString().split("T")[0];
+      return formattedDate(value);
     },
     flex: 1,
   },
@@ -170,12 +169,11 @@ const ClientDetails = () => {
   const navigate = useNavigate();
   const [isEditable, setIsEditable] = useState(false);
   const [changes, setChanges] = useState(initialChanges);
-  const [toggleView, setToggleView] = useState(false);
-  // const { response: client, loading, error, axiosFetch } = useAxios();
   const [client, setClient] = useState();
-  const [error, setError] = useState();
-  const { auth } = useAuth();
+  const [toggleView, setToggleView] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { auth } = useAuth();
 
   const modal = useRef(null);
 
@@ -188,17 +186,13 @@ const ClientDetails = () => {
           },
         });
         setClient(client);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
-        setError(error?.response?.data.message);
+        setIsLoading(false);
       }
     };
-
     fetchClient();
-    // axiosFetch({
-    //   method: "GET",
-    //   url: `clients/${id}`,
-    // });
   }, [id, refresh]);
 
   const toggleEditable = () => setIsEditable((prevState) => !prevState);
@@ -231,7 +225,7 @@ const ClientDetails = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `/api/clients/${id}`,
         {
           ...changes.selectedOption,
@@ -255,10 +249,9 @@ const ClientDetails = () => {
 
   return (
     <>
-      {/* {loading && <Loader />}
-      {!loading && error && <div>{error}</div>}
-      {!loading && !error && !client && <div>Resource not found</div>} */}
-      {client && (
+      {isLoading && !client ? (
+        <Loader />
+      ) : (
         <>
           {auth?._id === client?.user?._id &&
             (isEditable ? (
@@ -290,29 +283,29 @@ const ClientDetails = () => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className={`mb-2 flex items-center gap-2`}>
-                  <Avatar title={client?.title} size="md" rounded />
+                  <Avatar title={client.title} size="md" rounded />
                   <h2 className={`${styles.clientTitle} mb-0`}>
-                    {client?.title}
+                    {client.title}
                   </h2>
                 </div>
                 <h5 className={`${styles.clientSubtitle} mb-0.5`}>
-                  Client ID: {client?._id}
+                  Client ID: {client._id}
                 </h5>
                 <h5 className={styles.clientSubtitle}>
-                  Created on: {relativeDate(client?.createdAt)}
+                  Created on: {relativeDate(client.createdAt)}
                 </h5>
               </div>
               <div className={styles.avatarWrapper}>
                 <Link
-                  to={`/users/${client?.user?._id}`}
+                  to={`/users/${client.user._id}`}
                   className={styles.avatarBox}
                 >
-                  <Avatar rounded title={client?.user.name} shadow />
+                  <Avatar rounded title={client.user.name} />
                   <div>
                     <h6 className={styles.avatarSubtitle}>
-                      {client?.user.role}
+                      {client.user.role}
                     </h6>
-                    <h5 className={styles.avatarTitle}>{client?.user.name}</h5>
+                    <h5 className={styles.avatarTitle}>{client.user.name}</h5>
                   </div>
                 </Link>
               </div>
@@ -322,35 +315,20 @@ const ClientDetails = () => {
                 <h5 className={`mb-3 ${infoRow.title}`}>Associated Brand</h5>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`https://backend-production-56ca.up.railway.app/${client?.brand?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${client.brand.imgUrl}`}
                     className="w-8 object-contain"
                   />
-                  <h6 className={infoRow.subtitle}>{client?.brand?.title}</h6>
+                  <h6 className={infoRow.subtitle}>{client.brand.title}</h6>
                 </div>
               </div>
               <div>
                 <h5 className={`mb-3 ${infoRow.title}`}>Client Category</h5>
                 <div className={infoRow.subtitleWrapper}>
                   <img
-                    src={`https://backend-production-56ca.up.railway.app/${client?.category?.imgUrl}`}
+                    src={`https://backend-production-56ca.up.railway.app/${client.category.imgUrl}`}
                     className="w-5 object-contain"
                   />
-                  <h6 className={infoRow.subtitle}>
-                    {client?.category?.title}
-                  </h6>
-                  {/* {client?.orders?.length ? (
-                    <>
-                      <img
-                        src={`https://backend-production-56ca.up.railway.app/${client?.category?.imgUrl}`}
-                        className="w-5 object-contain"
-                      />
-                      <h6 className={infoRow.subtitle}>
-                        {client?.category?.title}
-                      </h6>
-                    </>
-                  ) : (
-                    <h6 className={infoRow.subtitle}>-</h6>
-                  )} */}
+                  <h6 className={infoRow.subtitle}>{client.category.title}</h6>
                 </div>
               </div>
               <div>
@@ -362,7 +340,7 @@ const ClientDetails = () => {
               <div>
                 <h5 className={`mb-3 ${infoRow.title}`}>Initial Payment</h5>
                 <h6 className={infoRow.subtitle}>
-                  {!client?.orders?.length
+                  {!client.orders.length
                     ? "No order yet"
                     : formattedCurrency(client?.orders[0].amount)}
                 </h6>
@@ -385,8 +363,8 @@ const ClientDetails = () => {
                   )}
                 </div>
                 <Chip
-                  label={client?.status?.title}
-                  variant={client?.status?.className}
+                  label={client.status.title}
+                  variant={client.status.className}
                 />
               </div>
               <div>
@@ -394,10 +372,10 @@ const ClientDetails = () => {
                 <div className={infoRow.subtitleWrapper}>
                   <HiOutlineEnvelope className="h-6 w-6 text-secondary" />
                   <a
-                    href={`mailto:${client?.email}`}
+                    href={`mailto:${client.email}`}
                     className={`${infoRow.subtitle} !lowercase`}
                   >
-                    {client?.email}
+                    {client.email}
                   </a>
                 </div>
               </div>
@@ -406,7 +384,7 @@ const ClientDetails = () => {
                 <div className={infoRow.subtitleWrapper}>
                   <HiOutlinePhone className="h-6 w-6 text-secondary" />
                   <a href={`tel:${client?.phone}`} className={infoRow.subtitle}>
-                    {client?.phone}
+                    {client.phone}
                   </a>
                 </div>
               </div>
@@ -424,7 +402,7 @@ const ClientDetails = () => {
             </Tab.List>
             <Tab.Panels>
               <Tab.Panel>
-                {!client?.orders.length ? (
+                {!client.orders.length ? (
                   <>
                     {auth._id === client.user._id && (
                       <Button
@@ -451,7 +429,7 @@ const ClientDetails = () => {
                     </Button>
                     {toggleView ? (
                       <div className="grid gap-5 lg:grid-cols-2 2xl:grid-cols-3">
-                        {client?.orders.map((order) => {
+                        {client.orders.map((order) => {
                           return (
                             <Box key={order._id}>
                               <Link to={`/orders/${order._id}`}>
@@ -550,8 +528,6 @@ const ClientDetails = () => {
                           getRowId={(row) => row._id}
                           rows={client?.orders}
                           columns={columns}
-                          // loading={loading}
-                          // components={{ Toolbar: GridToolbar }}
                           sx={{
                             background: "#f1f5f9",
                             border: "none",

@@ -122,7 +122,7 @@ const Users = () => {
         ]);
         setEditId(null);
         setRefresh((prev) => !prev);
-        toast.success("Status updated successfully");
+        toast.success("User updated successfully");
       } else {
         const { data: newUser } = await axios.post(
           "/api/users/create",
@@ -135,7 +135,7 @@ const Users = () => {
         );
         setRefresh((prev) => !prev);
         setUsers((prev) => [...prev, newUser]);
-        toast.success("Status created successfully");
+        toast.success("User created successfully");
       }
       modal.current.toggleModal();
       setInputs(initialInputs);

@@ -12,14 +12,12 @@ import Chip from "../../components/Chip";
 import InfoChip from "../../components/InfoChip";
 import Loader from "../../components/Loader";
 import EmptyPlaceholder from "../../components/EmptyPlaceholder";
-import Button from "../../components/Button";
+import RangePicker from "../../components/RangePicker";
 import formattedDate from "../../utils/formattedDate";
 import formattedCurrency from "../../utils/formattedCurrency";
-import useAxios from "../../hooks/useAxios";
-import { DateRange } from "react-date-range";
-import { formatISO } from "date-fns";
-import useAuth from "../../hooks/useAuth";
+import formattedNumber from "../../utils/formattedNumber";
 import axios from "../../config/axios";
+import useAuth from "../../hooks/useAuth";
 
 const VisitClient = ({ params }) => {
   return (
@@ -162,40 +160,11 @@ const styles = {
 };
 const { summaryChip, addClient } = styles;
 
-const initialDateRange = [
-  {
-    startDate: new Date(),
-    endDate: null,
-    key: "selection",
-  },
-];
-
 const Clients = () => {
-  // const { response: clients, loading, error, axiosFetch } = useAxios();
   const [clients, setClients] = useState([]);
-  const [filteredClients, setFilteredClients] = useState();
+  const [filteredClients, setFilteredClients] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { auth } = useAuth();
-
-  const [dateRange, setDateRange] = useState(initialDateRange);
-  const [toggleDateRange, setToggleDateRange] = useState(false);
-
-  const handleToggleRange = () => setToggleDateRange((prev) => !prev);
-
-  const handleRangeSelection = () => {
-    setToggleDateRange((prevState) => !prevState);
-    const { startDate, endDate } = dateRange[0];
-    const filtered = clients.filter(
-      (order) =>
-        order.createdAt >= formatISO(startDate) &&
-        order.createdAt <= formatISO(endDate)
-    );
-    setFilteredClients(filtered);
-  };
-
-  const resetRangeSelection = () => {
-    setToggleDateRange((prevState) => !prevState);
-    setFilteredClients(clients);
-  };
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -207,148 +176,113 @@ const Clients = () => {
         });
         setClients(clients);
         setFilteredClients(clients);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     };
     fetchClients();
-    // axiosFetch({
-    //   method: "GET",
-    //   url: "clients",
-    // });
   }, []);
 
   return (
     <>
-      {/* {loading && <Loader />}
-      {!loading && error && <div>{error}</div>}
-      {!loading && !error && !clients?.length && (
-        <Link to="new">
-          <EmptyPlaceholder
-            icon={<HiUsers className="h-full w-full" />}
-            title="No clients to display Click to Add"
-          />
-        </Link>
-      )} */}
-      {/* {!loading && !error && clients?.length > 0 && ( */}
-      {clients?.length > 0 ? (
+      {isLoading && !clients.length ? (
+        <Loader />
+      ) : (
         <>
-          <div className={styles.summaryChips}>
-            <div className={summaryChip.wrapper}>
-              <div className={summaryChip.icon}>
-                <HiOutlineUsers className="h-full w-full" />
-              </div>
-              <div>
-                <h6 className={summaryChip.subtitle}>No. of Clients</h6>
-                <h5 className={summaryChip.title}>{filteredClients.length}</h5>
-              </div>
-            </div>
-            <div className={summaryChip.wrapper}>
-              <div className={summaryChip.icon}>
-                <HiOutlineCurrencyDollar className="h-full w-full" />
-              </div>
-              <div>
-                <h6 className={summaryChip.subtitle}>Clients Worth</h6>
-                <h5 className={summaryChip.title}>
-                  {formattedCurrency(
-                    filteredClients.reduce((pv, c) => pv + c.worth, 0)
-                  )}
-                </h5>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className={addClient.wrapper}>
-              <div>
-                <h6 className={addClient.subtitle}>Total</h6>
-                <h5 className={addClient.title}>
-                  clients:{" "}
-                  <span className="font-bold text-secondary">
-                    {clients.length}
-                  </span>
-                </h5>
-              </div>
-              {auth.role === "user" && (
-                <Link to="new" className={addClient.icon}>
-                  <HiPlus className="h-full w-full" />
-                </Link>
-              )}
-            </div>
-            <div>
-              <Button handleClick={handleToggleRange}>Search By Date</Button>
-              {toggleDateRange && (
-                <div className="relative">
-                  <div className="absolute top-0 right-0 z-50 shadow-lg">
-                    <DateRange
-                      onChange={(item) => setDateRange([item.selection])}
-                      moveRangeOnFirstSelection={false}
-                      ranges={dateRange}
-                      rangeColors={["#019dff"]}
-                      showDateDisplay={true}
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        widthVariant="full"
-                        handleClick={resetRangeSelection}
-                      >
-                        Reset
-                      </Button>
-                      <Button
-                        widthVariant="full"
-                        handleClick={handleRangeSelection}
-                      >
-                        Search
-                      </Button>
-                    </div>
+          {clients.length > 0 ? (
+            <>
+              <div className={styles.summaryChips}>
+                <div className={summaryChip.wrapper}>
+                  <div className={summaryChip.icon}>
+                    <HiOutlineUsers className="h-full w-full" />
+                  </div>
+                  <div>
+                    <h6 className={summaryChip.subtitle}>No. of Clients</h6>
+                    <h5 className={summaryChip.title}>
+                      {formattedNumber(filteredClients.length)}
+                    </h5>
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-          <div className="h-[800px] w-full">
-            <DataGrid
-              getRowId={(row) => row._id}
-              rows={!filteredClients ? clients : filteredClients}
-              columns={columns}
-              // loading={loading}
-              components={{ Toolbar: GridToolbar }}
-              sx={{
-                background: "#f1f5f9",
-                border: "none",
-                borderRadius: "0.75rem",
-                padding: `0.5rem`,
-                "& .MuiDataGrid-row": {
-                  maxHeight: `65px !important`,
-                  minHeight: `65px !important`,
-                  background: "#fff",
-                  borderRadius: "0.75rem",
-                  marginTop: `1rem`,
-                  transition: `all 300ms ease-in-out`,
-                },
-                "& .MuiDataGrid-row:hover": {
-                  background: `#e2e8f0`,
-                  boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
-                },
-                "& .MuiDataGrid-cell": {
-                  maxHeight: `100% !important`,
-                  minHeight: `100% !important`,
-                },
-              }}
+                <div className={summaryChip.wrapper}>
+                  <div className={summaryChip.icon}>
+                    <HiOutlineCurrencyDollar className="h-full w-full" />
+                  </div>
+                  <div>
+                    <h6 className={summaryChip.subtitle}>Clients Worth</h6>
+                    <h5 className={summaryChip.title}>
+                      {formattedCurrency(
+                        filteredClients.reduce((pv, c) => pv + c.worth, 0)
+                      )}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className={addClient.wrapper}>
+                  <div>
+                    <h6 className={addClient.subtitle}>Total</h6>
+                    <h5 className={addClient.title}>
+                      clients:{" "}
+                      <span className="font-bold text-secondary">
+                        {formattedNumber(filteredClients.length)}
+                      </span>
+                    </h5>
+                  </div>
+                  {auth.role === "user" && (
+                    <Link to="new" className={addClient.icon}>
+                      <HiPlus className="h-full w-full" />
+                    </Link>
+                  )}
+                </div>
+                <RangePicker array={clients} setState={setFilteredClients} />
+              </div>
+              <div className="h-[800px] w-full">
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={filteredClients}
+                  columns={columns}
+                  components={{ Toolbar: GridToolbar }}
+                  sx={{
+                    background: "#f1f5f9",
+                    border: "none",
+                    borderRadius: "0.75rem",
+                    padding: `0.5rem`,
+                    "& .MuiDataGrid-row": {
+                      maxHeight: `65px !important`,
+                      minHeight: `65px !important`,
+                      background: "#fff",
+                      borderRadius: "0.75rem",
+                      marginTop: `1rem`,
+                      transition: `all 300ms ease-in-out`,
+                    },
+                    "& .MuiDataGrid-row:hover": {
+                      background: `#e2e8f0`,
+                      boxShadow: `0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`,
+                    },
+                    "& .MuiDataGrid-cell": {
+                      maxHeight: `100% !important`,
+                      minHeight: `100% !important`,
+                    },
+                  }}
+                />
+              </div>
+            </>
+          ) : auth.role === "user" ? (
+            <Link to="new">
+              <EmptyPlaceholder
+                icon={<HiUsers className="h-full w-full" />}
+                title="No clients to display Click to Add"
+              />
+            </Link>
+          ) : (
+            <EmptyPlaceholder
+              icon={<HiUsers className="h-full w-full" />}
+              title="No clients to display"
             />
-          </div>
+          )}
         </>
-      ) : auth.role === "user" ? (
-        <Link to="new">
-          <EmptyPlaceholder
-            icon={<HiUsers className="h-full w-full" />}
-            title="No clients to display Click to Add"
-          />
-        </Link>
-      ) : (
-        <EmptyPlaceholder
-          icon={<HiUsers className="h-full w-full" />}
-          title="No clients to display Click to Add"
-        />
       )}
     </>
   );
